@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-11-16T00:40:24+01:00",
+  "built_at": "2026-11-16T00:40:41+01:00",
   "built_at_human": "16 nov 2026, 00:40 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
@@ -7,7 +7,7 @@
   "heartbeat": "2026-11-16T00:39:37+01:00",
   "heartbeat_human": "16 nov 2026, 00:39 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 32.9,
+  "heartbeat_age_s": 58.4,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -89,7 +89,7 @@
       "last_signature": "5Bp8K4s9adpdQoUEmJSGxs6AY1dm6ax57prdvYjuPTYvBMfzZRpZRd4TFGTpCwkE2SHV1Fhh1wemJRHc5dH62sRL",
       "last_activity": "2026-11-16T00:37:33+01:00",
       "last_activity_human": "16 nov 2026, 00:37 (hora de Madrid)",
-      "last_activity_ago": "hace 2 min",
+      "last_activity_ago": "hace 3 min",
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
@@ -112,8 +112,8 @@
       "name": "Decu",
       "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
       "short": "4vw5…9Ud9",
-      "last_signature": "28PtMR8KWPJUxqU1FHB1iL7Z6mW79PVJs1aCwRsRVC6GfSbayaxgF35MkZKV7sEPS1QBeRfpcdmeqL15m1zLnbQk",
-      "last_activity": "2026-11-16T00:40:23+01:00",
+      "last_signature": "3HqJzwEo7myzowxdZkepo4nWAzjfyz72a9LvmHFgVJJFkgSUPT4thHRtFKfJgHhMAiQZ9N6oVv187dkKQYWM4P4i",
+      "last_activity": "2026-11-16T00:40:40+01:00",
       "last_activity_human": "16 nov 2026, 00:40 (hora de Madrid)",
       "last_activity_ago": "hace 0s",
       "activity_error": null,
@@ -220,7 +220,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:00 (hora de Madrid)",
-      "ago": "hace 39 min"
+      "ago": "hace 40 min"
     },
     {
       "kind": "decision",
@@ -278,7 +278,7 @@
       ],
       "passed": false,
       "ts_human": "15 nov 2026, 23:54 (hora de Madrid)",
-      "ago": "hace 45 min"
+      "ago": "hace 46 min"
     }
   ],
   "files": {

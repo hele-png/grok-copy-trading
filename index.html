@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Copy trading paper en Solana. Solo datos reales del monitor.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CopyBot">
+  <meta name="application-name" content="CopyBot">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <script>
+    if (new URLSearchParams(location.search).has("shot")) {
+      document.documentElement.classList.add("shot");
+    }
+  </script>
+  <title>Grok Copy Trading</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="phone">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-name">CopyBot</span>
+        <span class="paper-badge">PAPER</span>
+      </div>
+      <div id="status-pill" class="status-pill iniciando" aria-live="polite">
+        <span class="dot"></span>
+        <span class="status-label">INICIANDO</span>
+      </div>
+    </header>
+
+    <main id="view-home" class="view view-active">
+      <section class="hero">
+        <div class="balance-row">
+          <div>
+            <div id="balance" class="balance">$500.00</div>
+          </div>
+          <div id="multiplier" class="multiplier">1.00x</div>
+        </div>
+        <div class="hero-meta">
+          <span id="pnl-pill" class="pnl-pill pos">+0.00%</span>
+          <span id="pnl-usd" class="pnl-usd">+$0.00</span>
+        </div>
+      </section>
+
+      <nav class="ranges" id="ranges" aria-label="Rango del gráfico">
+        <button data-range="1H" type="button">1H</button>
+        <button data-range="4H" type="button">4H</button>
+        <button data-range="1D" class="active" type="button">1D</button>
+        <button data-range="1W" type="button">1W</button>
+        <button data-range="ALL" type="button">ALL</button>
+      </nav>
+
+      <section class="chart-wrap" aria-label="Curva de equity">
+        <svg id="equity-chart" viewBox="0 0 390 200" preserveAspectRatio="none" role="img"></svg>
+        <div id="chart-empty" class="chart-caption"></div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h2>Live screen</h2>
+        </div>
+        <div class="live-card">
+          <img id="live-screen" src="data/screen.jpg" alt="Pantalla en vivo del monitor">
+        </div>
+        <p id="screen-caption" class="muted screen-cap"></p>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h2>Bots</h2>
+        </div>
+        <div id="bots" class="bots"></div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h2>Copy grid</h2>
+          <span class="muted">Solana</span>
+        </div>
+        <div id="copy-grid" class="copy-grid"></div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h2>Activity</h2>
+          <span id="session-counts" class="muted"></span>
+        </div>
+        <div id="activity" class="activity"></div>
+      </section>
+    </main>
+
+    <main id="view-agents" class="view">
+      <section class="page-title">
+        <h1>Agents</h1>
+        <p class="muted">Watcher, Copier, Executor y Risk. Los números salen del monitor, no se inventan.</p>
+      </section>
+      <div id="bots-page" class="bots bots-page"></div>
+      <section class="block">
+        <div class="block-head"><h2>Wallets</h2></div>
+        <div id="agents-wallets" class="copy-grid"></div>
+      </section>
+    </main>
+
+    <main id="view-activity" class="view">
+      <section class="page-title">
+        <h1>Activity</h1>
+        <p id="activity-summary" class="muted"></p>
+      </section>
+      <div id="activity-page" class="activity"></div>
+    </main>
+
+    <main id="view-account" class="view">
+      <section class="page-title">
+        <h1>Account</h1>
+        <p class="muted">Modo paper · Solana · 500 USDC iniciales</p>
+      </section>
+      <div id="account-stats" class="account-stats"></div>
+      <section class="block">
+        <div class="block-head"><h2>Reglas</h2></div>
+        <ul class="rules">
+          <li><span>Modo</span><b>Solo paper</b></li>
+          <li><span>Tamaño por trade</span><b>8% del capital</b></li>
+          <li><span>Stop loss</span><b>−12% desde mi entrada</b></li>
+          <li><span>Take profit</span><b>50% al +25%, resto trailing 15%</b></li>
+          <li><span>Posiciones</span><b>Máximo 4 abiertas</b></li>
+          <li><span>Halt diario</span><b>−8% de drawdown</b></li>
+          <li><span>Ventana</span><b>21:00–07:30 (hora de Madrid)</b></li>
+        </ul>
+      </section>
+      <section class="block install-block">
+        <div class="block-head"><h2>Instalar como app</h2></div>
+        <div class="install-card" id="install-card">
+          <p>Puedes añadir CopyBot a la pantalla de inicio y usarla a pantalla completa.</p>
+          <ul>
+            <li><b>iPhone:</b> en Safari, pulsa Compartir y luego «Añadir a pantalla de inicio».</li>
+            <li><b>Android:</b> en Chrome, menú ⋮ y «Instalar app» o «Añadir a pantalla de inicio».</li>
+          </ul>
+          <button id="install-btn" type="button" hidden>Instalar CopyBot</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="install-hint" class="install-hint" hidden>
+      <span>Añade CopyBot a la pantalla de inicio para usarla como app.</span>
+      <button id="hint-how" type="button">Cómo</button>
+      <button id="hint-dismiss" type="button" aria-label="Cerrar">×</button>
+    </div>
+
+    <nav class="tabbar" aria-label="Navegación">
+      <button class="tab active" data-tab="home" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 11.2 12 4.8l7.5 6.4v8.3a1.5 1.5 0 0 1-1.5 1.5h-4.2v-5.2h-3.6v5.2H6A1.5 1.5 0 0 1 4.5 19.5z"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="tab" data-tab="agents" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.2 8.2 12 4.5l3.8 3.7L12 11.9zm7.6 0 3.7 3.8-3.7 3.8-3.8-3.8zm-7.6 7.6L12 12.1l3.8 3.7-3.8 3.7zm0-7.6L4.5 12l3.7 3.8 3.8-3.8z"/></svg>
+        <span>Agents</span>
+      </button>
+      <button class="tab" data-tab="activity" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span>Activity</span>
+      </button>
+      <button class="tab" data-tab="account" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.2a3.6 3.6 0 1 0-3.6-3.6 3.6 3.6 0 0 0 3.6 3.6zm0 1.8c-3.2 0-7 1.6-7 4.2V20h14v-1.8c0-2.6-3.8-4.2-7-4.2z"/></svg>
+        <span>Account</span>
+      </button>
+    </nav>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

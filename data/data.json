@@ -1,0 +1,132 @@
+{
+  "built_at": "2026-11-15T23:30:54+01:00",
+  "built_at_human": "15 nov 2026, 23:30 (hora de Madrid)",
+  "timezone": "Europe/Madrid",
+  "mode": "PAPER",
+  "status": "LIVE",
+  "heartbeat": "2026-11-15T23:29:58+01:00",
+  "heartbeat_human": "15 nov 2026, 23:29 (hora de Madrid)",
+  "heartbeat_source": "heartbeat",
+  "heartbeat_age_s": 52.8,
+  "source": "files+rpc",
+  "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
+  "capital_start": 500.0,
+  "equity": 500.0,
+  "cash": 500.0,
+  "pnl_usd": 0.0,
+  "pnl_pct": 0.0,
+  "multiplier": 1.0,
+  "open_positions": 0,
+  "max_positions": 4,
+  "positions": [],
+  "equity_points": [
+    {
+      "t": "2026-11-15T23:20:23",
+      "v": 500.0,
+      "source": "session_start"
+    },
+    {
+      "t": "2026-11-15T23:29:58",
+      "v": 500.0,
+      "source": "state"
+    }
+  ],
+  "session": {
+    "id": "2026-11-15",
+    "started": "2026-11-15T23:20:23",
+    "halted": false,
+    "seen": 0,
+    "copied": 0,
+    "rejected": 0,
+    "realized_pnl": 0.0,
+    "fills": 0,
+    "equity_pnl_usd": 0.0,
+    "equity_pnl_pct": 0.0,
+    "unrealized_pnl_usd": 0,
+    "rejected_by_reason": {}
+  },
+  "bots": [
+    {
+      "id": "watcher",
+      "name": "Watcher",
+      "status": "en vivo",
+      "value": "3 wallets",
+      "detail": "3/3 con actividad reciente verificada"
+    },
+    {
+      "id": "copier",
+      "name": "Copier",
+      "status": "en vivo",
+      "value": "0 copiados",
+      "detail": "0 vistos · 0 rechazados"
+    },
+    {
+      "id": "executor",
+      "name": "Executor",
+      "status": "en vivo",
+      "value": "0 abiertas",
+      "detail": "0 fills paper"
+    },
+    {
+      "id": "risk",
+      "name": "Risk",
+      "status": "en vivo",
+      "value": "+0.00% DD",
+      "detail": "stop −12% · TP +25% · trailing 15% · ventana 21:00–07:30"
+    }
+  ],
+  "traders": [
+    {
+      "name": "frank",
+      "wallet": "498g1rVnFcnjBjpfw1xyqA1WvgQXUU8RWuELjxkjAayQ",
+      "short": "498g…AayQ",
+      "last_signature": "3TGoFsgL8CBPC52nJpq6LsMHaov2tEm7Kxfvws6cmZQ5ZFs1jPKfw6cAWrcuGMKSBh7t85WKSgTnvjKYNnoqGwMJ",
+      "last_activity": "2026-11-15T23:30:27+01:00",
+      "last_activity_human": "15 nov 2026, 23:30 (hora de Madrid)",
+      "last_activity_ago": "hace 25s",
+      "activity_error": null,
+      "copied": 0,
+      "rejected": 0,
+      "status": "vigilando"
+    },
+    {
+      "name": "Unipcs",
+      "wallet": "2heJbC32Tpfcb3nbUb5ER61K11FGZVfVGtVnDm6LDogF",
+      "short": "2heJ…DogF",
+      "last_signature": "2xTvn4AC3JaTKP6FV4s4kNEco8niQh72ecgQ3rNoXtdYaDgiAeoR5sZ6ZGbiDQbjo1rG8rzxZjzkjhx9fnqedM5g",
+      "last_activity": "2026-11-15T22:25:10+01:00",
+      "last_activity_human": "15 nov 2026, 22:25 (hora de Madrid)",
+      "last_activity_ago": "hace 1 h",
+      "activity_error": null,
+      "copied": 0,
+      "rejected": 0,
+      "status": "vigilando"
+    },
+    {
+      "name": "Decu",
+      "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
+      "short": "4vw5…9Ud9",
+      "last_signature": "56ZrUobwVqifN29jjNXQLeFQrhbWqn6vbHpR6gXhy4736YRHBJbBxtxf2rayDMy7xUDe3Pqk2iL6ezHXtEG4sYM5",
+      "last_activity": "2026-11-15T23:30:54+01:00",
+      "last_activity_human": "15 nov 2026, 23:30 (hora de Madrid)",
+      "last_activity_ago": "hace 0s",
+      "activity_error": null,
+      "copied": 0,
+      "rejected": 0,
+      "status": "vigilando"
+    }
+  ],
+  "activity": [],
+  "files": {
+    "state": true,
+    "trades": false,
+    "trades_count": 0,
+    "decisions": false,
+    "decisions_count": 0,
+    "log": true,
+    "heartbeat": true
+  },
+  "screen": "data/screen.jpg",
+  "screen_kind": "status_board",
+  "screen_caption": "Tablero de estado (aún no hay captura de escritorio)"
+}

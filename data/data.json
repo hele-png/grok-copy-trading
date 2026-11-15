@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-16T00:36:27+01:00",
-  "built_at_human": "16 nov 2026, 00:36 (hora de Madrid)",
+  "built_at": "2026-11-16T00:38:33+01:00",
+  "built_at_human": "16 nov 2026, 00:38 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
   "status": "LIVE",
-  "heartbeat": "2026-11-16T00:35:37+01:00",
-  "heartbeat_human": "16 nov 2026, 00:35 (hora de Madrid)",
+  "heartbeat": "2026-11-16T00:37:37+01:00",
+  "heartbeat_human": "16 nov 2026, 00:37 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 48.9,
+  "heartbeat_age_s": 51.9,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -26,7 +26,7 @@
       "source": "session_start"
     },
     {
-      "t": "2026-11-16T00:35:37",
+      "t": "2026-11-16T00:37:37",
       "v": 500.0,
       "source": "state"
     }
@@ -86,10 +86,10 @@
       "name": "frank",
       "wallet": "498g1rVnFcnjBjpfw1xyqA1WvgQXUU8RWuELjxkjAayQ",
       "short": "498g…AayQ",
-      "last_signature": "4MSBbhW59faTVSPTuf82NuiFKEMHRR2EBEwZfk2vPURdRNMst4P7vCkpmCkmJfKPVPvceSsTTvChM2YUgvJwpgoE",
-      "last_activity": "2026-11-16T00:35:40+01:00",
-      "last_activity_human": "16 nov 2026, 00:35 (hora de Madrid)",
-      "last_activity_ago": "hace 46s",
+      "last_signature": "5Bp8K4s9adpdQoUEmJSGxs6AY1dm6ax57prdvYjuPTYvBMfzZRpZRd4TFGTpCwkE2SHV1Fhh1wemJRHc5dH62sRL",
+      "last_activity": "2026-11-16T00:37:33+01:00",
+      "last_activity_human": "16 nov 2026, 00:37 (hora de Madrid)",
+      "last_activity_ago": "hace 57s",
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
@@ -102,7 +102,7 @@
       "last_signature": "5PZG3V8XfZRWha9raEaw8EAGMaGyqdzMPdKcQkdqEbMA72W5aMC4uZwN8DvrJdyWeZgoML9L7JhmHN42GmqnbjeS",
       "last_activity": "2026-11-16T00:35:14+01:00",
       "last_activity_human": "16 nov 2026, 00:35 (hora de Madrid)",
-      "last_activity_ago": "hace 1 min",
+      "last_activity_ago": "hace 3 min",
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
@@ -112,10 +112,10 @@
       "name": "Decu",
       "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
       "short": "4vw5…9Ud9",
-      "last_signature": "3jfcEs8JaCJ72c87afrhZFABgm259aYxKmmU2Qfwx4HeYdfdevNVRZfjtbx4hamzwDoNnnEPNa1PU8GUhhrnUZDn",
-      "last_activity": "2026-11-16T00:36:16+01:00",
-      "last_activity_human": "16 nov 2026, 00:36 (hora de Madrid)",
-      "last_activity_ago": "hace 10s",
+      "last_signature": "2n62ufyEjZRWTRhcM1izkyYkCfj8mFB2WbGmTB2TdMHJ7eR7GewwNvweaVwa5QbnxFzWDEynLN5eonQHdJxiQpCm",
+      "last_activity": "2026-11-16T00:38:32+01:00",
+      "last_activity_human": "16 nov 2026, 00:38 (hora de Madrid)",
+      "last_activity_ago": "hace 1s",
       "activity_error": null,
       "copied": 0,
       "rejected": 8,
@@ -141,7 +141,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:11 (hora de Madrid)",
-      "ago": "hace 24 min"
+      "ago": "hace 26 min"
     },
     {
       "kind": "decision",
@@ -161,7 +161,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:10 (hora de Madrid)",
-      "ago": "hace 26 min"
+      "ago": "hace 28 min"
     },
     {
       "kind": "decision",
@@ -181,7 +181,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:03 (hora de Madrid)",
-      "ago": "hace 33 min"
+      "ago": "hace 35 min"
     },
     {
       "kind": "decision",
@@ -200,7 +200,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:01 (hora de Madrid)",
-      "ago": "hace 34 min"
+      "ago": "hace 36 min"
     },
     {
       "kind": "decision",
@@ -220,7 +220,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:00 (hora de Madrid)",
-      "ago": "hace 36 min"
+      "ago": "hace 38 min"
     },
     {
       "kind": "decision",
@@ -239,7 +239,7 @@
       ],
       "passed": false,
       "ts_human": "15 nov 2026, 23:58 (hora de Madrid)",
-      "ago": "hace 38 min"
+      "ago": "hace 40 min"
     },
     {
       "kind": "decision",
@@ -258,7 +258,7 @@
       ],
       "passed": false,
       "ts_human": "15 nov 2026, 23:56 (hora de Madrid)",
-      "ago": "hace 39 min"
+      "ago": "hace 41 min"
     },
     {
       "kind": "decision",
@@ -278,7 +278,7 @@
       ],
       "passed": false,
       "ts_human": "15 nov 2026, 23:54 (hora de Madrid)",
-      "ago": "hace 41 min"
+      "ago": "hace 43 min"
     }
   ],
   "files": {

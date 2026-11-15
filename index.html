@@ -69,6 +69,7 @@
         </div>
         <div class="live-card">
           <img id="live-screen" src="data/screen.jpg" alt="Pantalla en vivo del monitor">
+          <div id="live-event" class="live-event" hidden></div>
         </div>
         <p id="screen-caption" class="muted screen-cap"></p>
       </section>
@@ -135,6 +136,13 @@
           <li><span>Ventana</span><b>21:00–07:30 (hora de Madrid)</b></li>
         </ul>
       </section>
+      <section class="block demo-block">
+        <div class="block-head"><h2>DEMO</h2></div>
+        <div class="demo-card">
+          <p>Reproduce avisos de compra y venta solo en este teléfono, para ver el movimiento. No cambia el balance, el gráfico real ni los datos del monitor.</p>
+          <button id="demo-btn" type="button">Ver movimiento (DEMO)</button>
+        </div>
+      </section>
       <section class="block install-block">
         <div class="block-head"><h2>Instalar como app</h2></div>
         <div class="install-card" id="install-card">
@@ -147,12 +155,6 @@
         </div>
       </section>
     </main>
-
-    <div id="install-hint" class="install-hint" hidden>
-      <span>Añade CopyBot a la pantalla de inicio para usarla como app.</span>
-      <button id="hint-how" type="button">Cómo</button>
-      <button id="hint-dismiss" type="button" aria-label="Cerrar">×</button>
-    </div>
 
     <nav class="tabbar" aria-label="Navegación">
       <button class="tab active" data-tab="home" type="button">
@@ -173,6 +175,17 @@
       </button>
     </nav>
   </div>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <div id="install-hint" class="install-hint" hidden>
+    <p class="hint-text">Añade CopyBot a la pantalla de inicio para usarla como app.</p>
+    <button id="hint-how" type="button">Cómo</button>
+    <button id="hint-dismiss" type="button" class="hint-dismiss" aria-label="Cerrar el aviso">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

@@ -25,6 +25,7 @@ const START = {
     { name: "Decu", wallet: "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9", short: "4vw5…9Ud9", status: "iniciando" },
   ],
   activity: [],
+  fills: [],
   screen: "data/screen.jpg",
   screen_caption: "Tablero de estado (aún no hay captura de escritorio)",
   note: "Sin data.json: se muestra el capital de partida.",
@@ -126,7 +127,8 @@ function pointsForRange(points, key) {
 function smoothPath(pts, w, h, padX, padY) {
   if (pts.length === 1) {
     const y = padY + (h - padY * 2) / 2;
-    return { d: `M ${padX} ${y} L ${w - padX} ${y}`, min: pts[0].v, max: pts[0].v, ys: [y], xs: [w / 2] };
+    const t0 = pts[0].t, t1 = pts[0].t;
+    return { d: `M ${padX} ${y} L ${w - padX} ${y}`, min: pts[0].v, max: pts[0].v, t0, t1, ys: [y], xs: [w / 2] };
   }
   const vs = pts.map((p) => p.v);
   let min = Math.min(...vs);
@@ -147,7 +149,6 @@ function smoothPath(pts, w, h, padX, padY) {
     x: padX + ((p.t - t0) / span) * (w - padX * 2),
     y: padY + (1 - (p.v - min) / (max - min)) * (h - padY * 2),
   }));
-  // Monotone cubic (Fritsch-Carlson) to Bezier
   const n = xy.length;
   const dx = [];
   const dy = [];
@@ -171,7 +172,46 @@ function smoothPath(pts, w, h, padX, padY) {
     const c2y = xy[i + 1].y - (t[i + 1] * dx[i]) / 3;
     d += ` C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${xy[i + 1].x.toFixed(2)} ${xy[i + 1].y.toFixed(2)}`;
   }
-  return { d, min, max, xs: xy.map((p) => p.x), ys: xy.map((p) => p.y) };
+  return { d, min, max, t0, t1, xs: xy.map((p) => p.x), ys: xy.map((p) => p.y) };
+}
+
+function isLossFill(f) {
+  return f && f.type !== "buy" && Number(f.pnl_pct) < 0;
+}
+
+function fillLabel(type) {
+  return ({
+    buy: "Copiado",
+    tp_partial: "TP parcial",
+    trailing_exit: "Trailing",
+    stop_loss: "Stop",
+    session_close: "Cierre",
+  })[type] || type || "Fill";
+}
+
+function projectFill(fill, scale, w, h, padX, padY) {
+  const t = parseTime(fill.ts);
+  const v = Number(fill.equity);
+  if (t == null || !Number.isFinite(v) || t < scale.t0 - 1000 || t > scale.t1 + 1000) return null;
+  const span = Math.max(scale.t1 - scale.t0, 1);
+  const range = scale.max - scale.min || 1;
+  return {
+    x: padX + ((t - scale.t0) / span) * (w - padX * 2),
+    y: padY + (1 - (v - scale.min) / range) * (h - padY * 2),
+  };
+}
+
+function markerSvg(fills, scale, w, h, padX, padY, extraClass) {
+  return (fills || []).map((f) => {
+    const pt = projectFill(f, scale, w, h, padX, padY);
+    if (!pt) return "";
+    const color = isLossFill(f) ? "#ff453a" : "#32d74b";
+    const cls = extraClass || "fill-mark";
+    return `<g class="${cls}">
+      <circle cx="${pt.x.toFixed(2)}" cy="${pt.y.toFixed(2)}" r="6.2" fill="${color}" fill-opacity="0.22"></circle>
+      <circle cx="${pt.x.toFixed(2)}" cy="${pt.y.toFixed(2)}" r="3.6" fill="${color}" stroke="#000" stroke-width="1.1"></circle>
+    </g>`;
+  }).join("");
 }
 
 function renderChart(d) {
@@ -179,6 +219,7 @@ function renderChart(d) {
   const cap = document.getElementById("chart-empty");
   const pts = pointsForRange(d.equity_points, range);
   const w = 390, h = 188, padX = 2, padY = 14;
+  const realFills = (d.fills || []).filter((f) => !f.demo);
   if (!pts.length) {
     const y = h / 2;
     svg.innerHTML = `
@@ -194,10 +235,10 @@ function renderChart(d) {
     cap.textContent = "Sin puntos de equity todavía";
     return;
   }
-  const { d: path, ys, xs } = smoothPath(pts, w, h, padX, padY);
-  const lastX = xs[xs.length - 1];
-  const lastY = ys[ys.length - 1];
-  const area = `${path} L ${lastX.toFixed(2)} ${h} L ${xs[0].toFixed(2)} ${h} Z`;
+  const scale = smoothPath(pts, w, h, padX, padY);
+  const lastX = scale.xs[scale.xs.length - 1];
+  const lastY = scale.ys[scale.ys.length - 1];
+  const area = `${scale.d} L ${lastX.toFixed(2)} ${h} L ${scale.xs[0].toFixed(2)} ${h} Z`;
   svg.innerHTML = `
     <defs>
       <linearGradient id="eqFill" x1="0" y1="0" x2="0" y2="1">
@@ -211,11 +252,44 @@ function renderChart(d) {
       </filter>
     </defs>
     <path d="${area}" fill="url(#eqFill)"></path>
-    <path d="${path}" fill="none" stroke="#32d74b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"></path>
+    <path d="${scale.d}" fill="none" stroke="#32d74b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"></path>
+    ${markerSvg(realFills, scale, w, h, padX, padY)}
     <circle cx="${lastX.toFixed(2)}" cy="${lastY.toFixed(2)}" r="3.4" fill="#32d74b"></circle>
   `;
-  const flat = pts.every((p) => p.v === pts[0].v);
   cap.textContent = "";
+}
+
+function renderLiveEvent(fill, { demo = false } = {}) {
+  const el = document.getElementById("live-event");
+  if (!el) return;
+  if (!fill) {
+    if (!demo) {
+      el.hidden = true;
+      el.innerHTML = "";
+    }
+    return;
+  }
+  const loss = isLossFill(fill);
+  const title = `${fillLabel(fill.type)} ${fill.symbol || "?"}`;
+  const bits = [];
+  if (fill.usd != null) bits.push(money(fill.usd));
+  if (fill.type !== "buy" && fill.pnl_pct != null) bits.push(pct(fill.pnl_pct));
+  if (fill.trader) bits.push(fill.trader);
+  const link = (!demo && fill.solscan)
+    ? `<a href="${esc(fill.solscan)}" target="_blank" rel="noopener noreferrer">Solscan</a>`
+    : "";
+  const kicker = demo ? `<div class="toast-kicker">DEMO · simulado</div>` : "";
+  el.className = "live-event" + (loss ? " neg" : "") + (demo ? " demo" : "");
+  el.innerHTML = `
+    <span class="pulse-dot"></span>
+    <div class="live-event-main">
+      ${kicker}
+      <div class="live-event-title">${esc(title)}</div>
+      <div class="live-event-meta">${esc(bits.join(" · "))}</div>
+    </div>
+    ${link}
+  `;
+  el.hidden = false;
 }
 
 function renderBots(target, bots) {
@@ -311,6 +385,76 @@ function esc(s) {
     .replace(/"/g, "&quot;");
 }
 
+const SEEN_KEY = "copybot-seen-fills";
+const PRIMED_KEY = "copybot-fills-primed";
+
+function getSeen() {
+  try { return new Set(JSON.parse(localStorage.getItem(SEEN_KEY) || "[]")); }
+  catch { return new Set(); }
+}
+function saveSeen(set) {
+  try { localStorage.setItem(SEEN_KEY, JSON.stringify([...set].slice(-500))); } catch {}
+}
+
+function showToast(fill, { demo = false } = {}) {
+  const box = document.getElementById("toasts");
+  if (!box || isShot()) return;
+  const loss = isLossFill(fill);
+  const el = document.createElement("div");
+  el.className = "toast " + (loss ? "neg" : "pos");
+  const title = `${fillLabel(fill.type)} ${fill.symbol || "?"}`;
+  const bits = [];
+  if (fill.usd != null) bits.push(money(fill.usd));
+  if (fill.type !== "buy" && fill.pnl_pct != null) bits.push(pct(fill.pnl_pct));
+  else if (demo && fill.pnl_pct != null && fill.type === "buy") bits.push(pct(fill.pnl_pct));
+  if (fill.trader) bits.push(fill.trader);
+  el.innerHTML = `
+    ${demo ? '<div class="toast-kicker">DEMO · simulado</div>' : ""}
+    <div class="toast-title">${esc(title)}</div>
+    <div class="toast-meta">${esc(bits.join(" · "))}</div>
+  `;
+  box.prepend(el);
+  const t = setTimeout(() => dismissToast(el), 4800);
+  el.addEventListener("click", () => { clearTimeout(t); dismissToast(el); });
+}
+
+function dismissToast(el) {
+  if (!el || el.classList.contains("out")) return;
+  el.classList.add("out");
+  setTimeout(() => el.remove(), 320);
+}
+
+function vibrateFor(fills) {
+  if (!navigator.vibrate) return;
+  try {
+    const loss = fills.some(isLossFill);
+    navigator.vibrate(loss ? [30, 40, 40] : 40);
+  } catch {}
+}
+
+function processFills(fills) {
+  const real = (fills || []).filter((f) => f && f.id && !f.demo);
+  const seen = getSeen();
+  let primed = false;
+  try { primed = localStorage.getItem(PRIMED_KEY) === "1"; } catch {}
+  if (!primed) {
+    real.forEach((f) => seen.add(f.id));
+    saveSeen(seen);
+    try { localStorage.setItem(PRIMED_KEY, "1"); } catch {}
+    return;
+  }
+  const fresh = real.filter((f) => !seen.has(f.id))
+    .sort((a, b) => (parseTime(a.ts) || 0) - (parseTime(b.ts) || 0));
+  for (const f of fresh) {
+    seen.add(f.id);
+    showToast(f, { demo: false });
+  }
+  if (fresh.length) {
+    saveSeen(seen);
+    vibrateFor(fresh);
+  }
+}
+
 function render(d) {
   setStatus(d.status);
   renderHero(d);
@@ -320,6 +464,8 @@ function render(d) {
   const img = document.getElementById("live-screen");
   const src = (d.screen || "data/screen.jpg").replace(/^\//, "") + "?t=" + encodeURIComponent(d.built_at || Date.now());
   if (!img.dataset.locked) img.src = src;
+  const latest = (d.latest_fill && !d.latest_fill.demo) ? d.latest_fill : (d.fills || []).filter((f) => !f.demo).slice(-1)[0] || null;
+  if (!demoPlaying) renderLiveEvent(latest);
   renderBots("bots", d.bots);
   renderBots("bots-page", d.bots);
   renderTraders("copy-grid", d.traders);
@@ -341,12 +487,12 @@ async function load() {
     if (!r.ok) throw new Error("http " + r.status);
     data = await r.json();
   } catch (e) {
-    // Keep last good payload if we already have one; otherwise start state.
     if (data === START) {
       data = { ...START, note: "No se pudo leer data/data.json. Se muestra el capital de partida (500 USDC)." };
     }
   }
   render(data);
+  processFills(data.fills || []);
 }
 
 function showTab(name) {
@@ -377,41 +523,143 @@ function setupTabs() {
 
 function isShot() { return new URLSearchParams(location.search).has("shot"); }
 
+function isStandalone() {
+  return window.matchMedia("(display-mode: standalone)").matches
+    || window.matchMedia("(display-mode: fullscreen)").matches
+    || window.navigator.standalone === true;
+}
+
+function hideInstallHint(persist) {
+  const hint = document.getElementById("install-hint");
+  if (!hint) return;
+  hint.classList.remove("is-open");
+  hint.hidden = true;
+  hint.setAttribute("hidden", "");
+  document.body.classList.remove("has-hint");
+  if (persist) {
+    try { localStorage.setItem("copybot-hint-dismissed", "1"); } catch {}
+  }
+}
+
+function showInstallHint() {
+  if (isStandalone() || isShot()) return;
+  let dismissed = false;
+  try { dismissed = localStorage.getItem("copybot-hint-dismissed") === "1"; } catch {}
+  if (dismissed) return;
+  const hint = document.getElementById("install-hint");
+  hint.hidden = false;
+  hint.removeAttribute("hidden");
+  hint.classList.add("is-open");
+  document.body.classList.add("has-hint");
+}
+
 function setupInstall() {
   const hint = document.getElementById("install-hint");
   const btn = document.getElementById("install-btn");
-  const standalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
-  const shot = isShot();
-  const dismissed = localStorage.getItem("copybot-hint-dismissed") === "1";
-  if (!standalone && !dismissed && !shot) {
-    hint.hidden = false;
-    document.body.classList.add("has-hint");
+  if (isStandalone()) {
+    hideInstallHint(false);
+    return;
   }
-  document.getElementById("hint-dismiss").addEventListener("click", () => {
-    hint.hidden = true;
-    document.body.classList.remove("has-hint");
-    localStorage.setItem("copybot-hint-dismissed", "1");
+  showInstallHint();
+  const dismiss = document.getElementById("hint-dismiss");
+  const hide = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    hideInstallHint(true);
+  };
+  ["click", "pointerup", "touchend"].forEach((ev) => {
+    dismiss.addEventListener(ev, hide, ev === "touchend" ? { passive: false } : false);
   });
-  document.getElementById("hint-how").addEventListener("click", () => {
-    hint.hidden = true;
+  document.getElementById("hint-how").addEventListener("click", (e) => {
+    e.preventDefault();
+    hideInstallHint(false);
     showTab("account");
     document.getElementById("install-card").scrollIntoView({ behavior: "smooth" });
   });
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    btn.hidden = false;
-    if (!dismissed && !standalone && !isShot()) {
-      hint.hidden = false;
-      document.body.classList.add("has-hint");
-    }
+    if (btn) btn.hidden = false;
+    showInstallHint();
   });
-  btn.addEventListener("click", async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    btn.hidden = true;
+  if (btn) {
+    btn.addEventListener("click", async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      btn.hidden = true;
+    });
+  }
+}
+
+let demoPlaying = false;
+const DEMO_SEQ = [
+  { type: "buy", symbol: "DEMO", usd: 40, pnl_pct: 0, trader: "frank" },
+  { type: "tp_partial", symbol: "DEMO", usd: 25, pnl_pct: 25, trader: "Unipcs" },
+  { type: "stop_loss", symbol: "DEMO", usd: 35.2, pnl_pct: -12, trader: "Decu" },
+];
+
+function flashDemoMarker() {
+  const svg = document.getElementById("equity-chart");
+  if (!svg) return;
+  const mark = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  mark.setAttribute("class", "fill-mark demo-mark");
+  const c1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  c1.setAttribute("cx", "300");
+  c1.setAttribute("cy", "90");
+  c1.setAttribute("r", "8");
+  c1.setAttribute("fill", "#ffd60a");
+  c1.setAttribute("fill-opacity", "0.3");
+  const c2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  c2.setAttribute("cx", "300");
+  c2.setAttribute("cy", "90");
+  c2.setAttribute("r", "4");
+  c2.setAttribute("fill", "#ffd60a");
+  c2.setAttribute("stroke", "#000");
+  c2.setAttribute("stroke-width", "1");
+  mark.appendChild(c1);
+  mark.appendChild(c2);
+  svg.appendChild(mark);
+  setTimeout(() => mark.remove(), 1600);
+}
+
+function setupDemo() {
+  const btn = document.getElementById("demo-btn");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    if (demoPlaying) return;
+    demoPlaying = true;
+    btn.disabled = true;
+    const savedBalance = document.getElementById("balance").textContent;
+    let i = 0;
+    const tick = () => {
+      if (i >= DEMO_SEQ.length) {
+        setTimeout(() => {
+          const latest = (data.latest_fill && !data.latest_fill.demo)
+            ? data.latest_fill
+            : (data.fills || []).filter((f) => !f.demo).slice(-1)[0] || null;
+          renderLiveEvent(latest);
+          // never leave the real numbers touched
+          if (document.getElementById("balance").textContent !== savedBalance) {
+            document.getElementById("balance").textContent = savedBalance;
+          }
+          demoPlaying = false;
+          btn.disabled = false;
+        }, 1600);
+        return;
+      }
+      const fill = DEMO_SEQ[i];
+      showToast(fill, { demo: true });
+      renderLiveEvent(fill, { demo: true });
+      flashDemoMarker();
+      vibrateFor([fill]);
+      i += 1;
+      setTimeout(tick, 1400);
+    };
+    tick();
   });
 }
 
@@ -421,5 +669,6 @@ if ("serviceWorker" in navigator) {
 
 setupTabs();
 setupInstall();
+setupDemo();
 load();
 setInterval(load, REFRESH_MS);

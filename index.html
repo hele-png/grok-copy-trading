@@ -40,7 +40,7 @@
       <section class="hero">
         <div class="balance-row">
           <div>
-            <div id="balance" class="balance">$500.00</div>
+            <div id="balance" class="balance">$500.00</div><span id="demo-flag">DEMO</span>
           </div>
           <div id="multiplier" class="multiplier">1.00x</div>
         </div>
@@ -51,9 +51,9 @@
       </section>
 
       <nav class="ranges" id="ranges" aria-label="Rango del gráfico">
-        <button data-range="1H" type="button">1H</button>
+        <button data-range="1H" class="active" type="button">1H</button>
         <button data-range="4H" type="button">4H</button>
-        <button data-range="1D" class="active" type="button">1D</button>
+        <button data-range="1D" type="button">1D</button>
         <button data-range="1W" type="button">1W</button>
         <button data-range="ALL" type="button">ALL</button>
       </nav>
@@ -65,7 +65,7 @@
 
       <section class="block">
         <div class="block-head">
-          <h2>Live screen</h2>
+          <h2>Live</h2>
         </div>
         <div class="live-card">
           <img id="live-screen" src="data/screen.jpg" alt="Pantalla en vivo del monitor">
@@ -83,7 +83,7 @@
 
       <section class="block">
         <div class="block-head">
-          <h2>Copy grid</h2>
+          <h2>Wallets</h2>
           <span class="muted">Solana</span>
         </div>
         <div id="copy-grid" class="copy-grid"></div>
@@ -101,7 +101,6 @@
     <main id="view-agents" class="view">
       <section class="page-title">
         <h1>Agents</h1>
-        <p class="muted">Watcher, Copier, Executor y Risk. Los números salen del monitor, no se inventan.</p>
       </section>
       <div id="bots-page" class="bots bots-page"></div>
       <section class="block">
@@ -139,8 +138,8 @@
       <section class="block demo-block">
         <div class="block-head"><h2>DEMO</h2></div>
         <div class="demo-card">
-          <p>Reproduce avisos de compra y venta solo en este teléfono, para ver el movimiento. No cambia el balance, el gráfico real ni los datos del monitor.</p>
-          <button id="demo-btn" type="button">Ver movimiento (DEMO)</button>
+          <p>Simula compras y ventas en este teléfono. No altera el capital ni los datos del monitor.</p>
+          <button id="demo-btn" type="button">Probar DEMO</button>
         </div>
       </section>
       <section class="block install-block">
@@ -158,19 +157,19 @@
 
     <nav class="tabbar" aria-label="Navegación">
       <button class="tab active" data-tab="home" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 11.2 12 4.8l7.5 6.4v8.3a1.5 1.5 0 0 1-1.5 1.5h-4.2v-5.2h-3.6v5.2H6A1.5 1.5 0 0 1 4.5 19.5z"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 4.5l8 7V20a.5.5 0 0 1-.5.5h-5v-6h-5v6H4.5A.5.5 0 0 1 4 20z"/></svg>
         <span>Home</span>
       </button>
       <button class="tab" data-tab="agents" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.2 8.2 12 4.5l3.8 3.7L12 11.9zm7.6 0 3.7 3.8-3.7 3.8-3.8-3.8zm-7.6 7.6L12 12.1l3.8 3.7-3.8 3.7zm0-7.6L4.5 12l3.7 3.8 3.8-3.8z"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="6.5" height="6.5" rx="1"/><rect x="13" y="4.5" width="6.5" height="6.5" rx="1"/><rect x="4.5" y="13" width="6.5" height="6.5" rx="1"/><rect x="13" y="13" width="6.5" height="6.5" rx="1"/></svg>
         <span>Agents</span>
       </button>
       <button class="tab" data-tab="activity" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
         <span>Activity</span>
       </button>
       <button class="tab" data-tab="account" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.2a3.6 3.6 0 1 0-3.6-3.6 3.6 3.6 0 0 0 3.6 3.6zm0 1.8c-3.2 0-7 1.6-7 4.2V20h14v-1.8c0-2.6-3.8-4.2-7-4.2z"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 19.2c.6-3 3.4-5 7-5s6.4 2 7 5"/></svg>
         <span>Account</span>
       </button>
     </nav>

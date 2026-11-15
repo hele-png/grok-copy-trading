@@ -38,14 +38,13 @@ const ICONS = {
   risk: '<svg viewBox="0 0 24 24"><path d="M12 3 5 6.2v5.3c0 4.3 2.9 7.4 7 8.8 4.1-1.4 7-4.5 7-8.8V6.2z"/></svg>',
 };
 
-const AVATAR_COLORS = {
-  frank: "#2f6df6",
-  Unipcs: "#7c5cff",
-  Decu: "#e05a2b",
-};
 
 let data = START;
-let range = "1D";
+let displayedEquity = null;
+let liveTicks = [];
+let demoState = null;
+
+let range = "1H";
 let deferredPrompt = null;
 
 function money(n, digits = 2) {
@@ -70,58 +69,105 @@ function setStatus(status) {
   label.textContent = key === "LIVE" ? "LIVE" : key;
 }
 
-function renderHero(d) {
-  document.getElementById("balance").textContent = money(d.equity);
+function currentEquity(d) {
+  if (demoState && demoState.equity != null) return Number(demoState.equity);
+  return Number(d && d.equity);
+}
+
+function currentPnl(d) {
+  const start = Number((d && d.capital_start) || 500);
+  const eq = currentEquity(d);
+  const usd = eq - start;
+  return { usd, pct: start ? (usd / start) * 100 : 0, mult: start ? eq / start : 1 };
+}
+
+function tweenNumber(from, to, ms, onTick, onDone) {
+  const t0 = performance.now();
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const step = (now) => {
+    const p = Math.min(1, (now - t0) / ms);
+    onTick(from + (to - from) * ease(p));
+    if (p < 1) requestAnimationFrame(step);
+    else if (onDone) onDone();
+  };
+  requestAnimationFrame(step);
+}
+
+function renderHero(d, { tween = true } = {}) {
+  const target = currentEquity(d);
+  const el = document.getElementById("balance");
+  const pnl = currentPnl(d);
   const mul = document.getElementById("multiplier");
-  mul.textContent = (d.multiplier != null ? Number(d.multiplier).toFixed(2) : "1.00") + "x";
-  mul.className = "multiplier" + (d.multiplier > 1 ? " up" : d.multiplier < 1 ? " down" : "");
+  mul.textContent = pnl.mult.toFixed(2) + "x";
+  mul.className = "multiplier" + (pnl.mult > 1.0005 ? " up" : pnl.mult < 0.9995 ? " down" : "");
   const pill = document.getElementById("pnl-pill");
-  pill.textContent = pct(d.pnl_pct);
-  pill.className = "pnl-pill " + (d.pnl_pct < 0 ? "neg" : "pos");
+  pill.textContent = pct(pnl.pct);
+  pill.className = "pnl-pill " + (pnl.pct < 0 ? "neg" : "pos");
   const usd = document.getElementById("pnl-usd");
-  const abs = money(Math.abs(d.pnl_usd ?? 0));
-  usd.textContent = (d.pnl_usd < 0 ? "−" : "+") + abs;
+  usd.textContent = (pnl.usd < 0 ? "−" : "+") + money(Math.abs(pnl.usd));
+  if (target == null || Number.isNaN(target)) return;
+  const skip = displayedEquity == null || !tween || isShot() || Math.abs(target - displayedEquity) < 0.005;
+  if (skip) {
+    displayedEquity = target;
+    el.textContent = money(target);
+    return;
+  }
+  const from = displayedEquity;
+  el.classList.remove("flash-up", "flash-down");
+  void el.offsetWidth;
+  el.classList.add(target > from ? "flash-up" : "flash-down");
+  tweenNumber(from, target, 700, (v) => {
+    displayedEquity = v;
+    el.textContent = money(v);
+  }, () => {
+    displayedEquity = target;
+    el.textContent = money(target);
+    el.classList.remove("flash-up", "flash-down");
+  });
 }
 
 function parseTime(t) {
-  if (!t) return null;
-  const s = String(t);
+  if (t == null || t === "") return null;
+  if (typeof t === "number" && Number.isFinite(t)) return t < 1e12 ? t * 1000 : t;
+  const s = String(t).trim();
+  if (/^\d+(\.\d+)?$/.test(s)) {
+    const n = Number(s);
+    return n < 1e12 ? n * 1000 : n;
+  }
   const d = new Date(s);
   if (!Number.isNaN(d.getTime())) return d.getTime();
   const naive = new Date(s.includes("T") ? s : s.replace(" ", "T"));
   return Number.isNaN(naive.getTime()) ? null : naive.getTime();
 }
 
+function extraTicks() {
+  if (demoState) return demoState.ticks || [];
+  return liveTicks;
+}
+
+function mergedPoints(d) {
+  const base = (demoState && demoState.points) ? demoState.points : ((d && d.equity_points) || []);
+  return base.concat(extraTicks());
+}
+
 function pointsForRange(points, key) {
   const pts = (points || [])
-    .map((p) => ({ t: parseTime(p.t), v: Number(p.v), source: p.source }))
+    .map((p) => ({ t: typeof p.t === "number" ? p.t : parseTime(p.t), v: Number(p.v), source: p.source }))
     .filter((p) => p.t != null && Number.isFinite(p.v))
     .sort((a, b) => a.t - b.t);
   const now = Date.now();
   const span = { "1H": 3600e3, "4H": 4 * 3600e3, "1D": 24 * 3600e3, "1W": 7 * 24 * 3600e3, "ALL": 24 * 3600e3 }[key] || 24 * 3600e3;
   const cut = now - span;
-  if (!pts.length) {
-    // no equity points at all — caller may still draw an empty chart
-    return [];
-  }
+  if (!pts.length) return [];
   const last = pts[pts.length - 1];
   const inRange = pts.filter((p) => p.t >= cut);
   const before = [...pts].reverse().find((p) => p.t < cut);
   let out = before ? [{ ...before, t: cut }, ...inRange] : inRange.slice();
-  if (!out.length) out = [{ t: cut, v: last.v, source: last.source }];
-  if (out[out.length - 1].t < now - 500) {
-    out.push({ t: now, v: out[out.length - 1].v, source: out[out.length - 1].source });
+  if (!out.length) out = [{ t: last.t, v: last.v, source: last.source }];
+  if (out[out.length - 1].t < now - 250) {
+    out.push({ t: now, v: out[out.length - 1].v, source: "live-now" });
   }
-  const tmin = Math.min(...out.map((p) => p.t));
-  const tmax = Math.max(...out.map((p) => p.t));
-  // Same known equity, timestamps collapsed: draw it across the visible window (not invented history).
-  if (tmax - tmin < 1000) {
-    return [
-      { t: cut, v: last.v, source: last.source },
-      { t: now, v: last.v, source: last.source },
-    ];
-  }
-  return out;
+  return { pts: out, cut, now, span };
 }
 
 function smoothPath(pts, w, h, padX, padY) {
@@ -205,7 +251,7 @@ function markerSvg(fills, scale, w, h, padX, padY, extraClass) {
   return (fills || []).map((f) => {
     const pt = projectFill(f, scale, w, h, padX, padY);
     if (!pt) return "";
-    const color = isLossFill(f) ? "#ff453a" : "#32d74b";
+    const color = isLossFill(f) ? "#ff4d4f" : "#00d26a";
     const cls = extraClass || "fill-mark";
     return `<g class="${cls}">
       <circle cx="${pt.x.toFixed(2)}" cy="${pt.y.toFixed(2)}" r="6.2" fill="${color}" fill-opacity="0.22"></circle>
@@ -217,46 +263,90 @@ function markerSvg(fills, scale, w, h, padX, padY, extraClass) {
 function renderChart(d) {
   const svg = document.getElementById("equity-chart");
   const cap = document.getElementById("chart-empty");
-  const pts = pointsForRange(d.equity_points, range);
-  const w = 390, h = 188, padX = 2, padY = 14;
-  const realFills = (d.fills || []).filter((f) => !f.demo);
+  const packed = pointsForRange(mergedPoints(d), range);
+  const pts = packed.pts || packed;
+  const w = 390, h = 196, padX = 0, padY = 14;
+  const fills = demoState && demoState.fills
+    ? demoState.fills
+    : (d.fills || []).filter((f) => !f.demo);
   if (!pts.length) {
     const y = h / 2;
     svg.innerHTML = `
       <defs>
         <linearGradient id="eqFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#32d74b" stop-opacity="0.32"/>
-          <stop offset="100%" stop-color="#32d74b" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#00d26a" stop-opacity="0.28"/>
+          <stop offset="100%" stop-color="#00d26a" stop-opacity="0"/>
         </linearGradient>
       </defs>
       <path d="M ${padX} ${y} L ${w - padX} ${y} L ${w - padX} ${h} L ${padX} ${h} Z" fill="url(#eqFill)"/>
-      <path d="M ${padX} ${y} L ${w - padX} ${y}" fill="none" stroke="#32d74b" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M ${padX} ${y} L ${w - padX} ${y}" fill="none" stroke="#00d26a" stroke-width="2" stroke-linecap="round"/>
     `;
-    cap.textContent = "Sin puntos de equity todavía";
     return;
   }
-  const scale = smoothPath(pts, w, h, padX, padY);
-  const lastX = scale.xs[scale.xs.length - 1];
-  const lastY = scale.ys[scale.ys.length - 1];
-  const area = `${scale.d} L ${lastX.toFixed(2)} ${h} L ${scale.xs[0].toFixed(2)} ${h} Z`;
+  // Scale x against the selected window so new time extends the line honestly.
+  const t0 = packed.cut != null ? packed.cut : pts[0].t;
+  const t1 = packed.now != null ? packed.now : pts[pts.length - 1].t;
+  const vs = pts.map((p) => p.v);
+  let min = Math.min(...vs);
+  let max = Math.max(...vs);
+  if (min === max) {
+    min = min * 0.98;
+    max = max * 1.02 || 1;
+  } else {
+    const pad = (max - min) * 0.18;
+    min -= pad;
+    max += pad;
+  }
+  const spanT = Math.max(t1 - t0, 1);
+  const xy = pts.map((p) => ({
+    x: padX + ((p.t - t0) / spanT) * (w - padX * 2),
+    y: padY + (1 - (p.v - min) / (max - min)) * (h - padY * 2),
+  }));
+  // Monotone cubic through time-window coordinates
+  const n = xy.length;
+  let dpath;
+  if (n === 1) {
+    dpath = `M ${xy[0].x.toFixed(2)} ${xy[0].y.toFixed(2)} L ${w - padX} ${xy[0].y.toFixed(2)}`;
+  } else {
+    const dx = [], dy = [], m = [];
+    for (let i = 0; i < n - 1; i++) {
+      dx[i] = xy[i + 1].x - xy[i].x || 1;
+      dy[i] = xy[i + 1].y - xy[i].y;
+      m[i] = dy[i] / dx[i];
+    }
+    const sl = [m[0]];
+    for (let i = 1; i < n - 1; i++) sl[i] = (m[i - 1] * m[i] <= 0) ? 0 : (m[i - 1] + m[i]) / 2;
+    sl[n - 1] = m[n - 2];
+    dpath = `M ${xy[0].x.toFixed(2)} ${xy[0].y.toFixed(2)}`;
+    for (let i = 0; i < n - 1; i++) {
+      const c1x = xy[i].x + dx[i] / 3;
+      const c1y = xy[i].y + (sl[i] * dx[i]) / 3;
+      const c2x = xy[i + 1].x - dx[i] / 3;
+      const c2y = xy[i + 1].y - (sl[i + 1] * dx[i]) / 3;
+      dpath += ` C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${xy[i + 1].x.toFixed(2)} ${xy[i + 1].y.toFixed(2)}`;
+    }
+  }
+  const lastX = xy[xy.length - 1].x;
+  const lastY = xy[xy.length - 1].y;
+  const firstX = xy[0].x;
+  const area = `${dpath} L ${lastX.toFixed(2)} ${h} L ${firstX.toFixed(2)} ${h} Z`;
+  const winScale = { t0, t1, min, max };
+  const areaPath = area;
   svg.innerHTML = `
     <defs>
       <linearGradient id="eqFill" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#32d74b" stop-opacity="0.38"/>
-        <stop offset="70%" stop-color="#32d74b" stop-opacity="0.05"/>
-        <stop offset="100%" stop-color="#32d74b" stop-opacity="0"/>
+        <stop offset="0%" stop-color="#00d26a" stop-opacity="0.28"/>
+        <stop offset="80%" stop-color="#00d26a" stop-opacity="0.03"/>
+        <stop offset="100%" stop-color="#00d26a" stop-opacity="0"/>
       </linearGradient>
-      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation="2.2" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
     </defs>
-    <path d="${area}" fill="url(#eqFill)"></path>
-    <path d="${scale.d}" fill="none" stroke="#32d74b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"></path>
-    ${markerSvg(realFills, scale, w, h, padX, padY)}
-    <circle cx="${lastX.toFixed(2)}" cy="${lastY.toFixed(2)}" r="3.4" fill="#32d74b"></circle>
+    <path d="${areaPath}" fill="url(#eqFill)"></path>
+    <path id="eq-line" d="${dpath}" fill="none" stroke="#00d26a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    ${markerSvg(fills, winScale, w, h, padX, padY)}
+    <circle class="end-dot-pulse" cx="${lastX.toFixed(2)}" cy="${lastY.toFixed(2)}" r="6" fill="#00d26a" fill-opacity="0.35"></circle>
+    <circle cx="${lastX.toFixed(2)}" cy="${lastY.toFixed(2)}" r="3.2" fill="#00d26a"></circle>
   `;
-  cap.textContent = "";
+  if (cap) cap.textContent = "";
 }
 
 function renderLiveEvent(fill, { demo = false } = {}) {
@@ -313,13 +403,12 @@ function renderBots(target, bots) {
 function renderTraders(target, traders) {
   const el = document.getElementById(target);
   el.innerHTML = (traders || []).map((t) => {
-    const color = AVATAR_COLORS[t.name] || "#444";
     const ago = t.last_activity_ago || (t.activity_error ? "actividad no verificada" : "sin dato on-chain");
     const human = t.last_activity_human || "";
     const stats = (t.copied != null) ? `${t.copied} copiados · ${t.rejected || 0} rechazados` : "";
     return `<article class="trader">
       <div class="trader-top">
-        <div class="avatar" style="background:${color}">${esc(initials(t.name))}</div>
+        <div class="avatar">${esc(initials(t.name))}</div>
         <div>
           <div class="trader-name">${esc(t.name)}</div>
           <div class="trader-addr">${esc(t.short || "")}</div>
@@ -399,6 +488,8 @@ function saveSeen(set) {
 function showToast(fill, { demo = false } = {}) {
   const box = document.getElementById("toasts");
   if (!box || isShot()) return;
+  const liveToasts = () => [...box.children].filter((el) => !el.classList.contains("out"));
+  while (liveToasts().length >= 2) dismissToast(liveToasts().pop(), { dy: -80 });
   const loss = isLossFill(fill);
   const el = document.createElement("div");
   el.className = "toast " + (loss ? "neg" : "pos");
@@ -406,22 +497,93 @@ function showToast(fill, { demo = false } = {}) {
   const bits = [];
   if (fill.usd != null) bits.push(money(fill.usd));
   if (fill.type !== "buy" && fill.pnl_pct != null) bits.push(pct(fill.pnl_pct));
-  else if (demo && fill.pnl_pct != null && fill.type === "buy") bits.push(pct(fill.pnl_pct));
   if (fill.trader) bits.push(fill.trader);
   el.innerHTML = `
-    ${demo ? '<div class="toast-kicker">DEMO · simulado</div>' : ""}
-    <div class="toast-title">${esc(title)}</div>
-    <div class="toast-meta">${esc(bits.join(" · "))}</div>
+    ${demo ? '<span class="toast-kicker">DEMO</span>' : ""}
+    <span class="toast-title">${esc(title)}</span>
+    <span class="toast-meta">${esc(bits.join(" · "))}</span>
   `;
   box.prepend(el);
-  const t = setTimeout(() => dismissToast(el), 4800);
-  el.addEventListener("click", () => { clearTimeout(t); dismissToast(el); });
+  let timer = setTimeout(() => dismissToast(el, { dy: -90 }), 3500);
+  const cancelTimer = () => { clearTimeout(timer); timer = null; };
+  attachToastGestures(el, cancelTimer);
 }
 
-function dismissToast(el) {
+function dismissToast(el, dir) {
   if (!el || el.classList.contains("out")) return;
   el.classList.add("out");
-  setTimeout(() => el.remove(), 320);
+  el.style.pointerEvents = "none";
+  el.style.position = "absolute";
+  el.style.left = "0";
+  el.style.right = "0";
+  const dx = (dir && dir.dx) || 0;
+  const dy = (dir && dir.dy) || -90;
+  el.style.transition = "transform 0.28s ease, opacity 0.28s ease";
+  el.style.transform = `translate(${dx}px, ${dy}px)`;
+  el.style.opacity = "0";
+  setTimeout(() => el.remove(), 280);
+}
+
+function attachToastGestures(el, cancelTimer) {
+  let x0 = 0, y0 = 0, t0 = 0, lastX = 0, lastY = 0, lastT = 0, tracking = false, pid = null;
+  const pos = (e) => {
+    if (e.touches && e.touches[0]) return e.touches[0];
+    if (e.changedTouches && e.changedTouches[0]) return e.changedTouches[0];
+    return e;
+  };
+  const down = (e) => {
+    const p = pos(e);
+    tracking = true;
+    x0 = lastX = p.clientX;
+    y0 = lastY = p.clientY;
+    t0 = lastT = Date.now();
+    el.style.transition = "none";
+    if (e.pointerId != null && el.setPointerCapture) {
+      try { el.setPointerCapture(e.pointerId); pid = e.pointerId; } catch {}
+    }
+  };
+  const move = (e) => {
+    if (!tracking) return;
+    const p = pos(e);
+    lastX = p.clientX; lastY = p.clientY; lastT = Date.now();
+    const dx = lastX - x0, dy = lastY - y0;
+    el.style.transform = `translate(${dx}px, ${dy}px)`;
+    el.style.opacity = String(Math.max(0.15, 1 - Math.hypot(dx, dy) / 150));
+    if (e.cancelable) e.preventDefault();
+  };
+  const up = (e) => {
+    if (!tracking) return;
+    tracking = false;
+    const p = pos(e);
+    const x = p.clientX != null ? p.clientX : lastX;
+    const y = p.clientY != null ? p.clientY : lastY;
+    const dx = x - x0, dy = y - y0;
+    const dt = Math.max(16, Date.now() - t0);
+    const vx = dx / dt * 1000, vy = dy / dt * 1000;
+    const dist = Math.hypot(dx, dy);
+    const fling = Math.abs(vx) > 550 || vy < -450;
+    const far = Math.abs(dx) > 72 || dy < -36;
+    if (dist < 8) {
+      cancelTimer();
+      dismissToast(el, { dy: -90 });
+      return;
+    }
+    if (far || fling) {
+      cancelTimer();
+      const side = Math.abs(dx) > Math.abs(dy) || Math.abs(vx) > Math.abs(vy);
+      const outX = side ? (dx >= 0 ? 420 : -420) : 0;
+      const outY = side ? 0 : (dy < 0 || vy < 0 ? -280 : 280);
+      dismissToast(el, { dx: outX, dy: outY });
+    } else {
+      el.style.transition = "transform 0.22s ease, opacity 0.22s ease";
+      el.style.transform = "translate(0,0)";
+      el.style.opacity = "1";
+    }
+  };
+  el.addEventListener("pointerdown", down);
+  el.addEventListener("pointermove", move);
+  el.addEventListener("pointerup", up);
+  el.addEventListener("pointercancel", up);
 }
 
 function vibrateFor(fills) {
@@ -457,7 +619,7 @@ function processFills(fills) {
 
 function render(d) {
   setStatus(d.status);
-  renderHero(d);
+  renderHero(d, { tween: true });
   renderChart(d);
   const cap = document.getElementById("screen-caption");
   cap.textContent = d.screen_caption || d.built_at_human || "";
@@ -522,6 +684,7 @@ function setupTabs() {
 }
 
 function isShot() { return new URLSearchParams(location.search).has("shot"); }
+function isTest() { return new URLSearchParams(location.search).has("test"); }
 
 function isStandalone() {
   return window.matchMedia("(display-mode: standalone)").matches
@@ -597,78 +760,113 @@ function setupInstall() {
 
 let demoPlaying = false;
 const DEMO_SEQ = [
-  { type: "buy", symbol: "DEMO", usd: 40, pnl_pct: 0, trader: "frank" },
-  { type: "tp_partial", symbol: "DEMO", usd: 25, pnl_pct: 25, trader: "Unipcs" },
-  { type: "stop_loss", symbol: "DEMO", usd: 35.2, pnl_pct: -12, trader: "Decu" },
+  { type: "buy", symbol: "DEMO", usd: 40, pnl_pct: 0, trader: "frank", equityDelta: 0 },
+  { type: "tp_partial", symbol: "DEMO", usd: 25, pnl_pct: 25, trader: "Unipcs", equityDelta: 20 },
+  { type: "stop_loss", symbol: "DEMO", usd: 35.2, pnl_pct: -12, trader: "Decu", equityDelta: -15 },
 ];
-
-function flashDemoMarker() {
-  const svg = document.getElementById("equity-chart");
-  if (!svg) return;
-  const mark = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  mark.setAttribute("class", "fill-mark demo-mark");
-  const c1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  c1.setAttribute("cx", "300");
-  c1.setAttribute("cy", "90");
-  c1.setAttribute("r", "8");
-  c1.setAttribute("fill", "#ffd60a");
-  c1.setAttribute("fill-opacity", "0.3");
-  const c2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  c2.setAttribute("cx", "300");
-  c2.setAttribute("cy", "90");
-  c2.setAttribute("r", "4");
-  c2.setAttribute("fill", "#ffd60a");
-  c2.setAttribute("stroke", "#000");
-  c2.setAttribute("stroke-width", "1");
-  mark.appendChild(c1);
-  mark.appendChild(c2);
-  svg.appendChild(mark);
-  setTimeout(() => mark.remove(), 1600);
-}
 
 function setupDemo() {
   const btn = document.getElementById("demo-btn");
   if (!btn) return;
   btn.addEventListener("click", () => {
     if (demoPlaying) return;
+    const startEq = Number(data.equity) || 500;
+    const now0 = Date.now();
+    const demoStartT = now0 - 14 * 60 * 1000;
+    const demoTimes = [now0 - 10 * 60 * 1000, now0 - 5 * 60 * 1000, now0 - 12 * 1000];
+    const basePoints = (data.equity_points || [])
+      .map((p) => ({ ...p, t: typeof p.t === "number" ? p.t : parseTime(p.t) }))
+      .filter((p) => p.t != null && p.t <= demoStartT);
     demoPlaying = true;
+    demoState = {
+      equity: startEq,
+      points: basePoints.concat([{ t: demoStartT, v: startEq, source: "demo-start" }]),
+      ticks: [],
+      fills: [],
+      times: demoTimes,
+    };
     btn.disabled = true;
-    const savedBalance = document.getElementById("balance").textContent;
+    document.body.classList.add("demo-on");
+    showTab("home");
+    renderHero(data, { tween: false });
+    renderChart(data);
     let i = 0;
     const tick = () => {
       if (i >= DEMO_SEQ.length) {
         setTimeout(() => {
-          const latest = (data.latest_fill && !data.latest_fill.demo)
-            ? data.latest_fill
-            : (data.fills || []).filter((f) => !f.demo).slice(-1)[0] || null;
-          renderLiveEvent(latest);
-          // never leave the real numbers touched
-          if (document.getElementById("balance").textContent !== savedBalance) {
-            document.getElementById("balance").textContent = savedBalance;
-          }
-          demoPlaying = false;
-          btn.disabled = false;
-        }, 1600);
+          demoState.equity = startEq;
+          renderHero(data, { tween: true });
+          setTimeout(() => {
+            demoState = null;
+            demoPlaying = false;
+            document.body.classList.remove("demo-on");
+            btn.disabled = false;
+            renderHero(data, { tween: true });
+            renderChart(data);
+            const latest = (data.latest_fill && !data.latest_fill.demo)
+              ? data.latest_fill
+              : (data.fills || []).filter((f) => !f.demo).slice(-1)[0] || null;
+            renderLiveEvent(latest);
+          }, 900);
+        }, 1400);
         return;
       }
-      const fill = DEMO_SEQ[i];
+      const step = DEMO_SEQ[i];
+      const t = (demoState.times && demoState.times[i]) || Date.now();
+      demoState.equity = startEq + DEMO_SEQ.slice(0, i + 1).reduce((s, x) => s + x.equityDelta, 0);
+      const fill = {
+        ...step,
+        demo: true,
+        ts: t,
+        equity: demoState.equity,
+        id: "demo|" + i + "|" + t,
+      };
+      demoState.fills = (demoState.fills || []).concat([fill]);
+      demoState.ticks = (demoState.ticks || []).concat([{ t, v: demoState.equity, source: "demo" }]);
       showToast(fill, { demo: true });
       renderLiveEvent(fill, { demo: true });
-      flashDemoMarker();
+      renderHero(data, { tween: true });
+      renderChart(data);
       vibrateFor([fill]);
       i += 1;
-      setTimeout(tick, 1400);
+      setTimeout(tick, 1300);
     };
     tick();
   });
 }
 
+function pushLiveTick() {
+  if (demoPlaying) return;
+  const v = Number(data && data.equity);
+  if (!Number.isFinite(v)) return;
+  const now = Date.now();
+  const last = liveTicks[liveTicks.length - 1];
+  if (last && now - (typeof last.t === "number" ? last.t : parseTime(last.t)) < 8000) return;
+  liveTicks.push({ t: now, v, source: "live-tick" });
+  const keep = 8 * 24 * 3600e3;
+  liveTicks = liveTicks.filter((p) => now - (typeof p.t === "number" ? p.t : parseTime(p.t) || 0) < keep);
+  renderChart(data);
+}
+
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => { if (!isShot()) navigator.serviceWorker.register("sw.js"); });
+  window.addEventListener("load", () => { if (!isShot() && !isTest()) navigator.serviceWorker.register("sw.js"); });
 }
 
 setupTabs();
 setupInstall();
 setupDemo();
-load();
+load().then(() => {
+  pushLiveTick();
+});
 setInterval(load, REFRESH_MS);
+setInterval(pushLiveTick, 10000);
+
+if (isTest()) {
+  window.__copybotTest = {
+    showToast,
+    dismissToast,
+    currentEquity: () => currentEquity(data),
+    displayed: () => displayedEquity,
+    demoOn: () => !!demoState,
+  };
+}

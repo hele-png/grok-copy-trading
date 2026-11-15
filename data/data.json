@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-16T00:07:19+01:00",
-  "built_at_human": "16 nov 2026, 00:07 (hora de Madrid)",
+  "built_at": "2026-11-16T00:09:29+01:00",
+  "built_at_human": "16 nov 2026, 00:09 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
   "status": "LIVE",
-  "heartbeat": "2026-11-16T00:06:03+01:00",
-  "heartbeat_human": "16 nov 2026, 00:06 (hora de Madrid)",
+  "heartbeat": "2026-11-16T00:08:37+01:00",
+  "heartbeat_human": "16 nov 2026, 00:08 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 60.4,
+  "heartbeat_age_s": 44.5,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -26,7 +26,7 @@
       "source": "session_start"
     },
     {
-      "t": "2026-11-16T00:06:03",
+      "t": "2026-11-16T00:08:37",
       "v": 500.0,
       "source": "state"
     }
@@ -89,7 +89,7 @@
       "last_signature": "2kLcHbLooTxqrGSUEGtKcy3pcSsqE9BiMQDaprhUS2N4r1B2ty8GqrY6bQDxsf1u9vTdckx3Ei9YEcZQ23dMDdUy",
       "last_activity": "2026-11-15T23:59:11+01:00",
       "last_activity_human": "15 nov 2026, 23:59 (hora de Madrid)",
-      "last_activity_ago": "hace 7 min",
+      "last_activity_ago": "hace 10 min",
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
@@ -102,7 +102,7 @@
       "last_signature": "2WsfKxFtwuAD62hoX8k3Tg7zkinPri49mwiDcq5BVkvmcsKpXWyyLuRX9UBvVUoe2xSXC3kfPMubiyc8E38gi7uv",
       "last_activity": "2026-11-15T23:32:03+01:00",
       "last_activity_human": "15 nov 2026, 23:32 (hora de Madrid)",
-      "last_activity_ago": "hace 35 min",
+      "last_activity_ago": "hace 37 min",
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
@@ -112,10 +112,10 @@
       "name": "Decu",
       "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
       "short": "4vw5…9Ud9",
-      "last_signature": "3QCmuAwszt7h13q4VMCzhavBMeGtSKGHKJyYzEZNz8awCazY1SMpH36h51m4t9w7jS8T3yVVBWNSpgZws9dHfv69",
-      "last_activity": "2026-11-16T00:07:18+01:00",
-      "last_activity_human": "16 nov 2026, 00:07 (hora de Madrid)",
-      "last_activity_ago": "hace 1s",
+      "last_signature": "bG8Ec1rFd7tjfiM68wiiMGAnmgKb5YmureZepeRm2bzHe8FspAws38Q89cmEP82mn7TCi6np5rw7dJUZ76GyTvN",
+      "last_activity": "2026-11-16T00:09:28+01:00",
+      "last_activity_human": "16 nov 2026, 00:09 (hora de Madrid)",
+      "last_activity_ago": "hace 0s",
       "activity_error": null,
       "copied": 0,
       "rejected": 6,
@@ -141,7 +141,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:03 (hora de Madrid)",
-      "ago": "hace 3 min"
+      "ago": "hace 6 min"
     },
     {
       "kind": "decision",
@@ -160,7 +160,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:01 (hora de Madrid)",
-      "ago": "hace 5 min"
+      "ago": "hace 7 min"
     },
     {
       "kind": "decision",
@@ -180,7 +180,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:00 (hora de Madrid)",
-      "ago": "hace 6 min"
+      "ago": "hace 9 min"
     },
     {
       "kind": "decision",
@@ -199,7 +199,7 @@
       ],
       "passed": false,
       "ts_human": "15 nov 2026, 23:58 (hora de Madrid)",
-      "ago": "hace 9 min"
+      "ago": "hace 11 min"
     },
     {
       "kind": "decision",
@@ -218,7 +218,7 @@
       ],
       "passed": false,
       "ts_human": "15 nov 2026, 23:56 (hora de Madrid)",
-      "ago": "hace 10 min"
+      "ago": "hace 12 min"
     },
     {
       "kind": "decision",
@@ -238,7 +238,7 @@
       ],
       "passed": false,
       "ts_human": "15 nov 2026, 23:54 (hora de Madrid)",
-      "ago": "hace 12 min"
+      "ago": "hace 14 min"
     }
   ],
   "files": {

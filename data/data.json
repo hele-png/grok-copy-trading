@@ -1,24 +1,37 @@
 {
-  "built_at": "2026-11-16T00:48:54+01:00",
-  "built_at_human": "16 nov 2026, 00:48 (hora de Madrid)",
+  "built_at": "2026-11-16T00:51:12+01:00",
+  "built_at_human": "16 nov 2026, 00:51 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
   "status": "LIVE",
-  "heartbeat": "2026-11-16T00:48:37+01:00",
-  "heartbeat_human": "16 nov 2026, 00:48 (hora de Madrid)",
+  "heartbeat": "2026-11-16T00:50:37+01:00",
+  "heartbeat_human": "16 nov 2026, 00:50 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 16.1,
+  "heartbeat_age_s": 32.4,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
-  "equity": 500.0,
-  "cash": 500.0,
-  "pnl_usd": 0.0,
-  "pnl_pct": 0.0,
-  "multiplier": 1.0,
-  "open_positions": 0,
+  "equity": 500.513259,
+  "cash": 460.0,
+  "pnl_usd": 0.513259,
+  "pnl_pct": 0.1027,
+  "multiplier": 1.001027,
+  "open_positions": 1,
   "max_positions": 4,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+      "symbol": "FLOTI",
+      "trader": "Decu",
+      "entry": 0.0001169,
+      "qty": 342172.7972626176,
+      "last_price": 0.0001184,
+      "opened": "2026-11-16T00:49:26",
+      "stop": 0.000102872,
+      "cost": 40.0,
+      "realized": 0.0
+    }
+  ],
   "equity_points": [
     {
       "t": "2026-11-15T23:20:23",
@@ -26,30 +39,68 @@
       "source": "session_start"
     },
     {
-      "t": "2026-11-16T00:48:37",
+      "t": "2026-11-16T00:49:26",
       "v": 500.0,
+      "source": "buy"
+    },
+    {
+      "t": "2026-11-16T00:51:08",
+      "v": 500.513259,
       "source": "state"
     }
   ],
-  "fills": [],
-  "latest_fill": null,
+  "fills": [
+    {
+      "id": "2026-11-16T00:49:26|buy|DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat|Decu|40.0",
+      "type": "buy",
+      "symbol": "FLOTI",
+      "usd": 40.0,
+      "pnl_usd": 0.0,
+      "pnl_pct": 0.0,
+      "trader": "Decu",
+      "ts": "2026-11-16T00:49:26",
+      "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
+      "ago": "hace 1 min",
+      "signature": "tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
+      "solscan": "https://solscan.io/tx/tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
+      "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+      "equity": 500.0
+    }
+  ],
+  "latest_fill": {
+    "id": "2026-11-16T00:49:26|buy|DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat|Decu|40.0",
+    "type": "buy",
+    "symbol": "FLOTI",
+    "usd": 40.0,
+    "pnl_usd": 0.0,
+    "pnl_pct": 0.0,
+    "trader": "Decu",
+    "ts": "2026-11-16T00:49:26",
+    "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
+    "ago": "hace 1 min",
+    "signature": "tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
+    "solscan": "https://solscan.io/tx/tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
+    "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+    "equity": 500.0
+  },
   "session": {
     "id": "2026-11-15",
     "started": "2026-11-15T23:20:23",
     "halted": false,
-    "seen": 13,
-    "copied": 0,
-    "rejected": 13,
+    "seen": 20,
+    "copied": 1,
+    "rejected": 19,
     "realized_pnl": 0.0,
     "fills": 0,
-    "equity_pnl_usd": 0.0,
-    "equity_pnl_pct": 0.0,
-    "unrealized_pnl_usd": 0,
+    "equity_pnl_usd": 0.5133,
+    "equity_pnl_pct": 0.103,
+    "unrealized_pnl_usd": 0.5133,
     "rejected_by_reason": {
-      "precio ya subido >18%": 6,
+      "precio ya subido >18%": 7,
       "liquidez < $30k": 8,
       "trader inactivo": 1,
-      "dato no verificable: precio actual/liquidez": 3
+      "dato no verificable: precio actual/liquidez": 3,
+      "ya en cartera": 5
     }
   },
   "bots": [
@@ -64,21 +115,21 @@
       "id": "copier",
       "name": "Copier",
       "status": "en vivo",
-      "value": "0 copiados",
-      "detail": "13 vistos · 13 rechazados"
+      "value": "1 copiados",
+      "detail": "20 vistos · 19 rechazados"
     },
     {
       "id": "executor",
       "name": "Executor",
       "status": "en vivo",
-      "value": "0 abiertas",
+      "value": "1 abiertas",
       "detail": "0 fills paper"
     },
     {
       "id": "risk",
       "name": "Risk",
       "status": "en vivo",
-      "value": "+0.00% DD",
+      "value": "+0.10% DD",
       "detail": "stop −12% · TP +25% · trailing 15% · ventana 21:00–07:30"
     }
   ],
@@ -87,10 +138,10 @@
       "name": "frank",
       "wallet": "498g1rVnFcnjBjpfw1xyqA1WvgQXUU8RWuELjxkjAayQ",
       "short": "498g…AayQ",
-      "last_signature": "5Bp8K4s9adpdQoUEmJSGxs6AY1dm6ax57prdvYjuPTYvBMfzZRpZRd4TFGTpCwkE2SHV1Fhh1wemJRHc5dH62sRL",
-      "last_activity": "2026-11-16T00:37:33+01:00",
-      "last_activity_human": "16 nov 2026, 00:37 (hora de Madrid)",
-      "last_activity_ago": "hace 11 min",
+      "last_signature": "5PFLpYiGnqKaM19cEkbn8dR3q4ufy1NgnbknV1DLKnQC2EKvtsKHy4PVzzpnGq1FWKrh2CykguW8WM2pr45Bpq3P",
+      "last_activity": "2026-11-16T00:50:49+01:00",
+      "last_activity_human": "16 nov 2026, 00:50 (hora de Madrid)",
+      "last_activity_ago": "hace 21s",
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
@@ -103,7 +154,7 @@
       "last_signature": "5PZG3V8XfZRWha9raEaw8EAGMaGyqdzMPdKcQkdqEbMA72W5aMC4uZwN8DvrJdyWeZgoML9L7JhmHN42GmqnbjeS",
       "last_activity": "2026-11-16T00:35:14+01:00",
       "last_activity_human": "16 nov 2026, 00:35 (hora de Madrid)",
-      "last_activity_ago": "hace 13 min",
+      "last_activity_ago": "hace 15 min",
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
@@ -113,17 +164,166 @@
       "name": "Decu",
       "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
       "short": "4vw5…9Ud9",
-      "last_signature": "4ezvtczvSpCJBD5rMM8cYSuLdjs45aSi61dEVajoUUR4Aq18oqJXvqnQtUGEVyXcFjToFuKNf65aZyh31DKdi1zo",
-      "last_activity": "2026-11-16T00:48:53+01:00",
-      "last_activity_human": "16 nov 2026, 00:48 (hora de Madrid)",
-      "last_activity_ago": "hace 1s",
+      "last_signature": "2cxiS2MtE67HfQAEGzBjWifscNS1YnXzkgocTHjXAMr9Wrzmf3WEranmZZiKkg4K4YMUV67c2fhfVApGstgpqVjB",
+      "last_activity": "2026-11-16T00:51:03+01:00",
+      "last_activity_human": "16 nov 2026, 00:51 (hora de Madrid)",
+      "last_activity_ago": "hace 9s",
       "activity_error": null,
-      "copied": 0,
-      "rejected": 13,
+      "copied": 1,
+      "rejected": 19,
       "status": "vigilando"
     }
   ],
   "activity": [
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T00:50:41",
+      "type": "rejected",
+      "trader": "Decu",
+      "token": "FLOTI",
+      "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+      "usd": null,
+      "price": 0.0001184,
+      "pct_up": -34.75948210492971,
+      "liquidity_usd": 71887.73,
+      "market_cap": null,
+      "reasons": [
+        "ya tengo ese token"
+      ],
+      "passed": false,
+      "ts_human": "16 nov 2026, 00:50 (hora de Madrid)",
+      "ago": "hace 31s"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T00:49:47",
+      "type": "rejected",
+      "trader": "Decu",
+      "token": "FLOTI",
+      "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+      "usd": null,
+      "price": 0.0001231,
+      "pct_up": -50.55036691531567,
+      "liquidity_usd": 76187.57,
+      "market_cap": null,
+      "reasons": [
+        "ya tengo ese token"
+      ],
+      "passed": false,
+      "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T00:49:37",
+      "type": "rejected",
+      "trader": "Decu",
+      "token": "FLOTI",
+      "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+      "usd": null,
+      "price": 0.0001061,
+      "pct_up": -26.138424595282633,
+      "liquidity_usd": 70320.98,
+      "market_cap": null,
+      "reasons": [
+        "ya tengo ese token"
+      ],
+      "passed": false,
+      "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T00:49:28",
+      "type": "rejected",
+      "trader": "Decu",
+      "token": "FLOTI",
+      "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+      "usd": null,
+      "price": 0.0001061,
+      "pct_up": -56.86764865374716,
+      "liquidity_usd": 70320.98,
+      "market_cap": null,
+      "reasons": [
+        "ya tengo ese token"
+      ],
+      "passed": false,
+      "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T00:49:27",
+      "type": "rejected",
+      "trader": "Decu",
+      "token": "FLOTI",
+      "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+      "usd": null,
+      "price": 0.0001061,
+      "pct_up": -57.00398023011807,
+      "liquidity_usd": 70320.98,
+      "market_cap": null,
+      "reasons": [
+        "ya tengo ese token"
+      ],
+      "passed": false,
+      "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "trade",
+      "id": "2026-11-16T00:49:26|buy|DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat|Decu|40.0",
+      "ts": "2026-11-16T00:49:26",
+      "type": "buy",
+      "trader": "Decu",
+      "token": "FLOTI",
+      "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+      "usd": 40.0,
+      "qty": 342172.7972626176,
+      "price": 0.0001169,
+      "pnl_usd": 0.0,
+      "pnl_pct": 0.0,
+      "signature": null,
+      "market_cap": null,
+      "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T00:48:59",
+      "type": "copied",
+      "trader": "Decu",
+      "token": "FLOTI",
+      "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+      "usd": 40.0,
+      "price": 0.0001169,
+      "pct_up": -20.279584375343862,
+      "liquidity_usd": 73658.95,
+      "market_cap": null,
+      "reasons": [],
+      "passed": true,
+      "ts_human": "16 nov 2026, 00:48 (hora de Madrid)",
+      "ago": "hace 2 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T00:48:30",
+      "type": "rejected",
+      "trader": "Decu",
+      "token": "FLOTI",
+      "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
+      "usd": null,
+      "price": 0.0001523,
+      "pct_up": 65.29533527346234,
+      "liquidity_usd": 83244.4,
+      "market_cap": null,
+      "reasons": [
+        "precio ya subió 65.3% (>18%)"
+      ],
+      "passed": false,
+      "ts_human": "16 nov 2026, 00:48 (hora de Madrid)",
+      "ago": "hace 2 min"
+    },
     {
       "kind": "decision",
       "ts": "2026-11-16T00:47:42",
@@ -141,7 +341,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:47 (hora de Madrid)",
-      "ago": "hace 1 min"
+      "ago": "hace 3 min"
     },
     {
       "kind": "decision",
@@ -160,7 +360,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:46 (hora de Madrid)",
-      "ago": "hace 1 min"
+      "ago": "hace 4 min"
     },
     {
       "kind": "decision",
@@ -179,7 +379,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:45 (hora de Madrid)",
-      "ago": "hace 2 min"
+      "ago": "hace 5 min"
     },
     {
       "kind": "decision",
@@ -198,7 +398,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:45 (hora de Madrid)",
-      "ago": "hace 3 min"
+      "ago": "hace 5 min"
     },
     {
       "kind": "decision",
@@ -217,7 +417,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:44 (hora de Madrid)",
-      "ago": "hace 4 min"
+      "ago": "hace 6 min"
     },
     {
       "kind": "decision",
@@ -237,7 +437,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:11 (hora de Madrid)",
-      "ago": "hace 37 min"
+      "ago": "hace 39 min"
     },
     {
       "kind": "decision",
@@ -257,7 +457,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:10 (hora de Madrid)",
-      "ago": "hace 38 min"
+      "ago": "hace 41 min"
     },
     {
       "kind": "decision",
@@ -277,7 +477,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:03 (hora de Madrid)",
-      "ago": "hace 45 min"
+      "ago": "hace 47 min"
     },
     {
       "kind": "decision",
@@ -296,7 +496,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:01 (hora de Madrid)",
-      "ago": "hace 47 min"
+      "ago": "hace 49 min"
     },
     {
       "kind": "decision",
@@ -316,7 +516,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:00 (hora de Madrid)",
-      "ago": "hace 48 min"
+      "ago": "hace 50 min"
     },
     {
       "kind": "decision",
@@ -335,7 +535,7 @@
       ],
       "passed": false,
       "ts_human": "15 nov 2026, 23:58 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -354,7 +554,7 @@
       ],
       "passed": false,
       "ts_human": "15 nov 2026, 23:56 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 54 min"
     },
     {
       "kind": "decision",
@@ -374,15 +574,15 @@
       ],
       "passed": false,
       "ts_human": "15 nov 2026, 23:54 (hora de Madrid)",
-      "ago": "hace 54 min"
+      "ago": "hace 56 min"
     }
   ],
   "files": {
     "state": true,
-    "trades": false,
-    "trades_count": 0,
+    "trades": true,
+    "trades_count": 1,
     "decisions": true,
-    "decisions_count": 13,
+    "decisions_count": 20,
     "log": true,
     "heartbeat": true
   },

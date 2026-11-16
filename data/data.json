@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-16T01:22:43+01:00",
-  "built_at_human": "16 nov 2026, 01:22 (hora de Madrid)",
+  "built_at": "2026-11-16T01:24:49+01:00",
+  "built_at_human": "16 nov 2026, 01:24 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
   "status": "LIVE",
-  "heartbeat": "2026-11-16T01:22:38+01:00",
-  "heartbeat_human": "16 nov 2026, 01:22 (hora de Madrid)",
+  "heartbeat": "2026-11-16T01:24:09+01:00",
+  "heartbeat_human": "16 nov 2026, 01:24 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 1.4,
+  "heartbeat_age_s": 36.5,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -17,7 +17,7 @@
   "pnl_pct": 1.8477,
   "multiplier": 1.018477,
   "open_positions": 0,
-  "max_positions": 4,
+  "max_positions": 6,
   "positions": [],
   "equity_points": [
     {
@@ -41,7 +41,7 @@
       "source": "trailing_exit"
     },
     {
-      "t": "2026-11-16T01:22:38",
+      "t": "2026-11-16T01:24:09",
       "v": 509.238666,
       "source": "state"
     }
@@ -57,7 +57,7 @@
       "trader": "Decu",
       "ts": "2026-11-16T00:49:26",
       "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
-      "ago": "hace 33 min",
+      "ago": "hace 35 min",
       "signature": "tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "solscan": "https://solscan.io/tx/tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
@@ -73,7 +73,7 @@
       "trader": "Decu",
       "ts": "2026-11-16T00:53:23",
       "ts_human": "16 nov 2026, 00:53 (hora de Madrid)",
-      "ago": "hace 29 min",
+      "ago": "hace 31 min",
       "signature": "tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "solscan": "https://solscan.io/tx/tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
@@ -89,7 +89,7 @@
       "trader": "Decu",
       "ts": "2026-11-16T00:54:23",
       "ts_human": "16 nov 2026, 00:54 (hora de Madrid)",
-      "ago": "hace 28 min",
+      "ago": "hace 30 min",
       "signature": "tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "solscan": "https://solscan.io/tx/tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
@@ -106,7 +106,7 @@
     "trader": "Decu",
     "ts": "2026-11-16T00:54:23",
     "ts_human": "16 nov 2026, 00:54 (hora de Madrid)",
-    "ago": "hace 28 min",
+    "ago": "hace 30 min",
     "signature": "tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
     "solscan": "https://solscan.io/tx/tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
     "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
@@ -137,8 +137,8 @@
       "id": "watcher",
       "name": "Watcher",
       "status": "en vivo",
-      "value": "3 wallets",
-      "detail": "3/3 con actividad reciente verificada"
+      "value": "7 wallets",
+      "detail": "7/7 con actividad reciente verificada"
     },
     {
       "id": "copier",
@@ -159,47 +159,99 @@
       "name": "Risk",
       "status": "en vivo",
       "value": "+1.85% DD",
-      "detail": "stop −12% · TP +25% · trailing 15% · ventana 21:00–07:30"
+      "detail": "modo agresivo · stop −12/−15% · TP +30/+60% · trailing 20% · ventana 21:00–07:30"
     }
   ],
   "traders": [
     {
-      "name": "frank",
-      "wallet": "498g1rVnFcnjBjpfw1xyqA1WvgQXUU8RWuELjxkjAayQ",
-      "short": "498g…AayQ",
-      "last_signature": "2PoXRt6TfHvuvXdheJsJeGsKGsVBsQatEPXGqXszPAjafY2hQo8GKkmotjaG37gxhNbZ57KWAPPeafuS84BssrfN",
-      "last_activity": "2026-11-16T01:06:42+01:00",
-      "last_activity_human": "16 nov 2026, 01:06 (hora de Madrid)",
-      "last_activity_ago": "hace 15 min",
+      "name": "Decu",
+      "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
+      "short": "4vw5…9Ud9",
+      "last_signature": "yYb32kFv4yTR8jvCYU2vMDmVDvgYYKQAhfUr5e6JMKSxw3fwYi2TspApBAqnhGRaEWdxU5tRCXZHeuJ73E2fhWs",
+      "last_activity": "2026-11-16T01:24:45+01:00",
+      "last_activity_human": "16 nov 2026, 01:24 (hora de Madrid)",
+      "last_activity_ago": "hace 0s",
       "activity_error": null,
-      "copied": 0,
-      "rejected": 0,
+      "copied": 1,
+      "rejected": 26,
       "status": "vigilando"
     },
     {
       "name": "Unipcs",
-      "wallet": "2heJbC32Tpfcb3nbUb5ER61K11FGZVfVGtVnDm6LDogF",
-      "short": "2heJ…DogF",
-      "last_signature": "5PZG3V8XfZRWha9raEaw8EAGMaGyqdzMPdKcQkdqEbMA72W5aMC4uZwN8DvrJdyWeZgoML9L7JhmHN42GmqnbjeS",
-      "last_activity": "2026-11-16T00:35:14+01:00",
-      "last_activity_human": "16 nov 2026, 00:35 (hora de Madrid)",
-      "last_activity_ago": "hace 47 min",
+      "wallet": "5M8ACGKEXG1ojKDTMH3sMqhTihTgHYMSsZc6W8i7QW3Y",
+      "short": "5M8A…QW3Y",
+      "last_signature": "3DjSWFSs8zqMtM7puBfHmujdUSnZEpGr2iJ1W3AwRKVrr9JXGJ4ZnjTzmc3kMRt3kaidYusyb6aPt8cg37sceiVu",
+      "last_activity": "2026-11-15T23:48:44+01:00",
+      "last_activity_human": "15 nov 2026, 23:48 (hora de Madrid)",
+      "last_activity_ago": "hace 1 h",
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
       "status": "vigilando"
     },
     {
-      "name": "Decu",
-      "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
-      "short": "4vw5…9Ud9",
-      "last_signature": "4PJQhqGxAAk9oPTaiPquUKj7y858kfwxUjnJsKDpiXpz6L4fGWKeRkjbH6SckqMd6MP6wsCSy1UEnp7jXZTCSji1",
-      "last_activity": "2026-11-16T01:22:42+01:00",
-      "last_activity_human": "16 nov 2026, 01:22 (hora de Madrid)",
-      "last_activity_ago": "hace 1s",
+      "name": "9s4ji7",
+      "wallet": "9s4ji7MRh6xx9PVx7D4by8YjpHMfPVtHfYuMUy8VaTTp",
+      "short": "9s4j…aTTp",
+      "last_signature": "sEhEEWjp6qJ9bvMEzDimvmVwFaWcnmWoayoSnsckVGzmkLYDf7zqK8e2mPEiPaxPzj5z6QzVc6YSKyQVuMLd8b2",
+      "last_activity": "2026-11-15T22:02:32+01:00",
+      "last_activity_human": "15 nov 2026, 22:02 (hora de Madrid)",
+      "last_activity_ago": "hace 3 h",
       "activity_error": null,
-      "copied": 1,
-      "rejected": 26,
+      "copied": 0,
+      "rejected": 0,
+      "status": "vigilando"
+    },
+    {
+      "name": "Johnson",
+      "wallet": "J9TYAsWWidbrcZybmLSfrLzryANf4CgJBLdvwdGuC8MB",
+      "short": "J9TY…C8MB",
+      "last_signature": "5ZGRHLvtgFhJHqCDgE9bdhvrmeQQFkMJiRqvEmPThYAAVZ2MvA7pACzCg7bUuf9XdpwrkF43mPskczeZwvTVDA88",
+      "last_activity": "2026-11-16T01:23:00+01:00",
+      "last_activity_human": "16 nov 2026, 01:23 (hora de Madrid)",
+      "last_activity_ago": "hace 1 min",
+      "activity_error": null,
+      "copied": 0,
+      "rejected": 0,
+      "status": "vigilando"
+    },
+    {
+      "name": "Doji",
+      "wallet": "5ZuV8eqkvzYFVEKbLvGBdexL2tFv7E5BCd2HZpjqbdg",
+      "short": "5ZuV…qbdg",
+      "last_signature": "3YMTZZ5fjG79C3omTeLh9Z75DyeNKNrMzGudcCGXh3GRmhjhNQqq6fqwpsn19pcZhL8n3sZguC5cQUtBA1bVDsGu",
+      "last_activity": "2026-11-16T01:23:48+01:00",
+      "last_activity_human": "16 nov 2026, 01:23 (hora de Madrid)",
+      "last_activity_ago": "hace 59s",
+      "activity_error": null,
+      "copied": 0,
+      "rejected": 0,
+      "status": "vigilando"
+    },
+    {
+      "name": "BN7V",
+      "wallet": "BN7VBMS9LfNcRE5pk2jNgJyT8uny8uzQsMFhoSg4Ka4E",
+      "short": "BN7V…Ka4E",
+      "last_signature": "3jhyRX4jCS3uRxrkrbfh5WGHTUNQWkSPww6jV9Nwvr2x7s2z3cN5iyH73rV2xLGwaqqzmH3pyVTbPoCf8URe9A9i",
+      "last_activity": "2026-11-14T19:54:58+01:00",
+      "last_activity_human": "14 nov 2026, 19:54 (hora de Madrid)",
+      "last_activity_ago": "hace 1 d",
+      "activity_error": null,
+      "copied": 0,
+      "rejected": 0,
+      "status": "vigilando"
+    },
+    {
+      "name": "yHCx",
+      "wallet": "yHCxHBEaJW5tbndqC8JciSThr7U1cqLpdcsvHcx6PRe",
+      "short": "yHCx…6PRe",
+      "last_signature": "Fw1UFsxzzLyWvmii6XvbVq65JFaaWrLgYosjLHbbCSvCvZoSygeL9PNNHnnzWhuipmk86eYb3Qh7Gsa9ptMt7BG",
+      "last_activity": "2026-11-15T23:42:00+01:00",
+      "last_activity_human": "15 nov 2026, 23:42 (hora de Madrid)",
+      "last_activity_ago": "hace 1 h",
+      "activity_error": null,
+      "copied": 0,
+      "rejected": 0,
       "status": "vigilando"
     }
   ],
@@ -221,7 +273,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:55 (hora de Madrid)",
-      "ago": "hace 27 min"
+      "ago": "hace 29 min"
     },
     {
       "kind": "decision",
@@ -240,7 +292,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:54 (hora de Madrid)",
-      "ago": "hace 28 min"
+      "ago": "hace 30 min"
     },
     {
       "kind": "trade",
@@ -258,7 +310,7 @@
       "signature": null,
       "market_cap": null,
       "ts_human": "16 nov 2026, 00:54 (hora de Madrid)",
-      "ago": "hace 28 min"
+      "ago": "hace 30 min"
     },
     {
       "kind": "decision",
@@ -277,7 +329,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:54 (hora de Madrid)",
-      "ago": "hace 28 min"
+      "ago": "hace 30 min"
     },
     {
       "kind": "trade",
@@ -295,7 +347,7 @@
       "signature": null,
       "market_cap": null,
       "ts_human": "16 nov 2026, 00:53 (hora de Madrid)",
-      "ago": "hace 29 min"
+      "ago": "hace 31 min"
     },
     {
       "kind": "decision",
@@ -314,7 +366,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:53 (hora de Madrid)",
-      "ago": "hace 29 min"
+      "ago": "hace 31 min"
     },
     {
       "kind": "decision",
@@ -333,7 +385,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:52 (hora de Madrid)",
-      "ago": "hace 30 min"
+      "ago": "hace 32 min"
     },
     {
       "kind": "decision",
@@ -352,7 +404,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:51 (hora de Madrid)",
-      "ago": "hace 30 min"
+      "ago": "hace 32 min"
     },
     {
       "kind": "decision",
@@ -371,7 +423,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:51 (hora de Madrid)",
-      "ago": "hace 31 min"
+      "ago": "hace 33 min"
     },
     {
       "kind": "decision",
@@ -390,7 +442,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:50 (hora de Madrid)",
-      "ago": "hace 32 min"
+      "ago": "hace 34 min"
     },
     {
       "kind": "decision",
@@ -409,7 +461,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
-      "ago": "hace 32 min"
+      "ago": "hace 35 min"
     },
     {
       "kind": "decision",
@@ -428,7 +480,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
-      "ago": "hace 33 min"
+      "ago": "hace 35 min"
     },
     {
       "kind": "decision",
@@ -447,7 +499,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
-      "ago": "hace 33 min"
+      "ago": "hace 35 min"
     },
     {
       "kind": "decision",
@@ -466,7 +518,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
-      "ago": "hace 33 min"
+      "ago": "hace 35 min"
     },
     {
       "kind": "trade",
@@ -484,7 +536,7 @@
       "signature": null,
       "market_cap": null,
       "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
-      "ago": "hace 33 min"
+      "ago": "hace 35 min"
     },
     {
       "kind": "decision",
@@ -501,7 +553,7 @@
       "reasons": [],
       "passed": true,
       "ts_human": "16 nov 2026, 00:48 (hora de Madrid)",
-      "ago": "hace 33 min"
+      "ago": "hace 35 min"
     },
     {
       "kind": "decision",
@@ -520,7 +572,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:48 (hora de Madrid)",
-      "ago": "hace 34 min"
+      "ago": "hace 36 min"
     },
     {
       "kind": "decision",
@@ -539,7 +591,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:47 (hora de Madrid)",
-      "ago": "hace 35 min"
+      "ago": "hace 37 min"
     },
     {
       "kind": "decision",
@@ -558,7 +610,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:46 (hora de Madrid)",
-      "ago": "hace 35 min"
+      "ago": "hace 37 min"
     },
     {
       "kind": "decision",
@@ -577,7 +629,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:45 (hora de Madrid)",
-      "ago": "hace 36 min"
+      "ago": "hace 38 min"
     },
     {
       "kind": "decision",
@@ -596,7 +648,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:45 (hora de Madrid)",
-      "ago": "hace 37 min"
+      "ago": "hace 39 min"
     },
     {
       "kind": "decision",
@@ -615,7 +667,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:44 (hora de Madrid)",
-      "ago": "hace 37 min"
+      "ago": "hace 39 min"
     },
     {
       "kind": "decision",

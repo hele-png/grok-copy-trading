@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-16T04:06:10+01:00",
-  "built_at_human": "16 nov 2026, 04:06 (hora de Madrid)",
+  "built_at": "2026-11-16T04:35:02+01:00",
+  "built_at_human": "16 nov 2026, 04:35 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
   "status": "LIVE",
-  "heartbeat": "2026-11-16T04:06:08+01:00",
-  "heartbeat_human": "16 nov 2026, 04:06 (hora de Madrid)",
+  "heartbeat": "2026-11-16T04:34:06+01:00",
+  "heartbeat_human": "16 nov 2026, 04:34 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 0.2,
+  "heartbeat_age_s": 51.3,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -101,7 +101,7 @@
       "source": "trailing_exit"
     },
     {
-      "t": "2026-11-16T04:06:08",
+      "t": "2026-11-16T04:34:06",
       "v": 502.493219,
       "source": "state"
     }
@@ -168,7 +168,7 @@
       "trader": "Doji",
       "ts": "2026-11-16T02:15:27",
       "ts_human": "16 nov 2026, 02:15 (hora de Madrid)",
-      "ago": "hace 1 h",
+      "ago": "hace 2 h",
       "signature": "5UtubuytV7oNDhUQZHBfd5qnYyTrQgmDarZeDU6EvnyhWcYnqeoc32xQiMe45tYtzyhjXHxYiU1avPUowLAeSyGq",
       "solscan": "https://solscan.io/tx/5UtubuytV7oNDhUQZHBfd5qnYyTrQgmDarZeDU6EvnyhWcYnqeoc32xQiMe45tYtzyhjXHxYiU1avPUowLAeSyGq",
       "mint": "FwVsiYsWBDCs4QifGcDRGGxQ3xh6CYLnWWFLUDiupump",
@@ -185,7 +185,7 @@
       "trader": "Doji",
       "ts": "2026-11-16T02:20:23",
       "ts_human": "16 nov 2026, 02:20 (hora de Madrid)",
-      "ago": "hace 1 h",
+      "ago": "hace 2 h",
       "signature": "5UtubuytV7oNDhUQZHBfd5qnYyTrQgmDarZeDU6EvnyhWcYnqeoc32xQiMe45tYtzyhjXHxYiU1avPUowLAeSyGq",
       "solscan": "https://solscan.io/tx/5UtubuytV7oNDhUQZHBfd5qnYyTrQgmDarZeDU6EvnyhWcYnqeoc32xQiMe45tYtzyhjXHxYiU1avPUowLAeSyGq",
       "mint": "FwVsiYsWBDCs4QifGcDRGGxQ3xh6CYLnWWFLUDiupump",
@@ -355,7 +355,7 @@
       "trader": "Doji",
       "ts": "2026-11-16T03:19:31",
       "ts_human": "16 nov 2026, 03:19 (hora de Madrid)",
-      "ago": "hace 46 min",
+      "ago": "hace 1 h",
       "signature": "5Xari23w5wndUyDK8hHbtoYHBr3rgTGGbH7whPfyHnUs5yZp9fSM7NePT5SWTBt74fmRe5ccGhKKZ1SjVgTQTDNM",
       "solscan": "https://solscan.io/tx/5Xari23w5wndUyDK8hHbtoYHBr3rgTGGbH7whPfyHnUs5yZp9fSM7NePT5SWTBt74fmRe5ccGhKKZ1SjVgTQTDNM",
       "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
@@ -373,7 +373,7 @@
     "trader": "Doji",
     "ts": "2026-11-16T03:19:31",
     "ts_human": "16 nov 2026, 03:19 (hora de Madrid)",
-    "ago": "hace 46 min",
+    "ago": "hace 1 h",
     "signature": "5Xari23w5wndUyDK8hHbtoYHBr3rgTGGbH7whPfyHnUs5yZp9fSM7NePT5SWTBt74fmRe5ccGhKKZ1SjVgTQTDNM",
     "solscan": "https://solscan.io/tx/5Xari23w5wndUyDK8hHbtoYHBr3rgTGGbH7whPfyHnUs5yZp9fSM7NePT5SWTBt74fmRe5ccGhKKZ1SjVgTQTDNM",
     "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
@@ -384,9 +384,9 @@
     "id": "2026-11-15",
     "started": "2026-11-15T23:20:23",
     "halted": true,
-    "seen": 91,
+    "seen": 98,
     "copied": 8,
-    "rejected": 83,
+    "rejected": 90,
     "realized_pnl": 2.493218729197495,
     "fills": 9,
     "equity_pnl_usd": 2.4932,
@@ -403,7 +403,7 @@
       "dato no verificable: precio de la curva no cuadra con DexScreener": 3,
       "compras empaquetadas al crear": 1,
       "precio ya subido >35%": 6,
-      "parada diaria": 7,
+      "parada diaria": 14,
       "dato no verificable: precio de la curva sin contraste en DexScreener": 1
     }
   },
@@ -420,7 +420,7 @@
       "name": "Copier",
       "status": "en vivo",
       "value": "8 copiados",
-      "detail": "91 vistos · 83 rechazados"
+      "detail": "98 vistos · 90 rechazados"
     },
     {
       "id": "executor",
@@ -442,10 +442,10 @@
       "name": "Decu",
       "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
       "short": "4vw5…9Ud9",
-      "last_signature": "67qrW2irLLqddQ8DCTDvMFX5EF38tPK9H7431U3vBdJujzTpqCswgEF8vX5bXsJMKsUmVyc95d2B8rikfYsoJkx4",
-      "last_activity": "2026-11-16T04:06:08+01:00",
-      "last_activity_human": "16 nov 2026, 04:06 (hora de Madrid)",
-      "last_activity_ago": "hace 0s",
+      "last_signature": "daA1xRL2zmNUCJUPC1M1m1MhjxCU6vW8M4HLzbvpiuVMZH7VnX4gGg34ZBGoDEeH8Vbz8SoHXtidRf4ghrFbtj6",
+      "last_activity": "2026-11-16T04:34:44+01:00",
+      "last_activity_human": "16 nov 2026, 04:34 (hora de Madrid)",
+      "last_activity_ago": "hace 14s",
       "activity_error": null,
       "copied": 1,
       "rejected": 26,
@@ -484,7 +484,7 @@
       "last_signature": "33fXFXAeCDrQrERGgBga1RvFiePoHeZw3WvxekpTXyDV375tcUg2ZVXU3sRCypsdDumHe6zRkDNpzesrq1EVWAnm",
       "last_activity": "2026-11-16T04:00:08+01:00",
       "last_activity_human": "16 nov 2026, 04:00 (hora de Madrid)",
-      "last_activity_ago": "hace 6 min",
+      "last_activity_ago": "hace 34 min",
       "activity_error": null,
       "copied": 3,
       "rejected": 28,
@@ -494,13 +494,13 @@
       "name": "Doji",
       "wallet": "5ZuV8eqkvzYFVEKbLvGBdexL2tFv7E5BCd2HZpjqbdg",
       "short": "5ZuV…qbdg",
-      "last_signature": "5sUq2nXSZ2XaYdmh3KSRXfXzK9Hb1Nbw8KN9SwZQV9XGNAeEo2jyq79rSHm3mr542aafE8Nmaz3PYUibTNzXCw9Z",
-      "last_activity": "2026-11-16T03:58:29+01:00",
-      "last_activity_human": "16 nov 2026, 03:58 (hora de Madrid)",
-      "last_activity_ago": "hace 7 min",
+      "last_signature": "5gWDUbAr4hRkEJjCmDmvWiRUvnNvWaCnGLZPUqrJPLxnF7zHZig91A4LQNxJZp1F8gXFgUfieHujBZDFy4zKEei3",
+      "last_activity": "2026-11-16T04:30:12+01:00",
+      "last_activity_human": "16 nov 2026, 04:30 (hora de Madrid)",
+      "last_activity_ago": "hace 4 min",
       "activity_error": null,
       "copied": 4,
-      "rejected": 17,
+      "rejected": 24,
       "status": "vigilando"
     },
     {
@@ -533,6 +533,153 @@
   "activity": [
     {
       "kind": "decision",
+      "ts": "2026-11-16T04:33:39",
+      "type": "rejected",
+      "trader": "Doji",
+      "token": "HOGE",
+      "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
+      "usd": null,
+      "price": 0.0007829,
+      "pct_up": -1.2054272013638259,
+      "liquidity_usd": 96898.61,
+      "market_cap": null,
+      "reasons": [
+        "parada diaria (-10% o 4 stops seguidos): parado hasta la próxima sesión"
+      ],
+      "passed": false,
+      "route": "graduated",
+      "trader_entry": 0.000757819463684341,
+      "ts_human": "16 nov 2026, 04:33 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T04:33:38",
+      "type": "rejected",
+      "trader": "Doji",
+      "token": "HOGE",
+      "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
+      "usd": null,
+      "price": 0.0007829,
+      "pct_up": -1.2054272013638259,
+      "liquidity_usd": 96898.61,
+      "market_cap": null,
+      "reasons": [
+        "parada diaria (-10% o 4 stops seguidos): parado hasta la próxima sesión"
+      ],
+      "passed": false,
+      "route": "graduated",
+      "trader_entry": 0.0007566666632541553,
+      "ts_human": "16 nov 2026, 04:33 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T04:33:37",
+      "type": "rejected",
+      "trader": "Doji",
+      "token": "HOGE",
+      "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
+      "usd": null,
+      "price": 0.0007829,
+      "pct_up": -1.2054272013638259,
+      "liquidity_usd": 96898.61,
+      "market_cap": null,
+      "reasons": [
+        "parada diaria (-10% o 4 stops seguidos): parado hasta la próxima sesión"
+      ],
+      "passed": false,
+      "route": "graduated",
+      "trader_entry": 0.0008145439905876475,
+      "ts_human": "16 nov 2026, 04:33 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T04:33:36",
+      "type": "rejected",
+      "trader": "Doji",
+      "token": "HOGE",
+      "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
+      "usd": null,
+      "price": 0.0007829,
+      "pct_up": -1.2054272013638259,
+      "liquidity_usd": 96898.61,
+      "market_cap": null,
+      "reasons": [
+        "parada diaria (-10% o 4 stops seguidos): parado hasta la próxima sesión"
+      ],
+      "passed": false,
+      "route": "graduated",
+      "trader_entry": 0.0008106788432927524,
+      "ts_human": "16 nov 2026, 04:33 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T04:14:57",
+      "type": "rejected",
+      "trader": "Doji",
+      "token": "HOGE",
+      "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
+      "usd": null,
+      "price": 0.0008451,
+      "pct_up": -0.4152825187117317,
+      "liquidity_usd": 101453.86,
+      "market_cap": null,
+      "reasons": [
+        "parada diaria (-10% o 4 stops seguidos): parado hasta la próxima sesión"
+      ],
+      "passed": false,
+      "route": "graduated",
+      "trader_entry": 0.0008498223247529114,
+      "ts_human": "16 nov 2026, 04:14 (hora de Madrid)",
+      "ago": "hace 20 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T04:13:39",
+      "type": "rejected",
+      "trader": "Doji",
+      "token": "HOGE",
+      "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
+      "usd": null,
+      "price": 0.0008599,
+      "pct_up": 1.32871679346797,
+      "liquidity_usd": 102199.75,
+      "market_cap": null,
+      "reasons": [
+        "parada diaria (-10% o 4 stops seguidos): parado hasta la próxima sesión"
+      ],
+      "passed": false,
+      "route": "graduated",
+      "trader_entry": 0.0008532496038559,
+      "ts_human": "16 nov 2026, 04:13 (hora de Madrid)",
+      "ago": "hace 21 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T04:13:34",
+      "type": "rejected",
+      "trader": "Doji",
+      "token": "HOGE",
+      "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
+      "usd": null,
+      "price": 0.0008599,
+      "pct_up": 1.32871679346797,
+      "liquidity_usd": 102199.75,
+      "market_cap": null,
+      "reasons": [
+        "parada diaria (-10% o 4 stops seguidos): parado hasta la próxima sesión"
+      ],
+      "passed": false,
+      "route": "graduated",
+      "trader_entry": 0.0008681425442236601,
+      "ts_human": "16 nov 2026, 04:13 (hora de Madrid)",
+      "ago": "hace 21 min"
+    },
+    {
+      "kind": "decision",
       "ts": "2026-11-16T04:00:16",
       "type": "rejected",
       "trader": "Johnson",
@@ -552,7 +699,7 @@
       "route": "curve",
       "trader_entry": 4.401283506593531e-06,
       "ts_human": "16 nov 2026, 04:00 (hora de Madrid)",
-      "ago": "hace 5 min"
+      "ago": "hace 34 min"
     },
     {
       "kind": "decision",
@@ -575,7 +722,7 @@
       "route": "curve",
       "trader_entry": 1.2001182684665348e-08,
       "ts_human": "16 nov 2026, 03:59 (hora de Madrid)",
-      "ago": "hace 6 min"
+      "ago": "hace 35 min"
     },
     {
       "kind": "decision",
@@ -596,7 +743,7 @@
       "route": "graduated",
       "trader_entry": 0.0010075455378004386,
       "ts_human": "16 nov 2026, 03:59 (hora de Madrid)",
-      "ago": "hace 6 min"
+      "ago": "hace 35 min"
     },
     {
       "kind": "decision",
@@ -617,7 +764,7 @@
       "route": "graduated",
       "trader_entry": 0.0010694872049754416,
       "ts_human": "16 nov 2026, 03:59 (hora de Madrid)",
-      "ago": "hace 6 min"
+      "ago": "hace 35 min"
     },
     {
       "kind": "decision",
@@ -638,7 +785,7 @@
       "route": "graduated",
       "trader_entry": 0.0012247021048858195,
       "ts_human": "16 nov 2026, 03:37 (hora de Madrid)",
-      "ago": "hace 28 min"
+      "ago": "hace 57 min"
     },
     {
       "kind": "decision",
@@ -660,7 +807,7 @@
       "route": "graduated",
       "trader_entry": 0.0009248970284610378,
       "ts_human": "16 nov 2026, 03:34 (hora de Madrid)",
-      "ago": "hace 31 min"
+      "ago": "hace 1 h"
     },
     {
       "kind": "decision",
@@ -682,7 +829,7 @@
       "route": "graduated",
       "trader_entry": 0.0008518211569268222,
       "ts_human": "16 nov 2026, 03:34 (hora de Madrid)",
-      "ago": "hace 32 min"
+      "ago": "hace 1 h"
     },
     {
       "kind": "trade",
@@ -701,7 +848,7 @@
       "market_cap": null,
       "route": "graduated",
       "ts_human": "16 nov 2026, 03:19 (hora de Madrid)",
-      "ago": "hace 46 min"
+      "ago": "hace 1 h"
     },
     {
       "kind": "trade",
@@ -1202,153 +1349,6 @@
       "trader_entry": 3.5184107762258937e-06,
       "ts_human": "16 nov 2026, 02:40 (hora de Madrid)",
       "ago": "hace 1 h"
-    },
-    {
-      "kind": "decision",
-      "ts": "2026-11-16T02:40:25",
-      "type": "rejected",
-      "trader": "9s4ji7",
-      "token": "SHORTS",
-      "mint": "yaz3uMAorsfhkGxFmkcNbfMNdLz5sLEyervpjx5pump",
-      "usd": null,
-      "price": 3.082e-06,
-      "pct_up": -56.70838487552945,
-      "liquidity_usd": 3916.02,
-      "market_cap": null,
-      "reasons": [
-        "liquidez $3,916 < $15.000"
-      ],
-      "passed": false,
-      "route": "graduated",
-      "trader_entry": 5.198237031357944e-06,
-      "ts_human": "16 nov 2026, 02:40 (hora de Madrid)",
-      "ago": "hace 1 h"
-    },
-    {
-      "kind": "decision",
-      "ts": "2026-11-16T02:40:24",
-      "type": "rejected",
-      "trader": "9s4ji7",
-      "token": "SHORTS",
-      "mint": "yaz3uMAorsfhkGxFmkcNbfMNdLz5sLEyervpjx5pump",
-      "usd": null,
-      "price": 3.082e-06,
-      "pct_up": -56.70838487552945,
-      "liquidity_usd": 3916.02,
-      "market_cap": null,
-      "reasons": [
-        "liquidez $3,916 < $15.000"
-      ],
-      "passed": false,
-      "route": "graduated",
-      "trader_entry": 5.017946359322365e-06,
-      "ts_human": "16 nov 2026, 02:40 (hora de Madrid)",
-      "ago": "hace 1 h"
-    },
-    {
-      "kind": "decision",
-      "ts": "2026-11-16T02:40:24",
-      "type": "rejected",
-      "trader": "9s4ji7",
-      "token": "SHORTS",
-      "mint": "yaz3uMAorsfhkGxFmkcNbfMNdLz5sLEyervpjx5pump",
-      "usd": null,
-      "price": 3.082e-06,
-      "pct_up": -56.70838487552945,
-      "liquidity_usd": 3916.02,
-      "market_cap": null,
-      "reasons": [
-        "liquidez $3,916 < $15.000"
-      ],
-      "passed": false,
-      "route": "graduated",
-      "trader_entry": 5.117170990181608e-06,
-      "ts_human": "16 nov 2026, 02:40 (hora de Madrid)",
-      "ago": "hace 1 h"
-    },
-    {
-      "kind": "decision",
-      "ts": "2026-11-16T02:40:23",
-      "type": "rejected",
-      "trader": "9s4ji7",
-      "token": "SHORTS",
-      "mint": "yaz3uMAorsfhkGxFmkcNbfMNdLz5sLEyervpjx5pump",
-      "usd": null,
-      "price": 3.082e-06,
-      "pct_up": -56.70838487552945,
-      "liquidity_usd": 3916.02,
-      "market_cap": null,
-      "reasons": [
-        "liquidez $3,916 < $15.000"
-      ],
-      "passed": false,
-      "route": "graduated",
-      "trader_entry": 4.825704987481186e-06,
-      "ts_human": "16 nov 2026, 02:40 (hora de Madrid)",
-      "ago": "hace 1 h"
-    },
-    {
-      "kind": "decision",
-      "ts": "2026-11-16T02:40:22",
-      "type": "rejected",
-      "trader": "9s4ji7",
-      "token": "SHORTS",
-      "mint": "yaz3uMAorsfhkGxFmkcNbfMNdLz5sLEyervpjx5pump",
-      "usd": null,
-      "price": 3.082e-06,
-      "pct_up": -56.70838487552945,
-      "liquidity_usd": 3916.02,
-      "market_cap": null,
-      "reasons": [
-        "liquidez $3,916 < $15.000"
-      ],
-      "passed": false,
-      "route": "graduated",
-      "trader_entry": 7.921895094794082e-06,
-      "ts_human": "16 nov 2026, 02:40 (hora de Madrid)",
-      "ago": "hace 1 h"
-    },
-    {
-      "kind": "decision",
-      "ts": "2026-11-16T02:40:22",
-      "type": "rejected",
-      "trader": "9s4ji7",
-      "token": "SHORTS",
-      "mint": "yaz3uMAorsfhkGxFmkcNbfMNdLz5sLEyervpjx5pump",
-      "usd": null,
-      "price": 3.082e-06,
-      "pct_up": -56.70838487552945,
-      "liquidity_usd": 3916.02,
-      "market_cap": null,
-      "reasons": [
-        "liquidez $3,916 < $15.000"
-      ],
-      "passed": false,
-      "route": "graduated",
-      "trader_entry": 8.199546444513894e-06,
-      "ts_human": "16 nov 2026, 02:40 (hora de Madrid)",
-      "ago": "hace 1 h"
-    },
-    {
-      "kind": "decision",
-      "ts": "2026-11-16T02:40:21",
-      "type": "rejected",
-      "trader": "9s4ji7",
-      "token": "SHORTS",
-      "mint": "yaz3uMAorsfhkGxFmkcNbfMNdLz5sLEyervpjx5pump",
-      "usd": null,
-      "price": 3.082e-06,
-      "pct_up": -56.70838487552945,
-      "liquidity_usd": 3916.02,
-      "market_cap": null,
-      "reasons": [
-        "liquidez $3,916 < $15.000"
-      ],
-      "passed": false,
-      "route": "graduated",
-      "trader_entry": 7.751709497022283e-06,
-      "ts_human": "16 nov 2026, 02:40 (hora de Madrid)",
-      "ago": "hace 1 h"
     }
   ],
   "files": {
@@ -1356,7 +1356,7 @@
     "trades": true,
     "trades_count": 15,
     "decisions": true,
-    "decisions_count": 91,
+    "decisions_count": 98,
     "log": true,
     "heartbeat": true
   },

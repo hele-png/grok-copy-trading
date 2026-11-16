@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-11-16T05:48:03+01:00",
+  "built_at": "2026-11-16T05:48:44+01:00",
   "built_at_human": "16 nov 2026, 05:48 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
@@ -7,7 +7,7 @@
   "heartbeat": "2026-11-16T05:47:49+01:00",
   "heartbeat_human": "16 nov 2026, 05:47 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 9.8,
+  "heartbeat_age_s": 50.8,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -454,7 +454,7 @@
       "last_signature": "49RtjJGwSShyfLrxUMtjEbXvVezCchUsCT4sPvWauccdkrXU7PV4GiY8wymo8fzqLPeNTmv98YzQPE2PTQGttXRQ",
       "last_activity": "2026-11-16T05:47:23+01:00",
       "last_activity_human": "16 nov 2026, 05:47 (hora de Madrid)",
-      "last_activity_ago": "hace 35s",
+      "last_activity_ago": "hace 1 min",
       "activity_error": null,
       "copied": 1,
       "rejected": 36,
@@ -506,7 +506,7 @@
       "last_signature": "34w2nug3knnNW9JNiz46VMGDs6suZ1GaoxDaC7kMLquZCdBjf83XFz6hok5yiCwGwgw7uCZNowwu1rC9a9Q1PfFx",
       "last_activity": "2026-11-16T05:33:07+01:00",
       "last_activity_human": "16 nov 2026, 05:33 (hora de Madrid)",
-      "last_activity_ago": "hace 14 min",
+      "last_activity_ago": "hace 15 min",
       "activity_error": null,
       "copied": 4,
       "rejected": 40,
@@ -560,7 +560,7 @@
       "route": "curve",
       "trader_entry": 1.4027906529972365e-05,
       "ts_human": "16 nov 2026, 05:47 (hora de Madrid)",
-      "ago": "hace 46s"
+      "ago": "hace 1 min"
     },
     {
       "kind": "decision",
@@ -582,7 +582,7 @@
       "route": "curve",
       "trader_entry": 1.201364674603874e-05,
       "ts_human": "16 nov 2026, 05:46 (hora de Madrid)",
-      "ago": "hace 1 min"
+      "ago": "hace 2 min"
     },
     {
       "kind": "decision",
@@ -604,7 +604,7 @@
       "route": "curve",
       "trader_entry": 9.846447745718445e-06,
       "ts_human": "16 nov 2026, 05:46 (hora de Madrid)",
-      "ago": "hace 1 min"
+      "ago": "hace 2 min"
     },
     {
       "kind": "decision",
@@ -626,7 +626,7 @@
       "route": "graduated",
       "trader_entry": 2.2197913627719328e-05,
       "ts_human": "16 nov 2026, 05:45 (hora de Madrid)",
-      "ago": "hace 2 min"
+      "ago": "hace 3 min"
     },
     {
       "kind": "decision",
@@ -648,7 +648,7 @@
       "route": "curve",
       "trader_entry": 8.886730715905804e-06,
       "ts_human": "16 nov 2026, 05:44 (hora de Madrid)",
-      "ago": "hace 3 min"
+      "ago": "hace 4 min"
     },
     {
       "kind": "decision",
@@ -670,7 +670,7 @@
       "route": "curve",
       "trader_entry": 1.1281917532714324e-05,
       "ts_human": "16 nov 2026, 05:44 (hora de Madrid)",
-      "ago": "hace 3 min"
+      "ago": "hace 4 min"
     },
     {
       "kind": "decision",
@@ -692,7 +692,7 @@
       "route": "curve",
       "trader_entry": 4.802863227372882e-06,
       "ts_human": "16 nov 2026, 05:43 (hora de Madrid)",
-      "ago": "hace 4 min"
+      "ago": "hace 5 min"
     },
     {
       "kind": "decision",
@@ -714,7 +714,7 @@
       "route": "curve",
       "trader_entry": 1.1509381946374054e-05,
       "ts_human": "16 nov 2026, 05:43 (hora de Madrid)",
-      "ago": "hace 4 min"
+      "ago": "hace 5 min"
     },
     {
       "kind": "decision",
@@ -736,7 +736,7 @@
       "route": "curve",
       "trader_entry": 5.440527604291947e-06,
       "ts_human": "16 nov 2026, 05:43 (hora de Madrid)",
-      "ago": "hace 4 min"
+      "ago": "hace 5 min"
     },
     {
       "kind": "decision",
@@ -801,7 +801,7 @@
       "route": "curve",
       "trader_entry": 4.255980711494425e-06,
       "ts_human": "16 nov 2026, 05:41 (hora de Madrid)",
-      "ago": "hace 6 min"
+      "ago": "hace 7 min"
     },
     {
       "kind": "decision",
@@ -844,7 +844,7 @@
       "route": "graduated",
       "trader_entry": 2.4146065420156053e-05,
       "ts_human": "16 nov 2026, 05:11 (hora de Madrid)",
-      "ago": "hace 36 min"
+      "ago": "hace 37 min"
     },
     {
       "kind": "decision",
@@ -865,7 +865,7 @@
       "route": "graduated",
       "trader_entry": 4.525087783848081e-05,
       "ts_human": "16 nov 2026, 05:07 (hora de Madrid)",
-      "ago": "hace 40 min"
+      "ago": "hace 41 min"
     },
     {
       "kind": "decision",
@@ -888,7 +888,7 @@
       "route": "curve",
       "trader_entry": 2.0445926857190676e-05,
       "ts_human": "16 nov 2026, 05:01 (hora de Madrid)",
-      "ago": "hace 46 min"
+      "ago": "hace 47 min"
     },
     {
       "kind": "decision",
@@ -911,7 +911,7 @@
       "route": "curve",
       "trader_entry": 2.022814971519603e-05,
       "ts_human": "16 nov 2026, 05:00 (hora de Madrid)",
-      "ago": "hace 47 min"
+      "ago": "hace 48 min"
     },
     {
       "kind": "decision",
@@ -934,7 +934,7 @@
       "route": "curve",
       "trader_entry": 7.91202584276471e-06,
       "ts_human": "16 nov 2026, 04:56 (hora de Madrid)",
-      "ago": "hace 51 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -957,7 +957,7 @@
       "route": "curve",
       "trader_entry": 1.2359017332388833e-05,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -980,7 +980,7 @@
       "route": "curve",
       "trader_entry": 1.2031838836988498e-05,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -1002,7 +1002,7 @@
       "route": "curve",
       "trader_entry": 2.280110693373236e-05,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -1024,7 +1024,7 @@
       "route": "curve",
       "trader_entry": 1.5168038612257281e-05,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -1046,7 +1046,7 @@
       "route": "curve",
       "trader_entry": 7.455388414999599e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -1068,7 +1068,7 @@
       "route": "curve",
       "trader_entry": 4.626180357214658e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -1090,7 +1090,7 @@
       "route": "curve",
       "trader_entry": 3.3383134734965205e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -1112,7 +1112,7 @@
       "route": "curve",
       "trader_entry": 6.601552812186508e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -1134,7 +1134,7 @@
       "route": "curve",
       "trader_entry": 6.880867643455505e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -1156,7 +1156,7 @@
       "route": "curve",
       "trader_entry": 6.041100322062766e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 52 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",

@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-11-16T02:16:43+01:00",
+  "built_at": "2026-11-16T02:16:50+01:00",
   "built_at_human": "16 nov 2026, 02:16 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
@@ -7,7 +7,7 @@
   "heartbeat": "2026-11-16T02:16:34+01:00",
   "heartbeat_human": "16 nov 2026, 02:16 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 7.5,
+  "heartbeat_age_s": 14.0,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -63,7 +63,7 @@
       "source": "buy"
     },
     {
-      "t": "2026-11-16T02:16:40",
+      "t": "2026-11-16T02:16:46",
       "v": 509.836083,
       "source": "state"
     }
@@ -212,10 +212,10 @@
       "name": "Decu",
       "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
       "short": "4vw5…9Ud9",
-      "last_signature": "3zB8qyceLwhwLq7BrJGK8HDXn5VLeQo542cJuvEP4L8sqAYV67qwac62ACapnQXGkcnq4FGK65RqmVrV3PawNEiU",
-      "last_activity": "2026-11-16T02:16:41+01:00",
+      "last_signature": "NDqtG71c3MAwWjTosoPXdFLX8PpbdkhXxht2zXHfZk7o5zWa6ATnPZqCZPuUhAYdDGsn72bQrtvqYE4YRRttB9c",
+      "last_activity": "2026-11-16T02:16:47+01:00",
       "last_activity_human": "16 nov 2026, 02:16 (hora de Madrid)",
-      "last_activity_ago": "hace 0s",
+      "last_activity_ago": "hace 1s",
       "activity_error": null,
       "copied": 1,
       "rejected": 26,
@@ -587,7 +587,7 @@
       "route": "graduated",
       "trader_entry": 4.281661654972352e-05,
       "ts_human": "16 nov 2026, 01:51 (hora de Madrid)",
-      "ago": "hace 24 min"
+      "ago": "hace 25 min"
     },
     {
       "kind": "decision",
@@ -776,7 +776,7 @@
       "route": "curve-non-sol",
       "trader_entry": 2.5325290868089135e-05,
       "ts_human": "16 nov 2026, 01:33 (hora de Madrid)",
-      "ago": "hace 42 min"
+      "ago": "hace 43 min"
     },
     {
       "kind": "decision",
@@ -797,7 +797,7 @@
       "route": "curve-non-sol",
       "trader_entry": 2.5286710938928247e-05,
       "ts_human": "16 nov 2026, 01:33 (hora de Madrid)",
-      "ago": "hace 42 min"
+      "ago": "hace 43 min"
     },
     {
       "kind": "decision",
@@ -818,7 +818,7 @@
       "route": "curve-non-sol",
       "trader_entry": 2.5248160428711998e-05,
       "ts_human": "16 nov 2026, 01:33 (hora de Madrid)",
-      "ago": "hace 42 min"
+      "ago": "hace 43 min"
     },
     {
       "kind": "decision",
@@ -839,7 +839,7 @@
       "route": "curve-non-sol",
       "trader_entry": 2.265589733764942e-05,
       "ts_human": "16 nov 2026, 01:33 (hora de Madrid)",
-      "ago": "hace 42 min"
+      "ago": "hace 43 min"
     },
     {
       "kind": "decision",

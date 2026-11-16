@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-16T05:45:46+01:00",
+  "built_at": "2026-11-16T05:45:55+01:00",
   "built_at_human": "16 nov 2026, 05:45 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
   "status": "LIVE",
-  "heartbeat": "2026-11-16T05:44:49+01:00",
-  "heartbeat_human": "16 nov 2026, 05:44 (hora de Madrid)",
+  "heartbeat": "2026-11-16T05:45:49+01:00",
+  "heartbeat_human": "16 nov 2026, 05:45 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 52.4,
+  "heartbeat_age_s": 1.4,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -101,7 +101,7 @@
       "source": "trailing_exit"
     },
     {
-      "t": "2026-11-16T05:45:35",
+      "t": "2026-11-16T05:45:49",
       "v": 502.493219,
       "source": "state"
     }
@@ -489,10 +489,10 @@
       "name": "Johnson",
       "wallet": "J9TYAsWWidbrcZybmLSfrLzryANf4CgJBLdvwdGuC8MB",
       "short": "J9TY…C8MB",
-      "last_signature": "MvX1BrByJXDC2EwAGrfWZjmhMfjS7uSwaUGeiBs9wnr1b8xC9QGH7NupGhqu6TZyuXaAp3ynFYn5R3MyiJ9i7ie",
-      "last_activity": "2026-11-16T05:37:48+01:00",
-      "last_activity_human": "16 nov 2026, 05:37 (hora de Madrid)",
-      "last_activity_ago": "hace 7 min",
+      "last_signature": "3BVG8yp74tYt2iAmxZuQ8ZhKt33ZxHc4EtvZYC7ZQVSdeJJ7rqNwmozHWEHphMFpn6dbjUCNTJVK7hRayHv1pWiz",
+      "last_activity": "2026-11-16T05:45:31+01:00",
+      "last_activity_human": "16 nov 2026, 05:45 (hora de Madrid)",
+      "last_activity_ago": "hace 21s",
       "activity_error": null,
       "copied": 3,
       "rejected": 30,
@@ -559,7 +559,7 @@
       "route": "graduated",
       "trader_entry": 2.2197913627719328e-05,
       "ts_human": "16 nov 2026, 05:45 (hora de Madrid)",
-      "ago": "hace 12s"
+      "ago": "hace 21s"
     },
     {
       "kind": "decision",
@@ -690,7 +690,7 @@
       "route": "curve",
       "trader_entry": 1.502770269037742e-05,
       "ts_human": "16 nov 2026, 05:42 (hora de Madrid)",
-      "ago": "hace 2 min"
+      "ago": "hace 3 min"
     },
     {
       "kind": "decision",
@@ -756,7 +756,7 @@
       "route": "graduated",
       "trader_entry": 5.02617847184933e-05,
       "ts_human": "16 nov 2026, 05:37 (hora de Madrid)",
-      "ago": "hace 7 min"
+      "ago": "hace 8 min"
     },
     {
       "kind": "decision",

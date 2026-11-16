@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-11-16T01:18:15+01:00",
+  "built_at": "2026-11-16T01:18:34+01:00",
   "built_at_human": "16 nov 2026, 01:18 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
@@ -7,7 +7,7 @@
   "heartbeat": "2026-11-16T01:17:38+01:00",
   "heartbeat_human": "16 nov 2026, 01:17 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 28.3,
+  "heartbeat_age_s": 48.1,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -57,7 +57,7 @@
       "trader": "Decu",
       "ts": "2026-11-16T00:49:26",
       "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
-      "ago": "hace 28 min",
+      "ago": "hace 29 min",
       "signature": "tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "solscan": "https://solscan.io/tx/tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
@@ -73,7 +73,7 @@
       "trader": "Decu",
       "ts": "2026-11-16T00:53:23",
       "ts_human": "16 nov 2026, 00:53 (hora de Madrid)",
-      "ago": "hace 24 min",
+      "ago": "hace 25 min",
       "signature": "tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "solscan": "https://solscan.io/tx/tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
@@ -89,7 +89,7 @@
       "trader": "Decu",
       "ts": "2026-11-16T00:54:23",
       "ts_human": "16 nov 2026, 00:54 (hora de Madrid)",
-      "ago": "hace 23 min",
+      "ago": "hace 24 min",
       "signature": "tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "solscan": "https://solscan.io/tx/tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
       "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
@@ -106,7 +106,7 @@
     "trader": "Decu",
     "ts": "2026-11-16T00:54:23",
     "ts_human": "16 nov 2026, 00:54 (hora de Madrid)",
-    "ago": "hace 23 min",
+    "ago": "hace 24 min",
     "signature": "tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
     "solscan": "https://solscan.io/tx/tfk9dQDqRCCDKvXRrZyXXKqA8gqnHdNv9DXjZXGTjXsETfBZcaGNqiCWEC933wjYHHSyX6QR4636UoZNChcaPdp",
     "mint": "DnAbkueg3Mbs9DrTMQMxCM2goeMhkgByRd3ofKofLoat",
@@ -183,7 +183,7 @@
       "last_signature": "5PZG3V8XfZRWha9raEaw8EAGMaGyqdzMPdKcQkdqEbMA72W5aMC4uZwN8DvrJdyWeZgoML9L7JhmHN42GmqnbjeS",
       "last_activity": "2026-11-16T00:35:14+01:00",
       "last_activity_human": "16 nov 2026, 00:35 (hora de Madrid)",
-      "last_activity_ago": "hace 42 min",
+      "last_activity_ago": "hace 43 min",
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
@@ -193,8 +193,8 @@
       "name": "Decu",
       "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
       "short": "4vw5…9Ud9",
-      "last_signature": "5WanFNTdeNYazVLmPJBKSjoEFqoQ3USABxKg5CSfJRizS1AG7KGJsbcbbDaPp1YgLfQkHyKW1KzoHjTXLFkKm3yj",
-      "last_activity": "2026-11-16T01:18:14+01:00",
+      "last_signature": "5oWFjnbvN1rSYhJepUP9dxGJxjTDC5zNVTz4asbGWmpBLU9XETp5JQp9NesQZaKFx8csfz6cCzJcrFAv1JeqxMQE",
+      "last_activity": "2026-11-16T01:18:34+01:00",
       "last_activity_human": "16 nov 2026, 01:18 (hora de Madrid)",
       "last_activity_ago": "hace 0s",
       "activity_error": null,
@@ -240,7 +240,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:54 (hora de Madrid)",
-      "ago": "hace 23 min"
+      "ago": "hace 24 min"
     },
     {
       "kind": "trade",
@@ -258,7 +258,7 @@
       "signature": null,
       "market_cap": null,
       "ts_human": "16 nov 2026, 00:54 (hora de Madrid)",
-      "ago": "hace 23 min"
+      "ago": "hace 24 min"
     },
     {
       "kind": "decision",
@@ -295,7 +295,7 @@
       "signature": null,
       "market_cap": null,
       "ts_human": "16 nov 2026, 00:53 (hora de Madrid)",
-      "ago": "hace 24 min"
+      "ago": "hace 25 min"
     },
     {
       "kind": "decision",
@@ -314,7 +314,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:53 (hora de Madrid)",
-      "ago": "hace 24 min"
+      "ago": "hace 25 min"
     },
     {
       "kind": "decision",
@@ -333,7 +333,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:52 (hora de Madrid)",
-      "ago": "hace 25 min"
+      "ago": "hace 26 min"
     },
     {
       "kind": "decision",
@@ -371,7 +371,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:51 (hora de Madrid)",
-      "ago": "hace 26 min"
+      "ago": "hace 27 min"
     },
     {
       "kind": "decision",
@@ -447,7 +447,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
-      "ago": "hace 28 min"
+      "ago": "hace 29 min"
     },
     {
       "kind": "decision",
@@ -466,7 +466,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
-      "ago": "hace 28 min"
+      "ago": "hace 29 min"
     },
     {
       "kind": "trade",
@@ -484,7 +484,7 @@
       "signature": null,
       "market_cap": null,
       "ts_human": "16 nov 2026, 00:49 (hora de Madrid)",
-      "ago": "hace 28 min"
+      "ago": "hace 29 min"
     },
     {
       "kind": "decision",
@@ -520,7 +520,7 @@
       ],
       "passed": false,
       "ts_human": "16 nov 2026, 00:48 (hora de Madrid)",
-      "ago": "hace 29 min"
+      "ago": "hace 30 min"
     },
     {
       "kind": "decision",

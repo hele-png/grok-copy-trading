@@ -11,180 +11,188 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CopyBot">
   <meta name="application-name" content="CopyBot">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <script>
-    if (new URLSearchParams(location.search).has("shot")) {
-      document.documentElement.classList.add("shot");
-    }
-  </script>
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.json?v=6">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png?v=6">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=6">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png?v=6">
   <title>Grok Copy Trading</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
-  <div class="phone">
+  <div id="app" class="app is-loading">
     <header class="topbar">
       <div class="brand">
+        <img class="brand-mark" src="icons/icon-192.png?v=6" alt="" width="28" height="28">
         <span class="brand-name">CopyBot</span>
-        <span class="paper-badge">PAPER</span>
       </div>
-      <div id="status-pill" class="status-pill iniciando" aria-live="polite">
-        <span class="dot"></span>
-        <span class="status-label">INICIANDO</span>
+      <div class="top-right">
+        <span id="demo-chip" class="chip chip-demo" hidden>SIMULADO</span>
+        <span class="chip chip-paper">PAPER</span>
+        <span id="status-pill" class="status-pill is-wait"><i></i><b>Conectando</b></span>
       </div>
     </header>
 
-    <main id="view-home" class="view view-active">
-      <section class="hero">
-        <div class="balance-row">
-          <div>
-            <div id="balance" class="balance">$500.00</div><span id="demo-flag">DEMO</span>
+    <div id="ptr" class="ptr" aria-hidden="true"><span class="ptr-spin"></span></div>
+
+    <div class="views" id="views">
+      <!-- INICIO -->
+      <section class="view is-active" id="view-home" data-view="home">
+        <div class="pad">
+          <div class="balance-block">
+            <div class="label">Balance paper</div>
+            <div class="balance"><span id="bal-int" class="skel-txt">$000</span><span id="bal-dec" class="dec">.00</span></div>
+            <div id="bal-delta" class="delta"><span class="skel-txt">+$0.00 (0.00%)</span></div>
           </div>
-          <div id="multiplier" class="multiplier">1.00x</div>
         </div>
-        <div class="hero-meta">
-          <span id="pnl-pill" class="pnl-pill pos">+0.00%</span>
-          <span id="pnl-usd" class="pnl-usd">+$0.00</span>
+
+        <div class="chart-card">
+          <div class="ranges" id="ranges" role="tablist">
+            <button data-range="1H" type="button">1H</button>
+            <button data-range="4H" type="button">4H</button>
+            <button data-range="1D" type="button" class="is-on">1D</button>
+            <button data-range="1W" type="button">1S</button>
+            <button data-range="ALL" type="button">Todo</button>
+          </div>
+          <div class="chart" id="chart">
+            <svg id="chart-svg" viewBox="0 0 390 180" preserveAspectRatio="none" aria-label="Curva del balance">
+              <defs>
+                <linearGradient id="area-pos" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2FD36B" stop-opacity=".16"/><stop offset="1" stop-color="#2FD36B" stop-opacity="0"/></linearGradient>
+                <linearGradient id="area-neg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF5A5F" stop-opacity=".16"/><stop offset="1" stop-color="#FF5A5F" stop-opacity="0"/></linearGradient>
+              </defs>
+              <line id="chart-base" x1="0" x2="390" y1="90" y2="90" class="baseline"/>
+              <path id="chart-area" d="" fill="url(#area-pos)"/>
+              <path id="chart-line" d="" class="line"/>
+              <g id="chart-marks"></g>
+            </svg>
+            <div id="chart-dot" class="chart-dot"><i></i></div>
+            <div id="chart-note" class="chart-note"></div>
+          </div>
         </div>
-      </section>
 
-      <nav class="ranges" id="ranges" aria-label="Rango del gráfico">
-        <button data-range="1H" class="active" type="button">1H</button>
-        <button data-range="4H" type="button">4H</button>
-        <button data-range="1D" type="button">1D</button>
-        <button data-range="1W" type="button">1W</button>
-        <button data-range="ALL" type="button">ALL</button>
-      </nav>
+        <div class="pad">
+          <div class="cash-row">
+            <div class="cash-ico">$</div>
+            <div class="cash-txt"><div class="label">Efectivo</div><div id="cash" class="cash-val">—</div></div>
+            <div class="cash-meta"><div class="label">Posiciones</div><div id="pos-count" class="cash-val">—</div></div>
+          </div>
 
-      <section class="chart-wrap" aria-label="Curva de equity">
-        <svg id="equity-chart" viewBox="0 0 390 200" preserveAspectRatio="none" role="img"></svg>
-        <div id="chart-empty" class="chart-caption"></div>
-      </section>
-
-      <section class="block">
-        <div class="block-head">
-          <h2>Live</h2>
+          <div class="section-head"><h2>Mejores de la sesión</h2><span id="sess-sub" class="sub"></span></div>
         </div>
-        <div class="live-card">
-          <img id="live-screen" src="data/screen.jpg" alt="Pantalla en vivo del monitor">
-          <div id="live-event" class="live-event" hidden></div>
-        </div>
-        <p id="screen-caption" class="muted screen-cap"></p>
-      </section>
+        <div class="hscroll" id="top-trades"></div>
 
-      <section class="block">
-        <div class="block-head">
-          <h2>Bots</h2>
-        </div>
-        <div id="bots" class="bots"></div>
-      </section>
+        <div class="pad">
+          <div class="segmented" id="pos-seg">
+            <button type="button" data-seg="open" class="is-on">Abiertas <span id="seg-open-n" class="n">0</span></button>
+            <button type="button" data-seg="closed">Cerradas <span id="seg-closed-n" class="n">0</span></button>
+            <span class="seg-ink"></span>
+          </div>
+          <div id="positions" class="list"></div>
 
-      <section class="block">
-        <div class="block-head">
-          <h2>Wallets</h2>
-          <span class="muted">Solana</span>
-        </div>
-        <div id="copy-grid" class="copy-grid"></div>
-      </section>
+          <div class="section-head"><h2>Señales recientes</h2><button type="button" class="link" data-goto="feed">Ver todo</button></div>
+          <div id="home-feed" class="feed"></div>
 
-      <section class="block">
-        <div class="block-head">
-          <h2>Activity</h2>
-          <span id="session-counts" class="muted"></span>
-        </div>
-        <div id="activity" class="activity"></div>
-      </section>
-    </main>
-
-    <main id="view-agents" class="view">
-      <section class="page-title">
-        <h1>Agents</h1>
-      </section>
-      <div id="bots-page" class="bots bots-page"></div>
-      <section class="block">
-        <div class="block-head"><h2>Wallets</h2></div>
-        <div id="agents-wallets" class="copy-grid"></div>
-      </section>
-    </main>
-
-    <main id="view-activity" class="view">
-      <section class="page-title">
-        <h1>Activity</h1>
-        <p id="activity-summary" class="muted"></p>
-      </section>
-      <div id="activity-page" class="activity"></div>
-    </main>
-
-    <main id="view-account" class="view">
-      <section class="page-title">
-        <h1>Account</h1>
-        <p class="muted">Modo paper · Solana · 500 USDC iniciales</p>
-      </section>
-      <div id="account-stats" class="account-stats"></div>
-      <section class="block">
-        <div class="block-head"><h2>Reglas</h2></div>
-        <ul class="rules">
-          <li><span>Modo</span><b>Solo paper</b></li>
-          <li><span>Tamaño por trade</span><b>8% del capital</b></li>
-          <li><span>Stop loss</span><b>−12% desde mi entrada</b></li>
-          <li><span>Take profit</span><b>50% al +25%, resto trailing 15%</b></li>
-          <li><span>Posiciones</span><b>Máximo 4 abiertas</b></li>
-          <li><span>Halt diario</span><b>−8% de drawdown</b></li>
-          <li><span>Ventana</span><b>21:00–07:30 (hora de Madrid)</b></li>
-        </ul>
-      </section>
-      <section class="block demo-block">
-        <div class="block-head"><h2>DEMO</h2></div>
-        <div class="demo-card">
-          <p>Simula compras y ventas en este teléfono. No altera el capital ni los datos del monitor.</p>
-          <button id="demo-btn" type="button">Probar DEMO</button>
+          <div id="install-card" class="install-card" hidden>
+            <img src="icons/icon-192.png?v=6" alt="" width="40" height="40">
+            <div><b>Instálala en tu iPhone</b><span>Safari → Compartir → «Añadir a pantalla de inicio»</span></div>
+            <button type="button" id="install-close" class="icon-btn" aria-label="Cerrar">
+              <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+            </button>
+          </div>
+          <p class="foot" id="foot-home"></p>
         </div>
       </section>
-      <section class="block install-block">
-        <div class="block-head"><h2>Instalar como app</h2></div>
-        <div class="install-card" id="install-card">
-          <p>Puedes añadir CopyBot a la pantalla de inicio y usarla a pantalla completa.</p>
-          <ul>
-            <li><b>iPhone:</b> en Safari, pulsa Compartir y luego «Añadir a pantalla de inicio».</li>
-            <li><b>Android:</b> en Chrome, menú ⋮ y «Instalar app» o «Añadir a pantalla de inicio».</li>
+
+      <!-- ACTIVIDAD -->
+      <section class="view" id="view-feed" data-view="feed">
+        <div class="pad">
+          <h1 class="title">Actividad</h1>
+          <div class="tabs-u" id="feed-tabs">
+            <button type="button" data-f="all" class="is-on">Todo</button>
+            <button type="button" data-f="trades">Operaciones</button>
+            <button type="button" data-f="rejected">Rechazos</button>
+            <span class="tabs-ink"></span>
+          </div>
+          <div id="feed-summary" class="reasons"></div>
+          <div id="feed" class="feed"></div>
+          <p class="foot" id="foot-feed"></p>
+        </div>
+      </section>
+
+      <!-- WALLETS -->
+      <section class="view" id="view-wallets" data-view="wallets">
+        <div class="pad">
+          <h1 class="title">Wallets</h1>
+          <p class="lead" id="wallets-lead">Traders de Solana que copia el bot.</p>
+          <div id="wallets" class="list ranked"></div>
+          <div class="section-head"><h2>Agentes</h2><span class="sub">procesos del bot</span></div>
+          <div id="agents" class="agents"></div>
+        </div>
+      </section>
+
+      <!-- CUENTA -->
+      <section class="view" id="view-account" data-view="account">
+        <div class="pad">
+          <div class="profile">
+            <img src="icons/icon-192.png?v=6" alt="" width="64" height="64" class="avatar-lg">
+            <div>
+              <div class="profile-name">Hele</div>
+              <div class="profile-handle">@copybot · paper · Solana</div>
+            </div>
+          </div>
+          <div class="profile-stats" id="profile-stats"></div>
+
+          <div class="grid2" id="account-stats"></div>
+
+          <div class="section-head"><h2>Reglas · modo agresivo</h2></div>
+          <ul class="rules">
+            <li><span>Modo</span><b>Solo paper</b></li>
+            <li><span>Filtros</span><b>Subida ≤35% · liq. ≥$15k · top10 &lt;30% · dev &lt;5%</b></li>
+            <li><span>Tamaño</span><b>4% · 8% si 2 wallets · 10% si 3+</b></li>
+            <li><span>Stop loss</span><b>−12% graduado · −15% curva</b></li>
+            <li><span>Take profit</span><b>50% en +30% · parte en +60%</b></li>
+            <li><span>Resto</span><b>Trailing 20%</b></li>
+            <li><span>Otras salidas</span><b>10 min sin moverse · si vende el trader</b></li>
+            <li><span>Posiciones</span><b>Máx. 6 · 40% invertido</b></li>
+            <li><span>Paro diario</span><b>−10% o 4 stops seguidos</b></li>
+            <li><span>Ventana</span><b>21:00–07:30 (Madrid)</b></li>
           </ul>
-          <button id="install-btn" type="button" hidden>Instalar CopyBot</button>
+
+          <div class="section-head"><h2>Modo DEMO</h2></div>
+          <div class="demo-card">
+            <p>Reproduce una compra y sus ventas para ver las animaciones. Es <b>simulado</b>: no toca el balance real ni los datos del monitor.</p>
+            <button id="demo-btn" type="button" class="btn-primary">Probar DEMO simulada</button>
+          </div>
+
+          <div class="section-head"><h2>Instalar</h2></div>
+          <div class="rules install-how">
+            <p><b>iPhone:</b> abre la web en Safari, pulsa Compartir y «Añadir a pantalla de inicio».</p>
+            <p><b>Android:</b> en Chrome, menú ⋮ → «Instalar app».</p>
+          </div>
+          <p class="foot" id="foot-account"></p>
         </div>
       </section>
-    </main>
+    </div>
 
-    <nav class="tabbar" aria-label="Navegación">
-      <button class="tab active" data-tab="home" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 4.5l8 7V20a.5.5 0 0 1-.5.5h-5v-6h-5v6H4.5A.5.5 0 0 1 4 20z"/></svg>
-        <span>Home</span>
+    <nav class="tabbar" id="tabbar">
+      <button class="tab is-on" data-tab="home" type="button" aria-label="Inicio">
+        <svg viewBox="0 0 24 24"><path d="M4 10.8 12 4l8 6.8V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></svg><span>Inicio</span>
       </button>
-      <button class="tab" data-tab="agents" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="6.5" height="6.5" rx="1"/><rect x="13" y="4.5" width="6.5" height="6.5" rx="1"/><rect x="4.5" y="13" width="6.5" height="6.5" rx="1"/><rect x="13" y="13" width="6.5" height="6.5" rx="1"/></svg>
-        <span>Agents</span>
+      <button class="tab" data-tab="feed" type="button" aria-label="Actividad">
+        <svg viewBox="0 0 24 24"><path d="M3.5 12h4l2.5-6 4 12 2.5-6h4"/></svg><span>Actividad</span><i class="badge" id="feed-badge" hidden></i>
       </button>
-      <button class="tab" data-tab="activity" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
-        <span>Activity</span>
+      <button class="tab" data-tab="wallets" type="button" aria-label="Wallets">
+        <svg viewBox="0 0 24 24"><path d="M8 20v-6M12 20V6M16 20v-9"/><path d="M4 20h16"/></svg><span>Wallets</span>
       </button>
-      <button class="tab" data-tab="account" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 19.2c.6-3 3.4-5 7-5s6.4 2 7 5"/></svg>
-        <span>Account</span>
+      <button class="tab" data-tab="account" type="button" aria-label="Cuenta">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.4 3.6-5.5 7-5.5s6.2 2.1 7 5.5"/></svg><span>Cuenta</span>
       </button>
     </nav>
   </div>
 
   <div id="toasts" class="toasts" aria-live="polite"></div>
+  <div id="demo-bar" class="demo-bar" hidden><span>DEMO simulada en curso · no son datos reales</span><button type="button" id="demo-stop">Salir</button></div>
 
-  <div id="install-hint" class="install-hint" hidden>
-    <p class="hint-text">Añade CopyBot a la pantalla de inicio para usarla como app.</p>
-    <button id="hint-how" type="button">Cómo</button>
-    <button id="hint-dismiss" type="button" class="hint-dismiss" aria-label="Cerrar el aviso">
-      <span aria-hidden="true">×</span>
-    </button>
-  </div>
-
-  <script src="app.js"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

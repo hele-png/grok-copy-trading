@@ -1,880 +1,528 @@
-/* Grok Copy Trading PWA — renders only data from data/data.json */
-const REFRESH_MS = 45000;
-const START = {
-  status: "INICIANDO",
-  mode: "PAPER",
-  capital_start: 500,
-  equity: 500,
-  cash: 500,
-  pnl_usd: 0,
-  pnl_pct: 0,
-  multiplier: 1,
-  open_positions: 0,
-  max_positions: 6,
-  equity_points: [],
-  session: { seen: 0, copied: 0, rejected: 0, fills: 0, halted: false },
-  bots: [
-    { id: "watcher", name: "Watcher", status: "iniciando", value: "7 wallets", detail: "sondeo de compras en Solana" },
-    { id: "copier", name: "Copier", status: "iniciando", value: "0 copiados", detail: "0 vistos · 0 rechazados" },
-    { id: "executor", name: "Executor", status: "iniciando", value: "0 abiertas", detail: "0 fills paper" },
-    { id: "risk", name: "Risk", status: "iniciando", value: "0.00% DD", detail: "modo agresivo · stop −12/−15% · TP +30/+60% · trailing 20% · ventana 21:00–07:30" },
-  ],
-  traders: [
-    { name: "Decu", wallet: "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9", short: "4vw5…9Ud9", status: "iniciando" },
-    { name: "Unipcs", wallet: "5M8ACGKEXG1ojKDTMH3sMqhTihTgHYMSsZc6W8i7QW3Y", short: "5M8A…QW3Y", status: "iniciando" },
-    { name: "9s4ji7", wallet: "9s4ji7MRh6xx9PVx7D4by8YjpHMfPVtHfYuMUy8VaTTp", short: "9s4j…aTTp", status: "iniciando" },
-    { name: "Johnson", wallet: "J9TYAsWWidbrcZybmLSfrLzryANf4CgJBLdvwdGuC8MB", short: "J9TY…C8MB", status: "iniciando" },
-    { name: "Doji", wallet: "5ZuV8eqkvzYFVEKbLvGBdexL2tFv7E5BCd2HZpjqbdg", short: "5ZuV…qbdg", status: "iniciando" },
-    { name: "BN7V", wallet: "BN7VBMS9LfNcRE5pk2jNgJyT8uny8uzQsMFhoSg4Ka4E", short: "BN7V…Ka4E", status: "iniciando" },
-    { name: "yHCx", wallet: "yHCxHBEaJW5tbndqC8JciSThr7U1cqLpdcsvHcx6PRe", short: "yHCx…6PRe", status: "iniciando" },
-  ],
-  activity: [],
-  fills: [],
-  screen: "data/screen.jpg",
-  screen_caption: "Tablero de estado (aún no hay captura de escritorio)",
-  note: "Sin data.json: se muestra el capital de partida.",
+"use strict";
+/* CopyBot · Grok Copy Trading — paper dashboard. Only real data from data/data.json.
+   The DEMO mode is clearly labelled "SIMULADO" and never touches real data. */
+
+const REFRESH_MS = 30000;
+const SEEN_KEY = "copybot-seen-v6";
+const HINT_KEY = "copybot-install-closed";
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const Q = new URLSearchParams(location.search);
+const TEST = Q.has("test") || Q.has("shot");
+
+const state = {
+  real: null,          // last real payload
+  view: null,          // what is rendered (real or demo copy)
+  demo: false,
+  range: "1D",
+  posSeg: "open",
+  feedFilter: "all",
+  tab: "home",
+  shownEquity: null,
+  chartPts: null,      // last sampled chart points [[x,y]...]
+  tzOffset: "+01:00",
+  lastLoadOk: 0,
 };
 
-const ICONS = {
-  watcher: '<svg viewBox="0 0 24 24"><path d="M12 5c-5 0-8.5 4.2-9.7 6.2a1.5 1.5 0 0 0 0 1.6C3.5 14.8 7 19 12 19s8.5-4.2 9.7-6.2a1.5 1.5 0 0 0 0-1.6C20.5 9.2 17 5 12 5zm0 11.2A4.2 4.2 0 1 1 16.2 12 4.2 4.2 0 0 1 12 16.2zm0-6.4A2.2 2.2 0 1 0 14.2 12 2.2 2.2 0 0 0 12 9.8z"/></svg>',
-  copier: '<svg viewBox="0 0 24 24"><path d="M8 7.5A1.5 1.5 0 0 1 9.5 6h9A1.5 1.5 0 0 1 20 7.5v11A1.5 1.5 0 0 1 18.5 20h-9A1.5 1.5 0 0 1 8 18.5zm-3.5 9V5.5A1.5 1.5 0 0 1 6 4h10v1.5H6.5v11z"/></svg>',
-  executor: '<svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19.2 12z"/></svg>',
-  risk: '<svg viewBox="0 0 24 24"><path d="M12 3 5 6.2v5.3c0 4.3 2.9 7.4 7 8.8 4.1-1.4 7-4.5 7-8.8V6.2z"/></svg>',
+/* ---------------- formatting ---------------- */
+const SUB = "₀₁₂₃₄₅₆₇₈₉";
+function money(n, d = 2) {
+  if (n == null || !isFinite(n)) return "—";
+  const s = Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+  return (n < 0 ? "−$" : "$") + s;
+}
+function signedMoney(n) { if (n == null || !isFinite(n)) return "—"; return (n >= 0 ? "+" : "−") + money(Math.abs(n)); }
+function pct(n, d = 2) { if (n == null || !isFinite(n)) return "—"; return (n >= 0 ? "+" : "−") + Math.abs(n).toFixed(d) + "%"; }
+function price(p) {
+  if (p == null || !isFinite(p)) return "n/d";
+  if (p >= 1) return "$" + p.toLocaleString("en-US", { maximumFractionDigits: 4 });
+  if (p >= 0.001) return "$" + p.toPrecision(4).replace(/0+$/, "");
+  const s = p.toFixed(20); const m = s.match(/^0\.(0+)(\d{1,4})/);
+  if (!m) return "$" + p.toExponential(3);
+  const z = m[1].length; const zs = String(z).split("").map((c) => SUB[+c]).join("");
+  return "$0.0" + zs + m[2].replace(/0+$/, "");
+}
+function cls(n) { return n > 0.000001 ? "up" : n < -0.000001 ? "dn" : "flat"; }
+function esc(s) { return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function parseTs(t) {
+  if (!t) return null;
+  let s = String(t);
+  if (!/[zZ]|[+-]\d\d:?\d\d$/.test(s)) s += state.tzOffset;
+  const d = new Date(s); return isNaN(d) ? null : d;
+}
+function ago(t) {
+  const d = parseTs(t); if (!d) return "";
+  const s = Math.max(0, (Date.now() - d.getTime()) / 1000);
+  if (s < 60) return Math.floor(s) + " s";
+  if (s < 3600) return Math.floor(s / 60) + " min";
+  if (s < 86400) return Math.floor(s / 3600) + " h";
+  return Math.floor(s / 86400) + " d";
+}
+function hhmm(t) {
+  const d = parseTs(t); if (!d) return "";
+  return d.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" });
+}
+function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
+
+/* deterministic, muted avatar colours (no neon) */
+function hue(s) { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h % 360; }
+function avatar(name, size = "", verified = false) {
+  const h = hue(name || "?");
+  const init = String(name || "?").replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase() || "?";
+  const ver = verified ? '<span class="ver"><svg viewBox="0 0 10 10"><path d="M2.5 5.2 4.2 6.8 7.5 3.4"/></svg></span>' : "";
+  return `<span class="av ${size}" style="background:hsl(${h} 32% 26%);color:hsl(${h} 70% 82%)">${esc(init)}${ver}</span>`;
+}
+
+const TYPE = {
+  buy: { t: "Compra", c: "b" },
+  tp_partial: { t: "TP1 +30%", c: "g" },
+  tp2: { t: "TP2 +60%", c: "g" },
+  trailing_exit: { t: "Trailing", c: null },
+  stop_loss: { t: "Stop loss", c: "r" },
+  breakeven_stop: { t: "Stop breakeven", c: null },
+  time_exit: { t: "Sin movimiento", c: null },
+  mirror_exit: { t: "Vendió el trader", c: null },
+  session_close: { t: "Cierre 07:30", c: null },
 };
-
-
-let data = START;
-let displayedEquity = null;
-let liveTicks = [];
-let demoState = null;
-
-let range = "1H";
-let deferredPrompt = null;
-
-function money(n, digits = 2) {
-  if (n == null || Number.isNaN(n)) return "—";
-  const sign = n < 0 ? "-" : "";
-  return sign + "$" + Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits });
+const ROUTE = { curve: "Curva pump.fun", graduated: "Graduado", curva: "Curva pump.fun", graduado: "Graduado", "curve-non-sol": "Curva sin SOL", "curva-no-sol": "Curva sin SOL" };
+function typeTag(type, pnl) {
+  const m = TYPE[type] || { t: type, c: null };
+  const c = m.c || (pnl > 0 ? "g" : pnl < 0 ? "r" : "");
+  return `<span class="tag ${c}">${esc(m.t)}</span>`;
 }
-function pct(n, digits = 2) {
-  if (n == null || Number.isNaN(n)) return "—";
-  const sign = n > 0 ? "+" : n < 0 ? "−" : "+";
-  return sign + Math.abs(n).toFixed(digits) + "%";
-}
-function initials(name) {
-  return (name || "?").slice(0, 1).toUpperCase();
-}
+const isSell = (t) => t && t !== "buy" && TYPE[t];
 
-function setStatus(status) {
-  const el = document.getElementById("status-pill");
-  const label = document.querySelector(".status-label");
-  const key = (status || "INICIANDO").toUpperCase();
-  el.className = "status-pill " + (key === "LIVE" ? "live" : key === "OFFLINE" ? "offline" : "iniciando");
-  label.textContent = key === "LIVE" ? "LIVE" : key;
-}
-
-function currentEquity(d) {
-  if (demoState && demoState.equity != null) return Number(demoState.equity);
-  return Number(d && d.equity);
-}
-
-function currentPnl(d) {
-  const start = Number((d && d.capital_start) || 500);
-  const eq = currentEquity(d);
-  const usd = eq - start;
-  return { usd, pct: start ? (usd / start) * 100 : 0, mult: start ? eq / start : 1 };
-}
-
-function tweenNumber(from, to, ms, onTick, onDone) {
+/* ---------------- number tween ---------------- */
+function tween(from, to, ms, tick) {
+  if (from == null || Math.abs(to - from) < 0.005) { tick(to); return; }
   const t0 = performance.now();
-  const ease = (t) => 1 - Math.pow(1 - t, 3);
-  const step = (now) => {
-    const p = Math.min(1, (now - t0) / ms);
-    onTick(from + (to - from) * ease(p));
-    if (p < 1) requestAnimationFrame(step);
-    else if (onDone) onDone();
-  };
-  requestAnimationFrame(step);
+  const ease = (x) => 1 - Math.pow(1 - x, 3);
+  (function f(now) {
+    const k = Math.min(1, (now - t0) / ms);
+    tick(from + (to - from) * ease(k));
+    if (k < 1) requestAnimationFrame(f);
+  })(t0);
 }
 
-function renderHero(d, { tween = true } = {}) {
-  const target = currentEquity(d);
-  const el = document.getElementById("balance");
-  const pnl = currentPnl(d);
-  const mul = document.getElementById("multiplier");
-  mul.textContent = pnl.mult.toFixed(2) + "x";
-  mul.className = "multiplier" + (pnl.mult > 1.0005 ? " up" : pnl.mult < 0.9995 ? " down" : "");
-  const pill = document.getElementById("pnl-pill");
-  pill.textContent = pct(pnl.pct);
-  pill.className = "pnl-pill " + (pnl.pct < 0 ? "neg" : "pos");
-  const usd = document.getElementById("pnl-usd");
-  usd.textContent = (pnl.usd < 0 ? "−" : "+") + money(Math.abs(pnl.usd));
-  if (target == null || Number.isNaN(target)) return;
-  const skip = displayedEquity == null || !tween || isShot() || Math.abs(target - displayedEquity) < 0.005;
-  if (skip) {
-    displayedEquity = target;
-    el.textContent = money(target);
-    return;
-  }
-  const from = displayedEquity;
-  el.classList.remove("flash-up", "flash-down");
-  void el.offsetWidth;
-  el.classList.add(target > from ? "flash-up" : "flash-down");
-  tweenNumber(from, target, 700, (v) => {
-    displayedEquity = v;
-    el.textContent = money(v);
-  }, () => {
-    displayedEquity = target;
-    el.textContent = money(target);
-    el.classList.remove("flash-up", "flash-down");
+/* ---------------- hero ---------------- */
+function renderHero(d) {
+  const eq = Number(d.equity);
+  const start = Number(d.capital_start) || 500;
+  const prev = state.shownEquity;
+  const elI = $("#bal-int"), elD = $("#bal-dec");
+  tween(prev, eq, 900, (v) => {
+    const s = money(v); const i = s.lastIndexOf(".");
+    elI.textContent = s.slice(0, i); elD.textContent = s.slice(i);
   });
-}
-
-function parseTime(t) {
-  if (t == null || t === "") return null;
-  if (typeof t === "number" && Number.isFinite(t)) return t < 1e12 ? t * 1000 : t;
-  const s = String(t).trim();
-  if (/^\d+(\.\d+)?$/.test(s)) {
-    const n = Number(s);
-    return n < 1e12 ? n * 1000 : n;
+  if (prev != null && Math.abs(eq - prev) > 0.005) {
+    const b = $(".balance"); b.classList.remove("flash-up", "flash-dn"); void b.offsetWidth;
+    b.classList.add(eq > prev ? "flash-up" : "flash-dn");
   }
-  const d = new Date(s);
-  if (!Number.isNaN(d.getTime())) return d.getTime();
-  const naive = new Date(s.includes("T") ? s : s.replace(" ", "T"));
-  return Number.isNaN(naive.getTime()) ? null : naive.getTime();
+  state.shownEquity = eq;
+  const pnl = eq - start, p = (pnl / start) * 100;
+  $("#bal-delta").innerHTML = `<span class="${cls(pnl)}">${signedMoney(pnl)} (${pct(p)})</span><span class="d-when">desde ${money(start, 0)}</span>`;
+  $("#cash").textContent = money(Number(d.cash));
+  $("#pos-count").textContent = `${d.open_positions ?? 0} / ${d.max_positions ?? 6}`;
 }
 
-function extraTicks() {
-  if (demoState) return demoState.ticks || [];
-  return liveTicks;
+/* ---------------- chart ---------------- */
+const RANGES = { "1H": 3600e3, "4H": 4 * 3600e3, "1D": 86400e3, "1W": 7 * 86400e3, ALL: Infinity };
+function series(d) {
+  const pts = (d.equity_points || []).map((p) => ({ t: parseTs(p.t)?.getTime(), v: Number(p.v) })).filter((p) => p.t && isFinite(p.v));
+  const now = Math.max(Date.now(), parseTs(d.built_at)?.getTime() || 0);
+  pts.push({ t: now, v: Number(d.equity) });
+  pts.sort((a, b) => a.t - b.t);
+  return pts;
 }
-
-function mergedPoints(d) {
-  const base = (demoState && demoState.points) ? demoState.points : ((d && d.equity_points) || []);
-  return base.concat(extraTicks());
-}
-
-function pointsForRange(points, key) {
-  const pts = (points || [])
-    .map((p) => ({ t: typeof p.t === "number" ? p.t : parseTime(p.t), v: Number(p.v), source: p.source }))
-    .filter((p) => p.t != null && Number.isFinite(p.v))
-    .sort((a, b) => a.t - b.t);
-  const now = Date.now();
-  const span = { "1H": 3600e3, "4H": 4 * 3600e3, "1D": 24 * 3600e3, "1W": 7 * 24 * 3600e3, "ALL": 24 * 3600e3 }[key] || 24 * 3600e3;
-  const cut = now - span;
-  if (!pts.length) return [];
-  const last = pts[pts.length - 1];
-  const inRange = pts.filter((p) => p.t >= cut);
-  const before = [...pts].reverse().find((p) => p.t < cut);
-  let out = before ? [{ ...before, t: cut }, ...inRange] : inRange.slice();
-  if (!out.length) out = [{ t: last.t, v: last.v, source: last.source }];
-  if (out[out.length - 1].t < now - 250) {
-    out.push({ t: now, v: out[out.length - 1].v, source: "live-now" });
+function valueAt(pts, t) { let v = pts[0]?.v; for (const p of pts) { if (p.t <= t) v = p.v; else break; } return v; }
+function renderChart(d, animate = true) {
+  const box = $("#chart"), svg = $("#chart-svg");
+  const W = Math.max(200, box.clientWidth), H = box.clientHeight || 180;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const all = series(d);
+  const tEnd = all[all.length - 1].t;
+  const span = RANGES[state.range];
+  const tStart = isFinite(span) ? Math.max(tEnd - span, Math.min(all[0].t, tEnd - 60e3)) : all[0].t;
+  const v0 = valueAt(all, tStart);
+  const inR = all.filter((p) => p.t > tStart);
+  const pts = [{ t: tStart, v: v0 }, ...inR];
+  let lo = Math.min(...pts.map((p) => p.v)), hi = Math.max(...pts.map((p) => p.v));
+  if (hi - lo < 0.5) { const m = (hi + lo) / 2; lo = m - 1; hi = m + 1; }
+  const padY = 18, padX = 2;
+  const X = (t) => padX + ((t - tStart) / Math.max(1, tEnd - tStart)) * (W - padX * 2 - 8);
+  const Y = (v) => padY + (1 - (v - lo) / (hi - lo)) * (H - padY * 2);
+  // sample as step function (equity moves in discrete fills)
+  const N = 96, sampled = [];
+  for (let i = 0; i < N; i++) {
+    const t = tStart + ((tEnd - tStart) * i) / (N - 1);
+    sampled.push([X(t), Y(valueAt(pts, t))]);
   }
-  return { pts: out, cut, now, span };
-}
-
-function smoothPath(pts, w, h, padX, padY) {
-  if (pts.length === 1) {
-    const y = padY + (h - padY * 2) / 2;
-    const t0 = pts[0].t, t1 = pts[0].t;
-    return { d: `M ${padX} ${y} L ${w - padX} ${y}`, min: pts[0].v, max: pts[0].v, t0, t1, ys: [y], xs: [w / 2] };
-  }
-  const vs = pts.map((p) => p.v);
-  let min = Math.min(...vs);
-  let max = Math.max(...vs);
-  if (min === max) {
-    min = min * 0.98;
-    max = max * 1.02 || 1;
-  } else {
-    const pad = (max - min) * 0.18;
-    min -= pad;
-    max += pad;
-  }
-  const ts = pts.map((p) => p.t);
-  const t0 = Math.min(...ts);
-  const t1 = Math.max(...ts);
-  const span = Math.max(t1 - t0, 1);
-  const xy = pts.map((p) => ({
-    x: padX + ((p.t - t0) / span) * (w - padX * 2),
-    y: padY + (1 - (p.v - min) / (max - min)) * (h - padY * 2),
-  }));
-  const n = xy.length;
-  const dx = [];
-  const dy = [];
-  const m = [];
-  for (let i = 0; i < n - 1; i++) {
-    dx[i] = xy[i + 1].x - xy[i].x || 1;
-    dy[i] = xy[i + 1].y - xy[i].y;
-    m[i] = dy[i] / dx[i];
-  }
-  const t = [m[0]];
-  for (let i = 1; i < n - 1; i++) {
-    if (m[i - 1] * m[i] <= 0) t[i] = 0;
-    else t[i] = (m[i - 1] + m[i]) / 2;
-  }
-  t[n - 1] = m[n - 2];
-  let d = `M ${xy[0].x.toFixed(2)} ${xy[0].y.toFixed(2)}`;
-  for (let i = 0; i < n - 1; i++) {
-    const c1x = xy[i].x + dx[i] / 3;
-    const c1y = xy[i].y + (t[i] * dx[i]) / 3;
-    const c2x = xy[i + 1].x - dx[i] / 3;
-    const c2y = xy[i + 1].y - (t[i + 1] * dx[i]) / 3;
-    d += ` C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${xy[i + 1].x.toFixed(2)} ${xy[i + 1].y.toFixed(2)}`;
-  }
-  return { d, min, max, t0, t1, xs: xy.map((p) => p.x), ys: xy.map((p) => p.y) };
-}
-
-function isLossFill(f) {
-  return f && f.type !== "buy" && Number(f.pnl_pct) < 0;
-}
-
-function fillLabel(type) {
-  return ({
-    buy: "Copiado",
-    tp_partial: "TP +30%",
-    tp2: "TP +60%",
-    trailing_exit: "Trailing",
-    stop_loss: "Stop",
-    breakeven_stop: "Stop BE",
-    time_exit: "Salida 10 min",
-    mirror_exit: "Trader vende",
-    session_close: "Cierre",
-  })[type] || type || "Fill";
-}
-
-function projectFill(fill, scale, w, h, padX, padY) {
-  const t = parseTime(fill.ts);
-  const v = Number(fill.equity);
-  if (t == null || !Number.isFinite(v) || t < scale.t0 - 1000 || t > scale.t1 + 1000) return null;
-  const span = Math.max(scale.t1 - scale.t0, 1);
-  const range = scale.max - scale.min || 1;
-  return {
-    x: padX + ((t - scale.t0) / span) * (w - padX * 2),
-    y: padY + (1 - (v - scale.min) / range) * (h - padY * 2),
+  const neg = Number(d.equity) < v0 - 0.005;
+  box.classList.toggle("neg", neg);
+  $("#chart-area").setAttribute("fill", neg ? "url(#area-neg)" : "url(#area-pos)");
+  const base = $("#chart-base"); base.setAttribute("x2", W); base.setAttribute("y1", Y(v0)); base.setAttribute("y2", Y(v0));
+  const draw = (arr) => {
+    let dl = `M${arr[0][0].toFixed(1)},${arr[0][1].toFixed(1)}`;
+    for (let i = 1; i < arr.length; i++) dl += `L${arr[i][0].toFixed(1)},${arr[i - 1][1].toFixed(1)}L${arr[i][0].toFixed(1)},${arr[i][1].toFixed(1)}`;
+    $("#chart-line").setAttribute("d", dl);
+    $("#chart-area").setAttribute("d", dl + `L${arr[arr.length - 1][0].toFixed(1)},${H}L${arr[0][0].toFixed(1)},${H}Z`);
+    const e = arr[arr.length - 1]; $("#chart-dot").style.transform = `translate3d(${e[0]}px,${e[1]}px,0)`;
   };
-}
-
-function markerSvg(fills, scale, w, h, padX, padY, extraClass) {
-  return (fills || []).map((f) => {
-    const pt = projectFill(f, scale, w, h, padX, padY);
-    if (!pt) return "";
-    const color = isLossFill(f) ? "#ff4d4f" : "#00d26a";
-    const cls = extraClass || "fill-mark";
-    return `<g class="${cls}">
-      <circle cx="${pt.x.toFixed(2)}" cy="${pt.y.toFixed(2)}" r="6.2" fill="${color}" fill-opacity="0.22"></circle>
-      <circle cx="${pt.x.toFixed(2)}" cy="${pt.y.toFixed(2)}" r="3.6" fill="${color}" stroke="#000" stroke-width="1.1"></circle>
-    </g>`;
+  const prev = state.chartPts;
+  if (animate && prev && prev.length === N) {
+    const t0 = performance.now();
+    (function f(now) {
+      const k = Math.min(1, (now - t0) / 650), e = 1 - Math.pow(1 - k, 3);
+      draw(sampled.map((p, i) => [prev[i][0] + (p[0] - prev[i][0]) * e, prev[i][1] + (p[1] - prev[i][1]) * e]));
+      if (k < 1) requestAnimationFrame(f);
+    })(t0);
+  } else draw(sampled);
+  state.chartPts = sampled;
+  $("#chart-dot").classList.add("on");
+  // fill markers
+  const fills = (d.fills || []).map((f) => ({ ...f, tt: parseTs(f.ts)?.getTime() })).filter((f) => f.tt && f.tt > tStart);
+  $("#chart-marks").innerHTML = fills.map((f) => {
+    const c = f.type === "buy" ? "#6E7DFF" : Number(f.pnl_usd) >= 0 ? "#2FD36B" : "#FF5A5F";
+    return `<g class="mk"><circle cx="${X(f.tt).toFixed(1)}" cy="${Y(valueAt(pts, f.tt)).toFixed(1)}" r="4" fill="${c}"/></g>`;
   }).join("");
+  const nb = fills.filter((f) => f.type === "buy").length, ns = fills.length - nb;
+  $("#chart-note").textContent = fills.length ? `${plural(nb, "compra", "compras")} · ${plural(ns, "venta", "ventas")} en este rango` : "Sin operaciones en este rango";
+  state.chartMap = { X, Y, pts, tStart, tEnd, W };
 }
-
-function renderChart(d) {
-  const svg = document.getElementById("equity-chart");
-  const cap = document.getElementById("chart-empty");
-  const packed = pointsForRange(mergedPoints(d), range);
-  const pts = packed.pts || packed;
-  const w = 390, h = 196, padX = 0, padY = 14;
-  const fills = demoState && demoState.fills
-    ? demoState.fills
-    : (d.fills || []).filter((f) => !f.demo);
-  if (!pts.length) {
-    const y = h / 2;
-    svg.innerHTML = `
-      <defs>
-        <linearGradient id="eqFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#00d26a" stop-opacity="0.28"/>
-          <stop offset="100%" stop-color="#00d26a" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <path d="M ${padX} ${y} L ${w - padX} ${y} L ${w - padX} ${h} L ${padX} ${h} Z" fill="url(#eqFill)"/>
-      <path d="M ${padX} ${y} L ${w - padX} ${y}" fill="none" stroke="#00d26a" stroke-width="2" stroke-linecap="round"/>
-    `;
-    return;
-  }
-  // Scale x against the selected window so new time extends the line honestly.
-  const t0 = packed.cut != null ? packed.cut : pts[0].t;
-  const t1 = packed.now != null ? packed.now : pts[pts.length - 1].t;
-  const vs = pts.map((p) => p.v);
-  let min = Math.min(...vs);
-  let max = Math.max(...vs);
-  if (min === max) {
-    min = min * 0.98;
-    max = max * 1.02 || 1;
-  } else {
-    const pad = (max - min) * 0.18;
-    min -= pad;
-    max += pad;
-  }
-  const spanT = Math.max(t1 - t0, 1);
-  const xy = pts.map((p) => ({
-    x: padX + ((p.t - t0) / spanT) * (w - padX * 2),
-    y: padY + (1 - (p.v - min) / (max - min)) * (h - padY * 2),
-  }));
-  // Monotone cubic through time-window coordinates
-  const n = xy.length;
-  let dpath;
-  if (n === 1) {
-    dpath = `M ${xy[0].x.toFixed(2)} ${xy[0].y.toFixed(2)} L ${w - padX} ${xy[0].y.toFixed(2)}`;
-  } else {
-    const dx = [], dy = [], m = [];
-    for (let i = 0; i < n - 1; i++) {
-      dx[i] = xy[i + 1].x - xy[i].x || 1;
-      dy[i] = xy[i + 1].y - xy[i].y;
-      m[i] = dy[i] / dx[i];
-    }
-    const sl = [m[0]];
-    for (let i = 1; i < n - 1; i++) sl[i] = (m[i - 1] * m[i] <= 0) ? 0 : (m[i - 1] + m[i]) / 2;
-    sl[n - 1] = m[n - 2];
-    dpath = `M ${xy[0].x.toFixed(2)} ${xy[0].y.toFixed(2)}`;
-    for (let i = 0; i < n - 1; i++) {
-      const c1x = xy[i].x + dx[i] / 3;
-      const c1y = xy[i].y + (sl[i] * dx[i]) / 3;
-      const c2x = xy[i + 1].x - dx[i] / 3;
-      const c2y = xy[i + 1].y - (sl[i + 1] * dx[i]) / 3;
-      dpath += ` C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${xy[i + 1].x.toFixed(2)} ${xy[i + 1].y.toFixed(2)}`;
-    }
-  }
-  const lastX = xy[xy.length - 1].x;
-  const lastY = xy[xy.length - 1].y;
-  const firstX = xy[0].x;
-  const area = `${dpath} L ${lastX.toFixed(2)} ${h} L ${firstX.toFixed(2)} ${h} Z`;
-  const winScale = { t0, t1, min, max };
-  const areaPath = area;
-  svg.innerHTML = `
-    <defs>
-      <linearGradient id="eqFill" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#00d26a" stop-opacity="0.28"/>
-        <stop offset="80%" stop-color="#00d26a" stop-opacity="0.03"/>
-        <stop offset="100%" stop-color="#00d26a" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <path d="${areaPath}" fill="url(#eqFill)"></path>
-    <path id="eq-line" d="${dpath}" fill="none" stroke="#00d26a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-    ${markerSvg(fills, winScale, w, h, padX, padY)}
-    <circle class="end-dot-pulse" cx="${lastX.toFixed(2)}" cy="${lastY.toFixed(2)}" r="6" fill="#00d26a" fill-opacity="0.35"></circle>
-    <circle cx="${lastX.toFixed(2)}" cy="${lastY.toFixed(2)}" r="3.2" fill="#00d26a"></circle>
-  `;
-  if (cap) cap.textContent = "";
-}
-
-function renderLiveEvent(fill, { demo = false } = {}) {
-  const el = document.getElementById("live-event");
-  if (!el) return;
-  if (!fill) {
-    if (!demo) {
-      el.hidden = true;
-      el.innerHTML = "";
-    }
-    return;
-  }
-  const loss = isLossFill(fill);
-  const title = `${fillLabel(fill.type)} ${fill.symbol || "?"}`;
-  const bits = [];
-  if (fill.usd != null) bits.push(money(fill.usd));
-  if (fill.type !== "buy" && fill.pnl_pct != null) bits.push(pct(fill.pnl_pct));
-  if (fill.trader) bits.push(fill.trader);
-  const link = (!demo && fill.solscan)
-    ? `<a href="${esc(fill.solscan)}" target="_blank" rel="noopener noreferrer">Solscan</a>`
-    : "";
-  const kicker = demo ? `<div class="toast-kicker">DEMO · simulado</div>` : "";
-  el.className = "live-event" + (loss ? " neg" : "") + (demo ? " demo" : "");
-  el.innerHTML = `
-    <span class="pulse-dot"></span>
-    <div class="live-event-main">
-      ${kicker}
-      <div class="live-event-title">${esc(title)}</div>
-      <div class="live-event-meta">${esc(bits.join(" · "))}</div>
-    </div>
-    ${link}
-  `;
-  el.hidden = false;
-}
-
-function renderBots(target, bots) {
-  const el = document.getElementById(target);
-  el.innerHTML = (bots || []).map((b) => {
-    const st = (b.status || "").replace(/\s+/g, "-");
-    return `<article class="bot">
-      <div class="bot-icon ${b.id}">${ICONS[b.id] || ""}</div>
-      <div class="bot-main">
-        <div class="bot-name">${esc(b.name)}</div>
-        <div class="bot-detail">${esc(b.detail || "")}</div>
-      </div>
-      <div class="bot-right">
-        <div class="bot-value">${esc(b.value || "")}</div>
-        <div class="bot-status ${st}">${esc(b.status || "")}</div>
-      </div>
-    </article>`;
-  }).join("");
-}
-
-function renderTraders(target, traders) {
-  const el = document.getElementById(target);
-  el.innerHTML = (traders || []).map((t) => {
-    const ago = t.last_activity_ago || (t.activity_error ? "actividad no verificada" : "sin dato on-chain");
-    const human = t.last_activity_human || "";
-    const stats = (t.copied != null) ? `${t.copied} copiados · ${t.rejected || 0} rechazados` : "";
-    return `<article class="trader">
-      <div class="trader-top">
-        <div class="avatar">${esc(initials(t.name))}</div>
-        <div>
-          <div class="trader-name">${esc(t.name)}</div>
-          <div class="trader-addr">${esc(t.short || "")}</div>
-        </div>
-      </div>
-      <div class="trader-meta">
-        <div class="trader-ago">${esc(ago)}</div>
-        <div class="trader-human">${esc(human)}</div>
-        <div class="trader-stats">${esc(stats)} · ${esc(t.status || "")}</div>
-      </div>
-    </article>`;
-  }).join("");
-}
-
-function renderActivity(target, items, emptyNote) {
-  const el = document.getElementById(target);
-  if (!items || !items.length) {
-    el.innerHTML = `<div class="empty">${esc(emptyNote || "Sin trades en esta sesión")}</div>`;
-    return;
-  }
-  el.innerHTML = items.map((it) => {
-    const copied = it.type === "copied" || it.passed === true || it.type === "buy";
-    const rejected = it.type === "rejected" || it.passed === false;
-    const tag = copied && it.kind === "decision" ? "copy" : rejected ? "reject" : "trade";
-    const tagLabel = it.kind === "decision" ? (copied ? "COPIADO" : "RECHAZADO") : (it.type || "TRADE");
-    const bits = [];
-    if (it.trader) bits.push(it.trader);
-    if (it.usd != null) bits.push(money(it.usd));
-    if (it.liquidity_usd != null) bits.push("liq. " + money(it.liquidity_usd, 0));
-    if (it.market_cap != null) bits.push("mcap " + money(it.market_cap, 0));
-    if (it.pct_up != null) bits.push(pct(it.pct_up));
-    if (it.reasons && it.reasons.length) bits.push(it.reasons[0]);
-    return `<article class="act">
-      <div class="act-top">
-        <div class="act-token"><span class="tag ${tag}">${esc(tagLabel)}</span>${esc(it.token || "?")}</div>
-        <div class="act-ago">${esc(it.ago || it.ts_human || "")}</div>
-      </div>
-      <div class="act-row">${esc(bits.join(" · "))}</div>
-    </article>`;
-  }).join("");
-}
-
-function renderAccount(d) {
-  const el = document.getElementById("account-stats");
-  const s = d.session || {};
-  el.innerHTML = [
-    ["Equity", money(d.equity)],
-    ["Cash", money(d.cash)],
-    ["PnL", pct(d.pnl_pct)],
-    ["Multiplicador", (Number(d.multiplier) || 1).toFixed(2) + "x"],
-    ["Posiciones", `${d.open_positions || 0} / ${d.max_positions || 6}`],
-    ["Sesión", s.id || "sin sesión"],
-    ["Vistos", String(s.seen ?? 0)],
-    ["Copiados", String(s.copied ?? 0)],
-  ].map(([k, v]) => `<div class="stat"><span>${k}</span><b>${esc(v)}</b></div>`).join("");
-}
-
-function esc(s) {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-const SEEN_KEY = "copybot-seen-fills";
-const PRIMED_KEY = "copybot-fills-primed";
-
-function getSeen() {
-  try { return new Set(JSON.parse(localStorage.getItem(SEEN_KEY) || "[]")); }
-  catch { return new Set(); }
-}
-function saveSeen(set) {
-  try { localStorage.setItem(SEEN_KEY, JSON.stringify([...set].slice(-500))); } catch {}
-}
-
-function showToast(fill, { demo = false } = {}) {
-  const box = document.getElementById("toasts");
-  if (!box || isShot()) return;
-  const liveToasts = () => [...box.children].filter((el) => !el.classList.contains("out"));
-  while (liveToasts().length >= 2) dismissToast(liveToasts().pop(), { dy: -80 });
-  const loss = isLossFill(fill);
-  const el = document.createElement("div");
-  el.className = "toast " + (loss ? "neg" : "pos");
-  const title = `${fillLabel(fill.type)} ${fill.symbol || "?"}`;
-  const bits = [];
-  if (fill.usd != null) bits.push(money(fill.usd));
-  if (fill.type !== "buy" && fill.pnl_pct != null) bits.push(pct(fill.pnl_pct));
-  if (fill.trader) bits.push(fill.trader);
-  el.innerHTML = `
-    ${demo ? '<span class="toast-kicker">DEMO</span>' : ""}
-    <span class="toast-title">${esc(title)}</span>
-    <span class="toast-meta">${esc(bits.join(" · "))}</span>
-  `;
-  box.prepend(el);
-  let timer = setTimeout(() => dismissToast(el, { dy: -90 }), 3500);
-  const cancelTimer = () => { clearTimeout(timer); timer = null; };
-  attachToastGestures(el, cancelTimer);
-}
-
-function dismissToast(el, dir) {
-  if (!el || el.classList.contains("out")) return;
-  el.classList.add("out");
-  el.style.pointerEvents = "none";
-  el.style.position = "absolute";
-  el.style.left = "0";
-  el.style.right = "0";
-  const dx = (dir && dir.dx) || 0;
-  const dy = (dir && dir.dy) || -90;
-  el.style.transition = "transform 0.28s ease, opacity 0.28s ease";
-  el.style.transform = `translate(${dx}px, ${dy}px)`;
-  el.style.opacity = "0";
-  setTimeout(() => el.remove(), 280);
-}
-
-function attachToastGestures(el, cancelTimer) {
-  let x0 = 0, y0 = 0, t0 = 0, lastX = 0, lastY = 0, lastT = 0, tracking = false, pid = null;
-  const pos = (e) => {
-    if (e.touches && e.touches[0]) return e.touches[0];
-    if (e.changedTouches && e.changedTouches[0]) return e.changedTouches[0];
-    return e;
-  };
-  const down = (e) => {
-    const p = pos(e);
-    tracking = true;
-    x0 = lastX = p.clientX;
-    y0 = lastY = p.clientY;
-    t0 = lastT = Date.now();
-    el.style.transition = "none";
-    if (e.pointerId != null && el.setPointerCapture) {
-      try { el.setPointerCapture(e.pointerId); pid = e.pointerId; } catch {}
-    }
-  };
+function setupScrub() {
+  const box = $("#chart"); let tip = null;
   const move = (e) => {
-    if (!tracking) return;
-    const p = pos(e);
-    lastX = p.clientX; lastY = p.clientY; lastT = Date.now();
-    const dx = lastX - x0, dy = lastY - y0;
-    el.style.transform = `translate(${dx}px, ${dy}px)`;
-    el.style.opacity = String(Math.max(0.15, 1 - Math.hypot(dx, dy) / 150));
-    if (e.cancelable) e.preventDefault();
+    const m = state.chartMap; if (!m) return;
+    const r = box.getBoundingClientRect(); const x = Math.max(0, Math.min(r.width, (e.touches ? e.touches[0].clientX : e.clientX) - r.left));
+    const t = m.tStart + (x / r.width) * (m.tEnd - m.tStart); const v = valueAt(m.pts, t);
+    if (!tip) { tip = document.createElement("div"); tip.className = "scrub-tip"; box.appendChild(tip); }
+    tip.style.left = Math.max(40, Math.min(r.width - 40, x)) + "px";
+    tip.textContent = `${money(v)} · ${new Date(t).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" })}`;
   };
-  const up = (e) => {
-    if (!tracking) return;
-    tracking = false;
-    const p = pos(e);
-    const x = p.clientX != null ? p.clientX : lastX;
-    const y = p.clientY != null ? p.clientY : lastY;
-    const dx = x - x0, dy = y - y0;
-    const dt = Math.max(16, Date.now() - t0);
-    const vx = dx / dt * 1000, vy = dy / dt * 1000;
-    const dist = Math.hypot(dx, dy);
-    const fling = Math.abs(vx) > 550 || vy < -450;
-    const far = Math.abs(dx) > 72 || dy < -36;
-    if (dist < 8) {
-      cancelTimer();
-      dismissToast(el, { dy: -90 });
-      return;
-    }
-    if (far || fling) {
-      cancelTimer();
-      const side = Math.abs(dx) > Math.abs(dy) || Math.abs(vx) > Math.abs(vy);
-      const outX = side ? (dx >= 0 ? 420 : -420) : 0;
-      const outY = side ? 0 : (dy < 0 || vy < 0 ? -280 : 280);
-      dismissToast(el, { dx: outX, dy: outY });
-    } else {
-      el.style.transition = "transform 0.22s ease, opacity 0.22s ease";
-      el.style.transform = "translate(0,0)";
-      el.style.opacity = "1";
-    }
-  };
-  el.addEventListener("pointerdown", down);
-  el.addEventListener("pointermove", move);
-  el.addEventListener("pointerup", up);
-  el.addEventListener("pointercancel", up);
+  const end = () => { if (tip) { tip.remove(); tip = null; } };
+  box.addEventListener("pointerdown", move); box.addEventListener("pointermove", (e) => { if (e.buttons || e.pointerType === "touch") move(e); });
+  box.addEventListener("pointerup", end); box.addEventListener("pointerleave", end); box.addEventListener("pointercancel", end);
 }
 
-function vibrateFor(fills) {
-  if (!navigator.vibrate) return;
-  try {
-    const loss = fills.some(isLossFill);
-    navigator.vibrate(loss ? [30, 40, 40] : 40);
-  } catch {}
+/* ---------------- trades grouping ---------------- */
+function groupTrades(d) {
+  const groups = []; const openBy = {};
+  for (const f of d.fills || []) {
+    const k = f.mint + "|" + f.trader;
+    if (f.type === "buy") { const g = { key: k, symbol: f.symbol, trader: f.trader, mint: f.mint, route: f.route, cost: Number(f.usd) || 0, pnl: 0, out: 0, exits: [], opened: f.ts, sig: f.solscan }; groups.push(g); openBy[k] = g; }
+    else if (isSell(f.type)) { const g = openBy[k]; if (!g) continue; g.pnl += Number(f.pnl_usd) || 0; g.out += Number(f.usd) || 0; g.exits.push(f); g.closed = f.ts; }
+  }
+  const openMints = new Set((d.positions || []).map((p) => p.mint + "|" + p.trader));
+  for (const g of groups) g.isOpen = openMints.has(g.key);
+  return groups;
 }
-
-function processFills(fills) {
-  const real = (fills || []).filter((f) => f && f.id && !f.demo);
-  const seen = getSeen();
-  let primed = false;
-  try { primed = localStorage.getItem(PRIMED_KEY) === "1"; } catch {}
-  if (!primed) {
-    real.forEach((f) => seen.add(f.id));
-    saveSeen(seen);
-    try { localStorage.setItem(PRIMED_KEY, "1"); } catch {}
-    return;
-  }
-  const fresh = real.filter((f) => !seen.has(f.id))
-    .sort((a, b) => (parseTime(a.ts) || 0) - (parseTime(b.ts) || 0));
-  for (const f of fresh) {
-    seen.add(f.id);
-    showToast(f, { demo: false });
-  }
-  if (fresh.length) {
-    saveSeen(seen);
-    vibrateFor(fresh);
-  }
-}
-
-function render(d) {
-  setStatus(d.status);
-  renderHero(d, { tween: true });
-  renderChart(d);
-  const cap = document.getElementById("screen-caption");
-  cap.textContent = d.screen_caption || d.built_at_human || "";
-  const img = document.getElementById("live-screen");
-  const src = (d.screen || "data/screen.jpg").replace(/^\//, "") + "?t=" + encodeURIComponent(d.built_at || Date.now());
-  if (!img.dataset.locked) img.src = src;
-  const latest = (d.latest_fill && !d.latest_fill.demo) ? d.latest_fill : (d.fills || []).filter((f) => !f.demo).slice(-1)[0] || null;
-  if (!demoPlaying) renderLiveEvent(latest);
-  renderBots("bots", d.bots);
-  renderBots("bots-page", d.bots);
-  renderTraders("copy-grid", d.traders);
-  renderTraders("agents-wallets", d.traders);
+function renderTopTrades(d) {
+  const g = groupTrades(d).filter((x) => x.exits.length).sort((a, b) => b.pnl - a.pnl).slice(0, 8);
   const s = d.session || {};
-  document.getElementById("session-counts").textContent =
-    `${s.seen ?? 0} vistos · ${s.copied ?? 0} copiados · ${s.rejected ?? 0} rechazados`;
-  document.getElementById("activity-summary").textContent =
-    `${s.seen ?? 0} vistos · ${s.copied ?? 0} copiados · ${s.rejected ?? 0} rechazados`;
-  const empty = "Todavía no hay trades ni decisiones. El monitor no ha escrito fills.";
-  renderActivity("activity", d.activity, empty);
-  renderActivity("activity-page", d.activity, empty);
-  renderAccount(d);
+  $("#sess-sub").textContent = s.seen != null ? `${s.seen} vistas · ${s.copied} ${s.copied === 1 ? "copiada" : "copiadas"}` : "";
+  $("#top-trades").innerHTML = g.length ? g.map((x) => `
+    <div class="tt press">
+      <div class="tt-top">${avatar(x.trader, "sm")}<span>${esc(x.trader)}</span></div>
+      <div class="tt-pnl">${avatar(x.symbol, "sm")}<span class="${cls(x.pnl)}">${signedMoney(x.pnl)}</span></div>
+    </div>`).join("") : `<div class="tt-empty">Aún no hay operaciones cerradas en esta sesión.</div>`;
+}
+function renderPositions(d) {
+  const groups = groupTrades(d);
+  const open = d.positions || [];
+  const closed = groups.filter((g) => !g.isOpen && g.exits.length).reverse();
+  $("#seg-open-n").textContent = open.length; $("#seg-closed-n").textContent = closed.length;
+  $("#pos-seg").dataset.on = state.posSeg;
+  $$("#pos-seg button").forEach((b) => b.classList.toggle("is-on", b.dataset.seg === state.posSeg));
+  const el = $("#positions");
+  if (state.posSeg === "open") {
+    el.innerHTML = open.length ? open.map((p) => {
+      const val = (Number(p.qty) || 0) * (Number(p.last_price) || 0);
+      const ch = p.entry ? ((p.last_price / p.entry) - 1) * 100 : null;
+      return `<div class="row press">${avatar(p.symbol, "", true)}
+        <div class="row-main"><div class="row-t">${esc(p.symbol)} ${p.route ? `<span class="tag">${esc(ROUTE[p.route] || p.route)}</span>` : ""}</div>
+        <div class="row-s">${esc(p.trader)} · entrada ${price(p.entry)} · stop ${price(p.stop)}</div></div>
+        <div class="row-r"><div class="row-v">${money(val)}</div><div class="row-p ${cls(ch)}"><span class="tri"></span>${ch == null ? "—" : Math.abs(ch).toFixed(2) + "%"}</div></div></div>`;
+    }).join("") : `<div class="empty"><b>Sin posiciones abiertas</b>El bot entra cuando una wallet compra y el token pasa los filtros.</div>`;
+  } else {
+    el.innerHTML = closed.length ? closed.map((g) => {
+      const p = g.cost ? (g.pnl / g.cost) * 100 : 0; const last = g.exits[g.exits.length - 1];
+      return `<div class="row press">${avatar(g.symbol, "", true)}
+        <div class="row-main"><div class="row-t">${esc(g.symbol)} ${typeTag(last.type, g.pnl)}</div>
+        <div class="row-s">${esc(g.trader)} · ${money(g.cost)} → ${money(g.out)} · ${hhmm(g.closed)}</div></div>
+        <div class="row-r"><div class="row-v ${cls(g.pnl)}">${signedMoney(g.pnl)}</div><div class="row-p ${cls(p)}"><span class="tri"></span>${Math.abs(p).toFixed(2)}%</div></div></div>`;
+    }).join("") : `<div class="empty"><b>Aún no hay operaciones cerradas</b></div>`;
+  }
 }
 
+/* ---------------- feed ---------------- */
+function feedItem(a, isNew) {
+  const when = `<span class="when">${ago(a.ts)}</span>`;
+  const sig = a.signature ? `<a href="https://solscan.io/tx/${esc(a.signature)}" target="_blank" rel="noopener" class="link" style="font-size:12px">Solscan ↗</a>` : "";
+  const route = a.route ? `<span>${esc(ROUTE[a.route] || a.route)}</span>` : "";
+  if (a.kind === "trade") {
+    const pnl = Number(a.pnl_usd);
+    const right = a.type === "buy" ? `<div class="row-v">${money(Number(a.usd))}</div><div class="row-s">a ${price(a.price)}</div>`
+      : `<div class="row-v ${cls(pnl)}">${signedMoney(pnl)}</div><div class="row-p ${cls(pnl)}">${pct(Number(a.pnl_pct))}</div>`;
+    return `<div class="fi${isNew ? " is-new" : ""}">${avatar(a.trader, "md")}
+      <div class="fi-body"><div class="fi-head">${esc(a.trader)} ${typeTag(a.type, pnl)} ${when}</div>
+      <div class="fi-card">${avatar(a.token, "md", true)}<div class="row-main"><div class="row-t">${esc(a.token)}</div><div class="row-s">${a.type === "buy" ? "Compra paper" : "Venta " + money(Number(a.usd))}</div></div><div class="row-r">${right}</div></div>
+      <div class="fi-meta"><span>${hhmm(a.ts)}</span>${route}${sig}</div></div></div>`;
+  }
+  const ok = a.passed;
+  const reasons = (a.reasons || []).join(" · ");
+  const up = a.pct_up != null ? `<span class="mut">${pct(Number(a.pct_up), 1)} desde su entrada</span>` : "";
+  return `<div class="fi${isNew ? " is-new" : ""}">${avatar(a.trader, "md")}
+    <div class="fi-body"><div class="fi-head">${esc(a.trader)} <span class="tag ${ok ? "g" : ""}">${ok ? "Copiada" : "Rechazada"}</span> ${when}</div>
+    <div class="fi-line">${avatar(a.token, "sm")}<span class="tk">${esc(a.token)}</span><span class="mut">${price(Number(a.price))}</span>${up}</div>
+    ${!ok && reasons ? `<div class="fi-why">${esc(reasons)}</div>` : ""}
+    <div class="fi-meta"><span>${hhmm(a.ts)}</span>${a.liquidity_usd != null ? `<span>liq. ${money(Number(a.liquidity_usd), 0)}</span>` : ""}${ok && a.usd ? `<span>tamaño ${money(Number(a.usd))}</span>` : ""}${route}${sig}</div></div></div>`;
+}
+let seenFeed = null;
+function renderFeed(d) {
+  const items = d.activity || [];
+  const prevSeen = seenFeed; seenFeed = new Set(items.map((a) => a.kind + a.ts + a.trader + a.token + a.type));
+  const isNew = (a) => prevSeen && !prevSeen.has(a.kind + a.ts + a.trader + a.token + a.type);
+  const f = state.feedFilter;
+  const list = items.filter((a) => f === "all" || (f === "trades" ? (a.kind === "trade" || a.passed) : (a.kind === "decision" && !a.passed)));
+  $("#feed").innerHTML = list.length ? list.map((a) => feedItem(a, isNew(a))).join("") : `<div class="empty"><b>Nada por aquí todavía</b>Las decisiones aparecen en cuanto el bot ve una compra.</div>`;
+  $("#home-feed").innerHTML = items.length ? items.slice(0, 4).map((a) => feedItem(a, isNew(a))).join("") : `<div class="empty"><b>Esperando señales</b>El monitor vigila las wallets cada pocos segundos.</div>`;
+  const rb = (d.session || {}).rejected_by_reason || {};
+  const ents = Object.entries(rb).sort((a, b) => b[1] - a[1]);
+  $("#feed-summary").innerHTML = ents.map(([k, v]) => `<span class="rc"><b>${v}</b>${esc(k)}</span>`).join("");
+  $("#feed-summary").hidden = !ents.length || f === "trades";
+  $$("#feed-tabs button").forEach((b, i) => { b.classList.toggle("is-on", b.dataset.f === f); if (b.dataset.f === f) $("#feed-tabs .tabs-ink").style.transform = `translateX(${i * 100}%)`; });
+  if (prevSeen && items.some(isNew) && state.tab !== "feed") $("#feed-badge").hidden = false;
+}
+
+/* ---------------- wallets + agents ---------------- */
+function renderWallets(d) {
+  const tr = [...(d.traders || [])].sort((a, b) => (parseTs(b.last_activity)?.getTime() || 0) - (parseTs(a.last_activity)?.getTime() || 0));
+  $("#wallets-lead").textContent = `${plural(tr.length, "wallet", "wallets")} de Solana vigiladas · ordenadas por actividad`;
+  $("#wallets").innerHTML = tr.map((t, i) => {
+    const last = parseTs(t.last_activity); const fresh = last && Date.now() - last.getTime() < 15 * 60e3;
+    return `<a class="row press" href="https://solscan.io/account/${esc(t.wallet)}" target="_blank" rel="noopener">
+      <span class="rank">${i + 1}</span>${avatar(t.name, "", true)}
+      <div class="row-main"><div class="row-t">${esc(t.name)} <span class="live-dot ${fresh ? "" : "idle"}"></span></div>
+      <div class="row-s">${esc(t.short)} · ${t.activity_error ? "sin datos" : last ? "hace " + ago(t.last_activity) : "sin actividad"}</div></div>
+      <div class="row-r"><div class="row-v ${t.copied ? "up" : ""}">${t.copied || 0} <span class="sub">${t.copied === 1 ? "copiada" : "copiadas"}</span></div><div class="row-s">${t.rejected || 0} rech.</div></div></a>`;
+  }).join("") || `<div class="empty">Sin wallets</div>`;
+  const NAMES = { watcher: "Vigilante", copier: "Copiador", executor: "Ejecutor", risk: "Riesgo" };
+  $("#agents").innerHTML = (d.bots || []).map((b) => `<div class="agent"><div class="agent-h"><span>${esc(NAMES[b.id] || b.name)}</span><span class="live-dot ${/vivo/.test(b.status) ? "" : "idle"}"></span></div>
+    <div class="agent-v">${esc(String(b.value).replace(/^1 copiados$/, "1 copiada").replace(/^(\d+) copiados$/, "$1 copiadas"))}</div><div class="agent-d">${esc(b.detail)}</div></div>`).join("");
+}
+function renderAccount(d) {
+  const s = d.session || {};
+  $("#profile-stats").innerHTML = `<span><b>${(d.traders || []).length}</b>wallets</span><span><b>${s.seen ?? 0}</b>vistas</span><span><b>${s.copied ?? 0}</b>${s.copied === 1 ? "copiada" : "copiadas"}</span><span><b>${s.rejected ?? 0}</b>rechazadas</span>`;
+  const pnl = Number(d.pnl_usd);
+  const stats = [
+    ["Balance", money(Number(d.equity))], ["Efectivo", money(Number(d.cash))],
+    ["PnL total", `<span class="${cls(pnl)}">${pct(Number(d.pnl_pct))}</span>`], ["Multiplicador", (Number(d.multiplier) || 1).toFixed(3) + "x"],
+    ["Posiciones", `${d.open_positions ?? 0} / ${d.max_positions ?? 6}`], ["Sesión", esc(s.id || "—")],
+    ["PnL realizado", `<span class="${cls(s.realized_pnl)}">${signedMoney(Number(s.realized_pnl || 0))}</span>`], ["Estado", s.halted ? '<span class="dn">Parado</span>' : '<span class="up">Operando</span>'],
+  ];
+  $("#account-stats").innerHTML = stats.map(([k, v]) => `<div class="stat"><div class="label">${k}</div><div class="v">${v}</div></div>`).join("");
+}
+function renderStatus(d) {
+  const pill = $("#status-pill");
+  const hb = parseTs(d.heartbeat); const age = hb ? (Date.now() - hb.getTime()) / 1000 : Infinity;
+  let c = "is-wait", t = "Conectando";
+  if (d.status === "LIVE" && age < 300) { c = "is-live"; t = "En vivo"; }
+  else if (d.status === "LIVE") { c = "is-off"; t = "Sin señal"; }
+  else if (d.status === "INICIANDO") { t = "Iniciando"; }
+  else if (d.status) { c = "is-off"; t = String(d.status).charAt(0) + String(d.status).slice(1).toLowerCase(); }
+  pill.className = "status-pill " + c; pill.querySelector("b").textContent = t;
+  const foot = `Datos reales del monitor y de la RPC de Solana · actualizado ${hhmm(d.built_at)} (hora de Madrid)`;
+  ["#foot-home", "#foot-feed", "#foot-account"].forEach((s) => ($(s).textContent = foot));
+}
+
+/* ---------------- render ---------------- */
+function render(d, { animate = true } = {}) {
+  state.view = d;
+  $("#app").classList.remove("is-loading");
+  renderStatus(d); renderHero(d); renderChart(d, animate); renderTopTrades(d); renderPositions(d); renderFeed(d); renderWallets(d); renderAccount(d);
+}
+
+/* ---------------- toasts ---------------- */
+const ICONS = {
+  buy: '<svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>',
+  win: '<svg viewBox="0 0 24 24"><path d="M5 12.5 10 17 19 7"/></svg>',
+  loss: '<svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg>',
+};
+function toast(f, { demo = false } = {}) {
+  const host = $("#toasts");
+  while (host.children.length >= 2) dismiss(host.firstElementChild, 0, -1);
+  const pnl = Number(f.pnl_usd);
+  const kind = f.type === "buy" ? "buy" : pnl >= 0 ? "win" : "loss";
+  const el = document.createElement("div");
+  el.className = "toast " + kind;
+  const title = f.type === "buy" ? `Compra ${esc(f.symbol)}` : `${esc((TYPE[f.type] || {}).t || "Venta")} · ${esc(f.symbol)}`;
+  const val = f.type === "buy" ? money(Number(f.usd)) : signedMoney(pnl);
+  el.innerHTML = `<div class="t-ico">${ICONS[kind]}</div><div class="t-main"><div class="t-t">${title}${demo ? ' <span class="tag y">SIMULADO</span>' : ""}</div>
+    <div class="t-s">copiando a ${esc(f.trader)}${f.type !== "buy" && f.pnl_pct != null ? " · " + pct(Number(f.pnl_pct), 1) : ""}</div></div>
+    <div class="t-v ${f.type === "buy" ? "" : cls(pnl)}">${val}</div><div class="t-bar"><i style="animation-duration:4500ms"></i></div>`;
+  host.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("in")));
+  let timer = setTimeout(() => dismiss(el, 0, -1), 4500);
+  // swipe in any direction to dismiss; tap opens Actividad
+  let sx = 0, sy = 0, dx = 0, dy = 0, drag = false;
+  el.addEventListener("pointerdown", (e) => { drag = true; sx = e.clientX; sy = e.clientY; dx = dy = 0; el.classList.add("dragging"); el.setPointerCapture(e.pointerId); clearTimeout(timer); el.querySelector(".t-bar i").style.animationPlayState = "paused"; });
+  el.addEventListener("pointermove", (e) => { if (!drag) return; dx = e.clientX - sx; dy = Math.min(0, e.clientY - sy); el.style.transform = `translate3d(${dx}px,${dy}px,0)`; el.style.opacity = String(1 - Math.min(0.8, (Math.abs(dx) + Math.abs(dy)) / 260)); });
+  const up = () => {
+    if (!drag) return; drag = false; el.classList.remove("dragging");
+    if (Math.abs(dx) > 70) dismiss(el, Math.sign(dx), 0);
+    else if (dy < -30) dismiss(el, 0, -1);
+    else if (Math.abs(dx) < 6 && Math.abs(dy) < 6) { dismiss(el, 0, -1); showTab("feed"); }
+    else { el.style.transform = ""; el.style.opacity = ""; timer = setTimeout(() => dismiss(el, 0, -1), 2500); }
+  };
+  el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
+  if (navigator.vibrate) try { navigator.vibrate(f.type === "buy" ? 12 : [10, 40, 10]); } catch {}
+}
+function dismiss(el, sx, sy) {
+  if (!el || el.dataset.gone) return; el.dataset.gone = "1";
+  el.classList.add("out"); el.style.transform = `translate3d(${sx * 110}%,${sy * 130}%,0)`; el.style.opacity = "0";
+  setTimeout(() => el.remove(), 300);
+}
+function getSeen() { try { return new Set(JSON.parse(localStorage.getItem(SEEN_KEY) || "null") || []); } catch { return new Set(); } }
+function processFills(d) {
+  const fills = d.fills || [];
+  let primed = true; try { primed = localStorage.getItem(SEEN_KEY) != null; } catch {}
+  const seen = getSeen(); const fresh = [];
+  for (const f of fills) if (!seen.has(f.id)) { seen.add(f.id); fresh.push(f); }
+  try { localStorage.setItem(SEEN_KEY, JSON.stringify([...seen].slice(-400))); } catch {}
+  // on very first open only show fills from the last 5 minutes
+  const show = primed ? fresh : fresh.filter((f) => Date.now() - (parseTs(f.ts)?.getTime() || 0) < 5 * 60e3);
+  show.slice(-3).forEach((f, i) => setTimeout(() => toast(f), i * 650));
+}
+
+/* ---------------- load ---------------- */
+let loading = false;
 async function load() {
+  if (loading) return; loading = true;
   try {
     const r = await fetch("data/data.json?t=" + Date.now(), { cache: "no-store" });
-    if (!r.ok) throw new Error("http " + r.status);
-    data = await r.json();
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const d = await r.json();
+    const m = String(d.built_at || "").match(/([+-]\d\d:\d\d)$/); if (m) state.tzOffset = m[1];
+    state.real = d; state.lastLoadOk = Date.now();
+    if (!state.demo) { render(d); processFills(d); }
   } catch (e) {
-    if (data === START) {
-      data = { ...START, note: "No se pudo leer data/data.json. Se muestra el capital de partida (500 USDC)." };
+    const pill = $("#status-pill"); pill.className = "status-pill is-off"; pill.querySelector("b").textContent = "Sin conexión";
+    if (!state.view) { $("#app").classList.remove("is-loading"); $("#home-feed").innerHTML = `<div class="empty"><b>No se pudieron cargar los datos</b>Desliza hacia abajo para reintentar.</div>`; }
+  } finally { loading = false; }
+}
+
+/* ---------------- tabs ---------------- */
+function showTab(name, { instant = false } = {}) {
+  if (!$("#view-" + name)) name = "home";
+  const same = state.tab === name; state.tab = name;
+  const v = $("#view-" + name);
+  if (same) { v.scrollTo({ top: 0, behavior: "smooth" }); return; }
+  $$(".view").forEach((x) => x.classList.toggle("is-active", x === v));
+  $$(".tab").forEach((t) => t.classList.toggle("is-on", t.dataset.tab === name));
+  if (name === "feed") $("#feed-badge").hidden = true;
+  $("#app").classList.toggle("scrolled", v.scrollTop > 4);
+  if (history.replaceState) history.replaceState(null, "", location.pathname + location.search + (name === "home" ? "" : "#" + name));
+}
+function setupUI() {
+  $$(".tab").forEach((t) => t.addEventListener("click", () => showTab(t.dataset.tab)));
+  $$("[data-goto]").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.goto)));
+  $$("#ranges button").forEach((b) => b.addEventListener("click", () => {
+    state.range = b.dataset.range; $$("#ranges button").forEach((x) => x.classList.toggle("is-on", x === b));
+    if (state.view) renderChart(state.view, true);
+  }));
+  $$("#pos-seg button").forEach((b) => b.addEventListener("click", () => { state.posSeg = b.dataset.seg; if (state.view) renderPositions(state.view); }));
+  $$("#feed-tabs button").forEach((b) => b.addEventListener("click", () => { state.feedFilter = b.dataset.f; if (state.view) renderFeed(state.view); }));
+  $$(".view").forEach((v) => v.addEventListener("scroll", () => { if (v.classList.contains("is-active")) $("#app").classList.toggle("scrolled", v.scrollTop > 4); }, { passive: true }));
+  window.addEventListener("resize", () => { if (state.view) { state.chartPts = null; renderChart(state.view, false); } });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+  // install card (inline, closes for good)
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  let closed = false; try { closed = localStorage.getItem(HINT_KEY) === "1"; } catch {}
+  if (!standalone && !closed) $("#install-card").hidden = false;
+  $("#install-close").addEventListener("click", () => { $("#install-card").hidden = true; try { localStorage.setItem(HINT_KEY, "1"); } catch {} });
+  setupPTR(); setupScrub(); setupDemo();
+  const h = location.hash.replace("#", ""); if (h) showTab(h, { instant: true });
+}
+
+/* ---------------- pull to refresh ---------------- */
+function setupPTR() {
+  const ptr = $("#ptr"); let y0 = null, dy = 0, v = null;
+  document.addEventListener("touchstart", (e) => { v = $(".view.is-active"); if (v.scrollTop <= 0 && !e.target.closest(".toast,.chart,.hscroll")) { y0 = e.touches[0].clientY; dy = 0; } else y0 = null; }, { passive: true });
+  document.addEventListener("touchmove", (e) => {
+    if (y0 == null) return; dy = e.touches[0].clientY - y0; if (dy <= 0) { dy = 0; return; }
+    const k = Math.min(90, dy * 0.45);
+    v.style.transition = "none"; v.style.transform = `translate3d(0,${k}px,0)`;
+    ptr.style.opacity = String(Math.min(1, k / 50)); ptr.style.transform = `translate3d(0,${k - 26}px,0) rotate(${k * 4}deg)`;
+  }, { passive: true });
+  document.addEventListener("touchend", async () => {
+    if (y0 == null) return; y0 = null;
+    const go = dy * 0.45 > 55;
+    v.style.transition = ""; ptr.style.transition = "transform .3s, opacity .3s";
+    if (go) {
+      v.style.transform = "translate3d(0,44px,0)"; ptr.classList.add("spinning"); ptr.style.transform = "translate3d(0,14px,0)";
+      if (navigator.vibrate) try { navigator.vibrate(8); } catch {}
+      await Promise.all([load(), new Promise((r) => setTimeout(r, 600))]);
     }
-  }
-  render(data);
-  processFills(data.fills || []);
-}
-
-function showTab(name) {
-  document.querySelectorAll(".view").forEach((v) => v.classList.remove("view-active"));
-  const view = document.getElementById("view-" + name);
-  if (view) view.classList.add("view-active");
-  document.querySelectorAll(".tab").forEach((t) => t.classList.toggle("active", t.dataset.tab === name));
-  const url = new URL(location.href);
-  url.searchParams.set("tab", name);
-  history.replaceState(null, "", url);
-  window.scrollTo(0, 0);
-}
-
-function setupTabs() {
-  document.querySelectorAll(".tab").forEach((t) => {
-    t.addEventListener("click", () => showTab(t.dataset.tab));
+    v.style.transform = ""; ptr.classList.remove("spinning"); ptr.style.opacity = "0"; ptr.style.transform = "";
+    setTimeout(() => { ptr.style.transition = ""; }, 320);
   });
-  document.querySelectorAll(".ranges button").forEach((b) => {
-    b.addEventListener("click", () => {
-      range = b.dataset.range;
-      document.querySelectorAll(".ranges button").forEach((x) => x.classList.toggle("active", x === b));
-      renderChart(data);
-    });
-  });
-  const q = new URLSearchParams(location.search).get("tab");
-  if (q && document.getElementById("view-" + q)) showTab(q);
 }
 
-function isShot() { return new URLSearchParams(location.search).has("shot"); }
-function isTest() { return new URLSearchParams(location.search).has("test"); }
-
-function isStandalone() {
-  return window.matchMedia("(display-mode: standalone)").matches
-    || window.matchMedia("(display-mode: fullscreen)").matches
-    || window.navigator.standalone === true;
-}
-
-function hideInstallHint(persist) {
-  const hint = document.getElementById("install-hint");
-  if (!hint) return;
-  hint.classList.remove("is-open");
-  hint.hidden = true;
-  hint.setAttribute("hidden", "");
-  document.body.classList.remove("has-hint");
-  if (persist) {
-    try { localStorage.setItem("copybot-hint-dismissed", "1"); } catch {}
-  }
-}
-
-function showInstallHint() {
-  if (isStandalone() || isShot()) return;
-  let dismissed = false;
-  try { dismissed = localStorage.getItem("copybot-hint-dismissed") === "1"; } catch {}
-  if (dismissed) return;
-  const hint = document.getElementById("install-hint");
-  hint.hidden = false;
-  hint.removeAttribute("hidden");
-  hint.classList.add("is-open");
-  document.body.classList.add("has-hint");
-}
-
-function setupInstall() {
-  const hint = document.getElementById("install-hint");
-  const btn = document.getElementById("install-btn");
-  if (isStandalone()) {
-    hideInstallHint(false);
-    return;
-  }
-  showInstallHint();
-  const dismiss = document.getElementById("hint-dismiss");
-  const hide = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    hideInstallHint(true);
-  };
-  ["click", "pointerup", "touchend"].forEach((ev) => {
-    dismiss.addEventListener(ev, hide, ev === "touchend" ? { passive: false } : false);
-  });
-  document.getElementById("hint-how").addEventListener("click", (e) => {
-    e.preventDefault();
-    hideInstallHint(false);
-    showTab("account");
-    document.getElementById("install-card").scrollIntoView({ behavior: "smooth" });
-  });
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    if (btn) btn.hidden = false;
-    showInstallHint();
-  });
-  if (btn) {
-    btn.addEventListener("click", async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      btn.hidden = true;
-    });
-  }
-}
-
-let demoPlaying = false;
-const DEMO_SEQ = [
-  { type: "buy", symbol: "DEMO", usd: 40, pnl_pct: 0, trader: "BN7V", equityDelta: 0 },
-  { type: "tp_partial", symbol: "DEMO", usd: 25, pnl_pct: 25, trader: "Unipcs", equityDelta: 20 },
-  { type: "stop_loss", symbol: "DEMO", usd: 35.2, pnl_pct: -12, trader: "Decu", equityDelta: -15 },
-];
-
+/* ---------------- DEMO (simulado, never touches real data) ---------------- */
+let demoTimers = [];
 function setupDemo() {
-  const btn = document.getElementById("demo-btn");
-  if (!btn) return;
-  btn.addEventListener("click", () => {
-    if (demoPlaying) return;
-    const startEq = Number(data.equity) || 500;
-    const now0 = Date.now();
-    const demoStartT = now0 - 14 * 60 * 1000;
-    const demoTimes = [now0 - 10 * 60 * 1000, now0 - 5 * 60 * 1000, now0 - 12 * 1000];
-    const basePoints = (data.equity_points || [])
-      .map((p) => ({ ...p, t: typeof p.t === "number" ? p.t : parseTime(p.t) }))
-      .filter((p) => p.t != null && p.t <= demoStartT);
-    demoPlaying = true;
-    demoState = {
-      equity: startEq,
-      points: basePoints.concat([{ t: demoStartT, v: startEq, source: "demo-start" }]),
-      ticks: [],
-      fills: [],
-      times: demoTimes,
-    };
-    btn.disabled = true;
-    document.body.classList.add("demo-on");
-    showTab("home");
-    renderHero(data, { tween: false });
-    renderChart(data);
-    let i = 0;
-    const tick = () => {
-      if (i >= DEMO_SEQ.length) {
-        setTimeout(() => {
-          demoState.equity = startEq;
-          renderHero(data, { tween: true });
-          setTimeout(() => {
-            demoState = null;
-            demoPlaying = false;
-            document.body.classList.remove("demo-on");
-            btn.disabled = false;
-            renderHero(data, { tween: true });
-            renderChart(data);
-            const latest = (data.latest_fill && !data.latest_fill.demo)
-              ? data.latest_fill
-              : (data.fills || []).filter((f) => !f.demo).slice(-1)[0] || null;
-            renderLiveEvent(latest);
-          }, 900);
-        }, 1400);
-        return;
-      }
-      const step = DEMO_SEQ[i];
-      const t = (demoState.times && demoState.times[i]) || Date.now();
-      demoState.equity = startEq + DEMO_SEQ.slice(0, i + 1).reduce((s, x) => s + x.equityDelta, 0);
-      const fill = {
-        ...step,
-        demo: true,
-        ts: t,
-        equity: demoState.equity,
-        id: "demo|" + i + "|" + t,
-      };
-      demoState.fills = (demoState.fills || []).concat([fill]);
-      demoState.ticks = (demoState.ticks || []).concat([{ t, v: demoState.equity, source: "demo" }]);
-      showToast(fill, { demo: true });
-      renderLiveEvent(fill, { demo: true });
-      renderHero(data, { tween: true });
-      renderChart(data);
-      vibrateFor([fill]);
-      i += 1;
-      setTimeout(tick, 1300);
-    };
-    tick();
-  });
+  $("#demo-btn").addEventListener("click", startDemo);
+  $("#demo-stop").addEventListener("click", stopDemo);
 }
-
-function pushLiveTick() {
-  if (demoPlaying) return;
-  const v = Number(data && data.equity);
-  if (!Number.isFinite(v)) return;
-  const now = Date.now();
-  const last = liveTicks[liveTicks.length - 1];
-  if (last && now - (typeof last.t === "number" ? last.t : parseTime(last.t)) < 8000) return;
-  liveTicks.push({ t: now, v, source: "live-tick" });
-  const keep = 8 * 24 * 3600e3;
-  liveTicks = liveTicks.filter((p) => now - (typeof p.t === "number" ? p.t : parseTime(p.t) || 0) < keep);
-  renderChart(data);
-}
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => { if (!isShot() && !isTest()) navigator.serviceWorker.register("sw.js"); });
-}
-
-setupTabs();
-setupInstall();
-setupDemo();
-load().then(() => {
-  pushLiveTick();
-});
-setInterval(load, REFRESH_MS);
-setInterval(pushLiveTick, 10000);
-
-if (isTest()) {
-  window.__copybotTest = {
-    showToast,
-    dismissToast,
-    currentEquity: () => currentEquity(data),
-    displayed: () => displayedEquity,
-    demoOn: () => !!demoState,
+function startDemo() {
+  if (!state.real || state.demo) return;
+  state.demo = true; $("#demo-chip").hidden = false; $("#demo-bar").hidden = false; $("#demo-btn").disabled = true;
+  const d = JSON.parse(JSON.stringify(state.real));
+  d.fills = d.fills || []; d.activity = d.activity || []; d.equity_points = d.equity_points || []; d.positions = d.positions || [];
+  showTab("home");
+  const base = Number(d.equity), size = Math.round(base * 0.08 * 100) / 100;
+  const p0 = 0.0000412, sym = "DEMO", trader = (d.traders && d.traders[0] && d.traders[0].name) || "Decu", mint = "DEMO-simulado";
+  let eq = base; const qty = size / p0;
+  const iso = (ms) => { const x = new Date(ms + 3600e3 * (parseInt(state.tzOffset) || 0)); return x.toISOString().slice(0, 19); };
+  const step = (type, px, frac) => {
+    const now = Date.now(), ts = iso(now);
+    let f;
+    if (type === "buy") {
+      f = { id: "demo-buy-" + now, type, symbol: sym, usd: size, pnl_usd: 0, trader, ts, mint, route: "curve" };
+      d.positions = [{ mint, symbol: sym, trader, entry: p0, qty, last_price: px, stop: p0 * 0.85, route: "curve" }];
+      d.open_positions = 1; d.cash = Number(d.cash) - size;
+    } else {
+      const q = qty * frac, usd = q * px, pnl = q * (px - p0);
+      eq += pnl; d.cash = Number(d.cash) + usd;
+      f = { id: "demo-" + type + now, type, symbol: sym, usd, pnl_usd: pnl, pnl_pct: (px / p0 - 1) * 100, trader, ts, mint, route: "curve" };
+      if (type === "trailing_exit") { d.positions = []; d.open_positions = 0; } else d.positions[0].last_price = px;
+    }
+    d.equity = eq; d.pnl_usd = eq - d.capital_start; d.pnl_pct = (d.pnl_usd / d.capital_start) * 100; d.multiplier = eq / d.capital_start;
+    d.fills = [...d.fills, f]; d.equity_points = [...d.equity_points, { t: ts, v: eq }];
+    d.activity = [{ kind: "trade", ts, type, trader, token: sym, usd: f.usd, price: px, pnl_usd: f.pnl_usd, pnl_pct: f.pnl_pct, route: "curve" }, ...d.activity];
+    state.range = "1H"; $$("#ranges button").forEach((x) => x.classList.toggle("is-on", x.dataset.range === "1H"));
+    render(d); toast(f, { demo: true });
   };
+  const plan = [["buy", p0, 0, 300], ["tp_partial", p0 * 1.34, 0.5, 2600], ["tp2", p0 * 1.66, 0.25, 5200], ["trailing_exit", p0 * 1.41, 0.25, 7800]];
+  demoTimers = plan.map(([t, px, fr, ms]) => setTimeout(() => step(t, px, fr), ms));
+  demoTimers.push(setTimeout(stopDemo, 13000));
+}
+function stopDemo() {
+  demoTimers.forEach(clearTimeout); demoTimers = [];
+  if (!state.demo) return;
+  state.demo = false; $("#demo-chip").hidden = true; $("#demo-bar").hidden = true; $("#demo-btn").disabled = false;
+  if (state.real) render(state.real);
+}
+
+/* ---------------- boot ---------------- */
+setupUI();
+load();
+setInterval(load, REFRESH_MS);
+setInterval(() => { if (state.view && !state.demo) { renderChart(state.view, false); renderFeed(state.view); renderWallets(state.view); renderStatus(state.view); } }, 15000);
+if ("serviceWorker" in navigator && !TEST) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").then((reg) => {
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) reg.update().catch(() => {}); });
+  }).catch(() => {}));
+  const hadController = !!navigator.serviceWorker.controller; let reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!hadController || reloaded) return; reloaded = true; location.reload(); });
 }

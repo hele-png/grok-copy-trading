@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-16T03:59:03+01:00",
+  "built_at": "2026-11-16T03:59:27+01:00",
   "built_at_human": "16 nov 2026, 03:59 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
-  "status": "OFFLINE",
+  "status": "LIVE",
   "heartbeat": "2026-11-16T03:47:17+01:00",
   "heartbeat_human": "16 nov 2026, 03:47 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 704.2,
+  "heartbeat_age_s": 0.6,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -321,7 +321,7 @@
       "trader": "Doji",
       "ts": "2026-11-16T03:05:07",
       "ts_human": "16 nov 2026, 03:05 (hora de Madrid)",
-      "ago": "hace 53 min",
+      "ago": "hace 54 min",
       "signature": "5Xari23w5wndUyDK8hHbtoYHBr3rgTGGbH7whPfyHnUs5yZp9fSM7NePT5SWTBt74fmRe5ccGhKKZ1SjVgTQTDNM",
       "solscan": "https://solscan.io/tx/5Xari23w5wndUyDK8hHbtoYHBr3rgTGGbH7whPfyHnUs5yZp9fSM7NePT5SWTBt74fmRe5ccGhKKZ1SjVgTQTDNM",
       "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
@@ -338,7 +338,7 @@
       "trader": "Johnson",
       "ts": "2026-11-16T03:05:07",
       "ts_human": "16 nov 2026, 03:05 (hora de Madrid)",
-      "ago": "hace 53 min",
+      "ago": "hace 54 min",
       "signature": "5eMJH8cmnJbFg6Wjb6FAdZExLuXhmQMr2j5raV16h342K825RpqQmDkyZ53Vt8Yeqn7y7hDo1chznjjzQYrvJN26",
       "solscan": "https://solscan.io/tx/5eMJH8cmnJbFg6Wjb6FAdZExLuXhmQMr2j5raV16h342K825RpqQmDkyZ53Vt8Yeqn7y7hDo1chznjjzQYrvJN26",
       "mint": "8tQWRzPw8PMoK3z3M28vnTq93esgxEQY6Jr3BTN7pump",
@@ -410,21 +410,21 @@
     {
       "id": "watcher",
       "name": "Watcher",
-      "status": "offline",
+      "status": "en vivo",
       "value": "7 wallets",
       "detail": "7/7 con actividad reciente verificada"
     },
     {
       "id": "copier",
       "name": "Copier",
-      "status": "offline",
+      "status": "en vivo",
       "value": "8 copiados",
       "detail": "87 vistos · 79 rechazados"
     },
     {
       "id": "executor",
       "name": "Executor",
-      "status": "offline",
+      "status": "en vivo",
       "value": "0 abiertas",
       "detail": "9 fills paper"
     },
@@ -441,14 +441,14 @@
       "name": "Decu",
       "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
       "short": "4vw5…9Ud9",
-      "last_signature": "4va87uH5srR9TbPuL5ny4TH89K5j9rMNXmcpTs5VJDp7oWa9hewz9oLvKoDgMFje8p9dfAjU946KrzWBF4e7YjzY",
-      "last_activity": "2026-11-16T03:59:01+01:00",
-      "last_activity_human": "16 nov 2026, 03:59 (hora de Madrid)",
-      "last_activity_ago": "hace 0s",
+      "last_signature": "zCNdpGTGUU6fCuXmwLWs9w1xETRHDR46YT2aa8gKL7SPT8L4CfwnYZYNiLPBNs5yxyYa6W8dSUcbWUCjXRw6fPL",
+      "last_activity": "2026-11-16T03:47:17+01:00",
+      "last_activity_human": "16 nov 2026, 03:47 (hora de Madrid)",
+      "last_activity_ago": "hace 1s",
       "activity_error": null,
       "copied": 1,
       "rejected": 26,
-      "status": "en pausa"
+      "status": "vigilando"
     },
     {
       "name": "Unipcs",
@@ -461,7 +461,7 @@
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
-      "status": "en pausa"
+      "status": "vigilando"
     },
     {
       "name": "9s4ji7",
@@ -474,7 +474,7 @@
       "activity_error": null,
       "copied": 0,
       "rejected": 12,
-      "status": "en pausa"
+      "status": "vigilando"
     },
     {
       "name": "Johnson",
@@ -487,7 +487,7 @@
       "activity_error": null,
       "copied": 3,
       "rejected": 27,
-      "status": "en pausa"
+      "status": "vigilando"
     },
     {
       "name": "Doji",
@@ -500,7 +500,7 @@
       "activity_error": null,
       "copied": 4,
       "rejected": 14,
-      "status": "en pausa"
+      "status": "vigilando"
     },
     {
       "name": "BN7V",
@@ -513,7 +513,7 @@
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
-      "status": "en pausa"
+      "status": "vigilando"
     },
     {
       "name": "yHCx",
@@ -526,7 +526,7 @@
       "activity_error": null,
       "copied": 0,
       "rejected": 0,
-      "status": "en pausa"
+      "status": "vigilando"
     }
   ],
   "activity": [
@@ -571,7 +571,7 @@
       "route": "graduated",
       "trader_entry": 0.0009248970284610378,
       "ts_human": "16 nov 2026, 03:34 (hora de Madrid)",
-      "ago": "hace 24 min"
+      "ago": "hace 25 min"
     },
     {
       "kind": "decision",
@@ -593,7 +593,7 @@
       "route": "graduated",
       "trader_entry": 0.0008518211569268222,
       "ts_human": "16 nov 2026, 03:34 (hora de Madrid)",
-      "ago": "hace 24 min"
+      "ago": "hace 25 min"
     },
     {
       "kind": "trade",
@@ -631,7 +631,7 @@
       "market_cap": null,
       "route": "graduated",
       "ts_human": "16 nov 2026, 03:05 (hora de Madrid)",
-      "ago": "hace 53 min"
+      "ago": "hace 54 min"
     },
     {
       "kind": "trade",
@@ -650,7 +650,7 @@
       "market_cap": null,
       "route": "curve",
       "ts_human": "16 nov 2026, 03:05 (hora de Madrid)",
-      "ago": "hace 53 min"
+      "ago": "hace 54 min"
     },
     {
       "kind": "decision",

@@ -1,4 +1,4 @@
-const CACHE = "copybot-v4";
+const CACHE = "copybot-v5";
 const SHELL = [
   "./",
   "./index.html",

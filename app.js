@@ -10,19 +10,23 @@ const START = {
   pnl_pct: 0,
   multiplier: 1,
   open_positions: 0,
-  max_positions: 4,
+  max_positions: 6,
   equity_points: [],
   session: { seen: 0, copied: 0, rejected: 0, fills: 0, halted: false },
   bots: [
-    { id: "watcher", name: "Watcher", status: "iniciando", value: "3 wallets", detail: "sondeo de compras en Solana" },
+    { id: "watcher", name: "Watcher", status: "iniciando", value: "7 wallets", detail: "sondeo de compras en Solana" },
     { id: "copier", name: "Copier", status: "iniciando", value: "0 copiados", detail: "0 vistos · 0 rechazados" },
     { id: "executor", name: "Executor", status: "iniciando", value: "0 abiertas", detail: "0 fills paper" },
-    { id: "risk", name: "Risk", status: "iniciando", value: "0.00% DD", detail: "stop −12% · TP +25% · trailing 15% · ventana 21:00–07:30" },
+    { id: "risk", name: "Risk", status: "iniciando", value: "0.00% DD", detail: "modo agresivo · stop −12/−15% · TP +30/+60% · trailing 20% · ventana 21:00–07:30" },
   ],
   traders: [
-    { name: "frank", wallet: "498g1rVnFcnjBjpfw1xyqA1WvgQXUU8RWuELjxkjAayQ", short: "498g…AayQ", status: "iniciando" },
-    { name: "Unipcs", wallet: "2heJbC32Tpfcb3nbUb5ER61K11FGZVfVGtVnDm6LDogF", short: "2heJ…DogF", status: "iniciando" },
     { name: "Decu", wallet: "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9", short: "4vw5…9Ud9", status: "iniciando" },
+    { name: "Unipcs", wallet: "5M8ACGKEXG1ojKDTMH3sMqhTihTgHYMSsZc6W8i7QW3Y", short: "5M8A…QW3Y", status: "iniciando" },
+    { name: "9s4ji7", wallet: "9s4ji7MRh6xx9PVx7D4by8YjpHMfPVtHfYuMUy8VaTTp", short: "9s4j…aTTp", status: "iniciando" },
+    { name: "Johnson", wallet: "J9TYAsWWidbrcZybmLSfrLzryANf4CgJBLdvwdGuC8MB", short: "J9TY…C8MB", status: "iniciando" },
+    { name: "Doji", wallet: "5ZuV8eqkvzYFVEKbLvGBdexL2tFv7E5BCd2HZpjqbdg", short: "5ZuV…qbdg", status: "iniciando" },
+    { name: "BN7V", wallet: "BN7VBMS9LfNcRE5pk2jNgJyT8uny8uzQsMFhoSg4Ka4E", short: "BN7V…Ka4E", status: "iniciando" },
+    { name: "yHCx", wallet: "yHCxHBEaJW5tbndqC8JciSThr7U1cqLpdcsvHcx6PRe", short: "yHCx…6PRe", status: "iniciando" },
   ],
   activity: [],
   fills: [],
@@ -228,9 +232,13 @@ function isLossFill(f) {
 function fillLabel(type) {
   return ({
     buy: "Copiado",
-    tp_partial: "TP parcial",
+    tp_partial: "TP +30%",
+    tp2: "TP +60%",
     trailing_exit: "Trailing",
     stop_loss: "Stop",
+    breakeven_stop: "Stop BE",
+    time_exit: "Salida 10 min",
+    mirror_exit: "Trader vende",
     session_close: "Cierre",
   })[type] || type || "Fill";
 }
@@ -459,7 +467,7 @@ function renderAccount(d) {
     ["Cash", money(d.cash)],
     ["PnL", pct(d.pnl_pct)],
     ["Multiplicador", (Number(d.multiplier) || 1).toFixed(2) + "x"],
-    ["Posiciones", `${d.open_positions || 0} / ${d.max_positions || 4}`],
+    ["Posiciones", `${d.open_positions || 0} / ${d.max_positions || 6}`],
     ["Sesión", s.id || "sin sesión"],
     ["Vistos", String(s.seen ?? 0)],
     ["Copiados", String(s.copied ?? 0)],
@@ -760,7 +768,7 @@ function setupInstall() {
 
 let demoPlaying = false;
 const DEMO_SEQ = [
-  { type: "buy", symbol: "DEMO", usd: 40, pnl_pct: 0, trader: "frank", equityDelta: 0 },
+  { type: "buy", symbol: "DEMO", usd: 40, pnl_pct: 0, trader: "BN7V", equityDelta: 0 },
   { type: "tp_partial", symbol: "DEMO", usd: 25, pnl_pct: 25, trader: "Unipcs", equityDelta: 20 },
   { type: "stop_loss", symbol: "DEMO", usd: 35.2, pnl_pct: -12, trader: "Decu", equityDelta: -15 },
 ];

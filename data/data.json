@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-16T05:45:55+01:00",
-  "built_at_human": "16 nov 2026, 05:45 (hora de Madrid)",
+  "built_at": "2026-11-16T05:48:03+01:00",
+  "built_at_human": "16 nov 2026, 05:48 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
   "status": "LIVE",
-  "heartbeat": "2026-11-16T05:45:49+01:00",
-  "heartbeat_human": "16 nov 2026, 05:45 (hora de Madrid)",
+  "heartbeat": "2026-11-16T05:47:49+01:00",
+  "heartbeat_human": "16 nov 2026, 05:47 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 1.4,
+  "heartbeat_age_s": 9.8,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -101,7 +101,7 @@
       "source": "trailing_exit"
     },
     {
-      "t": "2026-11-16T05:45:49",
+      "t": "2026-11-16T05:47:49",
       "v": 502.493219,
       "source": "state"
     }
@@ -304,7 +304,7 @@
       "trader": "Doji",
       "ts": "2026-11-16T02:46:52",
       "ts_human": "16 nov 2026, 02:46 (hora de Madrid)",
-      "ago": "hace 2 h",
+      "ago": "hace 3 h",
       "signature": "5Xari23w5wndUyDK8hHbtoYHBr3rgTGGbH7whPfyHnUs5yZp9fSM7NePT5SWTBt74fmRe5ccGhKKZ1SjVgTQTDNM",
       "solscan": "https://solscan.io/tx/5Xari23w5wndUyDK8hHbtoYHBr3rgTGGbH7whPfyHnUs5yZp9fSM7NePT5SWTBt74fmRe5ccGhKKZ1SjVgTQTDNM",
       "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
@@ -384,9 +384,9 @@
     "id": "2026-11-15",
     "started": "2026-11-15T23:20:23",
     "halted": false,
-    "seen": 124,
+    "seen": 127,
     "copied": 8,
-    "rejected": 116,
+    "rejected": 119,
     "realized_pnl": 2.493218729197495,
     "fills": 9,
     "equity_pnl_usd": 2.4932,
@@ -400,13 +400,14 @@
       "ya en cartera": 11,
       "curva no cotiza en SOL": 17,
       "liquidez < $15k": 29,
-      "dato no verificable: precio de la curva no cuadra con DexScreener": 13,
-      "compras empaquetadas al crear": 2,
-      "precio ya subido >35%": 25,
+      "dato no verificable: precio de la curva no cuadra con DexScreener": 15,
+      "compras empaquetadas al crear": 3,
+      "precio ya subido >35%": 26,
       "parada diaria": 28,
       "dato no verificable: precio de la curva sin contraste en DexScreener": 3,
-      "wallet en pausa (2 stops)": 2,
-      "curva fuera de 15-75 SOL": 2
+      "wallet en pausa (2 stops)": 3,
+      "curva fuera de 15-75 SOL": 2,
+      "dato no verificable: precio del token de cotización WISHMAS": 1
     },
     "paused_until": null,
     "size_mult": 1.0,
@@ -428,7 +429,7 @@
       "name": "Copier",
       "status": "en vivo",
       "value": "8 copiados",
-      "detail": "124 vistos · 116 rechazados"
+      "detail": "127 vistos · 119 rechazados"
     },
     {
       "id": "executor",
@@ -450,13 +451,13 @@
       "name": "Decu",
       "wallet": "4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",
       "short": "4vw5…9Ud9",
-      "last_signature": "5BoZ3M66PrXf9PTbwrapvyzCJrqSpaM5xwhhgLqv8Z65SRMY9pHkwPBy4meyZ1wRkKfcr9WMHYN9fnBMB6NvpVA4",
-      "last_activity": "2026-11-16T05:44:36+01:00",
-      "last_activity_human": "16 nov 2026, 05:44 (hora de Madrid)",
-      "last_activity_ago": "hace 1 min",
+      "last_signature": "49RtjJGwSShyfLrxUMtjEbXvVezCchUsCT4sPvWauccdkrXU7PV4GiY8wymo8fzqLPeNTmv98YzQPE2PTQGttXRQ",
+      "last_activity": "2026-11-16T05:47:23+01:00",
+      "last_activity_human": "16 nov 2026, 05:47 (hora de Madrid)",
+      "last_activity_ago": "hace 35s",
       "activity_error": null,
       "copied": 1,
-      "rejected": 34,
+      "rejected": 36,
       "status": "vigilando"
     },
     {
@@ -489,13 +490,13 @@
       "name": "Johnson",
       "wallet": "J9TYAsWWidbrcZybmLSfrLzryANf4CgJBLdvwdGuC8MB",
       "short": "J9TY…C8MB",
-      "last_signature": "3BVG8yp74tYt2iAmxZuQ8ZhKt33ZxHc4EtvZYC7ZQVSdeJJ7rqNwmozHWEHphMFpn6dbjUCNTJVK7hRayHv1pWiz",
-      "last_activity": "2026-11-16T05:45:31+01:00",
-      "last_activity_human": "16 nov 2026, 05:45 (hora de Madrid)",
-      "last_activity_ago": "hace 21s",
+      "last_signature": "jPTE9Kg4ia1zmV5FG5TDoJJr8KG6d3j19TLawALo3CusL6ANqktkHWsYUKPNamCcqbhRfFfcQGv4quB77LtBNNs",
+      "last_activity": "2026-11-16T05:46:00+01:00",
+      "last_activity_human": "16 nov 2026, 05:46 (hora de Madrid)",
+      "last_activity_ago": "hace 2 min",
       "activity_error": null,
       "copied": 3,
-      "rejected": 30,
+      "rejected": 31,
       "status": "vigilando"
     },
     {
@@ -505,7 +506,7 @@
       "last_signature": "34w2nug3knnNW9JNiz46VMGDs6suZ1GaoxDaC7kMLquZCdBjf83XFz6hok5yiCwGwgw7uCZNowwu1rC9a9Q1PfFx",
       "last_activity": "2026-11-16T05:33:07+01:00",
       "last_activity_human": "16 nov 2026, 05:33 (hora de Madrid)",
-      "last_activity_ago": "hace 12 min",
+      "last_activity_ago": "hace 14 min",
       "activity_error": null,
       "copied": 4,
       "rejected": 40,
@@ -541,6 +542,72 @@
   "activity": [
     {
       "kind": "decision",
+      "ts": "2026-11-16T05:47:17",
+      "type": "rejected",
+      "trader": "Decu",
+      "token": "Takara",
+      "mint": "BhCi5XLroiRr8ZyuNXYCWC2xrkSPm3XEvtT1uUyJpump",
+      "usd": null,
+      "price": 6.981698568366993e-06,
+      "pct_up": 33.39022027743426,
+      "liquidity_usd": 1672.3627599909998,
+      "market_cap": null,
+      "reasons": [
+        "dato no verificable: precio de la curva no cuadra con DexScreener (84% de diferencia)",
+        "compras empaquetadas en el bloque de creación (7 txs)"
+      ],
+      "passed": false,
+      "route": "curve",
+      "trader_entry": 1.4027906529972365e-05,
+      "ts_human": "16 nov 2026, 05:47 (hora de Madrid)",
+      "ago": "hace 46s"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T05:46:40",
+      "type": "rejected",
+      "trader": "Decu",
+      "token": "Takara",
+      "mint": "BhCi5XLroiRr8ZyuNXYCWC2xrkSPm3XEvtT1uUyJpump",
+      "usd": null,
+      "price": 1.1510218781108664e-05,
+      "pct_up": 119.86406874742639,
+      "liquidity_usd": 3084.0772719,
+      "market_cap": null,
+      "reasons": [
+        "dato no verificable: precio de la curva no cuadra con DexScreener (17% de diferencia)",
+        "precio ya subió 119.9% desde la primera wallet (>35%)"
+      ],
+      "passed": false,
+      "route": "curve",
+      "trader_entry": 1.201364674603874e-05,
+      "ts_human": "16 nov 2026, 05:46 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "decision",
+      "ts": "2026-11-16T05:46:08",
+      "type": "rejected",
+      "trader": "Johnson",
+      "token": "?",
+      "mint": "FyV2sX2VbB7qxkZYTBqhDeCkVWgBmx8ZDdyfc9gtpump",
+      "usd": null,
+      "price": null,
+      "pct_up": null,
+      "liquidity_usd": null,
+      "market_cap": null,
+      "reasons": [
+        "wallet en pausa: Johnson lleva 3 stops en esta sesión",
+        "dato no verificable: precio del token de cotización WISHMAS (liquidez del pool principal $37,597 < $50.000)"
+      ],
+      "passed": false,
+      "route": "curve",
+      "trader_entry": 9.846447745718445e-06,
+      "ts_human": "16 nov 2026, 05:46 (hora de Madrid)",
+      "ago": "hace 1 min"
+    },
+    {
+      "kind": "decision",
       "ts": "2026-11-16T05:45:34",
       "type": "rejected",
       "trader": "Johnson",
@@ -559,7 +626,7 @@
       "route": "graduated",
       "trader_entry": 2.2197913627719328e-05,
       "ts_human": "16 nov 2026, 05:45 (hora de Madrid)",
-      "ago": "hace 21s"
+      "ago": "hace 2 min"
     },
     {
       "kind": "decision",
@@ -581,7 +648,7 @@
       "route": "curve",
       "trader_entry": 8.886730715905804e-06,
       "ts_human": "16 nov 2026, 05:44 (hora de Madrid)",
-      "ago": "hace 1 min"
+      "ago": "hace 3 min"
     },
     {
       "kind": "decision",
@@ -603,7 +670,7 @@
       "route": "curve",
       "trader_entry": 1.1281917532714324e-05,
       "ts_human": "16 nov 2026, 05:44 (hora de Madrid)",
-      "ago": "hace 1 min"
+      "ago": "hace 3 min"
     },
     {
       "kind": "decision",
@@ -625,7 +692,7 @@
       "route": "curve",
       "trader_entry": 4.802863227372882e-06,
       "ts_human": "16 nov 2026, 05:43 (hora de Madrid)",
-      "ago": "hace 2 min"
+      "ago": "hace 4 min"
     },
     {
       "kind": "decision",
@@ -647,7 +714,7 @@
       "route": "curve",
       "trader_entry": 1.1509381946374054e-05,
       "ts_human": "16 nov 2026, 05:43 (hora de Madrid)",
-      "ago": "hace 2 min"
+      "ago": "hace 4 min"
     },
     {
       "kind": "decision",
@@ -669,7 +736,7 @@
       "route": "curve",
       "trader_entry": 5.440527604291947e-06,
       "ts_human": "16 nov 2026, 05:43 (hora de Madrid)",
-      "ago": "hace 2 min"
+      "ago": "hace 4 min"
     },
     {
       "kind": "decision",
@@ -690,7 +757,7 @@
       "route": "curve",
       "trader_entry": 1.502770269037742e-05,
       "ts_human": "16 nov 2026, 05:42 (hora de Madrid)",
-      "ago": "hace 3 min"
+      "ago": "hace 5 min"
     },
     {
       "kind": "decision",
@@ -712,7 +779,7 @@
       "route": "curve",
       "trader_entry": 8.553872266040475e-06,
       "ts_human": "16 nov 2026, 05:42 (hora de Madrid)",
-      "ago": "hace 3 min"
+      "ago": "hace 6 min"
     },
     {
       "kind": "decision",
@@ -734,7 +801,7 @@
       "route": "curve",
       "trader_entry": 4.255980711494425e-06,
       "ts_human": "16 nov 2026, 05:41 (hora de Madrid)",
-      "ago": "hace 4 min"
+      "ago": "hace 6 min"
     },
     {
       "kind": "decision",
@@ -756,7 +823,7 @@
       "route": "graduated",
       "trader_entry": 5.02617847184933e-05,
       "ts_human": "16 nov 2026, 05:37 (hora de Madrid)",
-      "ago": "hace 8 min"
+      "ago": "hace 10 min"
     },
     {
       "kind": "decision",
@@ -777,7 +844,7 @@
       "route": "graduated",
       "trader_entry": 2.4146065420156053e-05,
       "ts_human": "16 nov 2026, 05:11 (hora de Madrid)",
-      "ago": "hace 34 min"
+      "ago": "hace 36 min"
     },
     {
       "kind": "decision",
@@ -798,7 +865,7 @@
       "route": "graduated",
       "trader_entry": 4.525087783848081e-05,
       "ts_human": "16 nov 2026, 05:07 (hora de Madrid)",
-      "ago": "hace 38 min"
+      "ago": "hace 40 min"
     },
     {
       "kind": "decision",
@@ -821,7 +888,7 @@
       "route": "curve",
       "trader_entry": 2.0445926857190676e-05,
       "ts_human": "16 nov 2026, 05:01 (hora de Madrid)",
-      "ago": "hace 44 min"
+      "ago": "hace 46 min"
     },
     {
       "kind": "decision",
@@ -844,7 +911,7 @@
       "route": "curve",
       "trader_entry": 2.022814971519603e-05,
       "ts_human": "16 nov 2026, 05:00 (hora de Madrid)",
-      "ago": "hace 45 min"
+      "ago": "hace 47 min"
     },
     {
       "kind": "decision",
@@ -867,7 +934,7 @@
       "route": "curve",
       "trader_entry": 7.91202584276471e-06,
       "ts_human": "16 nov 2026, 04:56 (hora de Madrid)",
-      "ago": "hace 49 min"
+      "ago": "hace 51 min"
     },
     {
       "kind": "decision",
@@ -890,7 +957,7 @@
       "route": "curve",
       "trader_entry": 1.2359017332388833e-05,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -913,7 +980,7 @@
       "route": "curve",
       "trader_entry": 1.2031838836988498e-05,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -935,7 +1002,7 @@
       "route": "curve",
       "trader_entry": 2.280110693373236e-05,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -957,7 +1024,7 @@
       "route": "curve",
       "trader_entry": 1.5168038612257281e-05,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -979,7 +1046,7 @@
       "route": "curve",
       "trader_entry": 7.455388414999599e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -1001,7 +1068,7 @@
       "route": "curve",
       "trader_entry": 4.626180357214658e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -1023,7 +1090,7 @@
       "route": "curve",
       "trader_entry": 3.3383134734965205e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -1045,7 +1112,7 @@
       "route": "curve",
       "trader_entry": 6.601552812186508e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -1067,7 +1134,7 @@
       "route": "curve",
       "trader_entry": 6.880867643455505e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -1089,7 +1156,7 @@
       "route": "curve",
       "trader_entry": 6.041100322062766e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 52 min"
     },
     {
       "kind": "decision",
@@ -1111,7 +1178,7 @@
       "route": "curve",
       "trader_entry": 2.380534416922125e-06,
       "ts_human": "16 nov 2026, 04:55 (hora de Madrid)",
-      "ago": "hace 50 min"
+      "ago": "hace 53 min"
     },
     {
       "kind": "decision",
@@ -1347,71 +1414,6 @@
       "trader_entry": 0.0010694872049754416,
       "ts_human": "16 nov 2026, 03:59 (hora de Madrid)",
       "ago": "hace 1 h"
-    },
-    {
-      "kind": "decision",
-      "ts": "2026-11-16T03:37:31",
-      "type": "rejected",
-      "trader": "Doji",
-      "token": "HOGE",
-      "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
-      "usd": null,
-      "price": 0.001133,
-      "pct_up": 25.317626106831664,
-      "liquidity_usd": 116717.11,
-      "market_cap": null,
-      "reasons": [
-        "parada diaria (-10% o 4 stops seguidos): parado hasta la próxima sesión"
-      ],
-      "passed": false,
-      "route": "graduated",
-      "trader_entry": 0.0012247021048858195,
-      "ts_human": "16 nov 2026, 03:37 (hora de Madrid)",
-      "ago": "hace 2 h"
-    },
-    {
-      "kind": "decision",
-      "ts": "2026-11-16T03:34:11",
-      "type": "rejected",
-      "trader": "Doji",
-      "token": "HOGE",
-      "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
-      "usd": null,
-      "price": 0.001295,
-      "pct_up": 43.235945108867604,
-      "liquidity_usd": 124444.51,
-      "market_cap": null,
-      "reasons": [
-        "parada diaria (-10% o 4 stops seguidos): parado hasta la próxima sesión",
-        "precio ya subió 43.2% desde la primera wallet (>35%)"
-      ],
-      "passed": false,
-      "route": "graduated",
-      "trader_entry": 0.0009248970284610378,
-      "ts_human": "16 nov 2026, 03:34 (hora de Madrid)",
-      "ago": "hace 2 h"
-    },
-    {
-      "kind": "decision",
-      "ts": "2026-11-16T03:34:10",
-      "type": "rejected",
-      "trader": "Doji",
-      "token": "HOGE",
-      "mint": "FVzqGqRmr4UH1Fif6dewmwbJ1p4YUZCu8dcw4Efopump",
-      "usd": null,
-      "price": 0.001352,
-      "pct_up": 49.540538831806174,
-      "liquidity_usd": 127243.6,
-      "market_cap": null,
-      "reasons": [
-        "parada diaria (-10% o 4 stops seguidos): parado hasta la próxima sesión",
-        "precio ya subió 49.5% desde la primera wallet (>35%)"
-      ],
-      "passed": false,
-      "route": "graduated",
-      "trader_entry": 0.0008518211569268222,
-      "ts_human": "16 nov 2026, 03:34 (hora de Madrid)",
-      "ago": "hace 2 h"
     }
   ],
   "files": {
@@ -1419,7 +1421,7 @@
     "trades": true,
     "trades_count": 15,
     "decisions": true,
-    "decisions_count": 124,
+    "decisions_count": 127,
     "log": true,
     "heartbeat": true
   },

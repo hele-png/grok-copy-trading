@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-22T22:39:57+01:00",
-  "built_at_human": "22 nov 2026, 22:39 (hora de Madrid)",
+  "built_at": "2026-11-22T22:41:12+01:00",
+  "built_at_human": "22 nov 2026, 22:41 (hora de Madrid)",
   "timezone": "Europe/Madrid",
   "mode": "PAPER",
   "status": "LIVE",
-  "heartbeat": "2026-11-22T22:39:00+01:00",
-  "heartbeat_human": "22 nov 2026, 22:39 (hora de Madrid)",
+  "heartbeat": "2026-11-22T22:41:00+01:00",
+  "heartbeat_human": "22 nov 2026, 22:41 (hora de Madrid)",
   "heartbeat_source": "heartbeat",
-  "heartbeat_age_s": 52.0,
+  "heartbeat_age_s": 7.1,
   "source": "files+rpc",
   "note": "Datos leídos de archivos reales del monitor y de la RPC de Solana. No se interpolan precios ni balances.",
   "capital_start": 500.0,
@@ -331,7 +331,7 @@
       "source": "trailing_exit"
     },
     {
-      "t": "2026-11-22T22:39:00",
+      "t": "2026-11-22T22:41:00",
       "v": 464.062568,
       "source": "state"
     }
@@ -1396,16 +1396,16 @@
     "id": "2026-11-22",
     "started": "2026-11-22T22:36:00",
     "halted": false,
-    "seen": 1,
+    "seen": 2,
     "copied": 0,
-    "rejected": 1,
+    "rejected": 2,
     "realized_pnl": 0.0,
     "fills": 0,
     "equity_pnl_usd": -0.0,
     "equity_pnl_pct": -0.0,
     "unrealized_pnl_usd": 0,
     "rejected_by_reason": {
-      "liquidez < $15k": 1,
+      "liquidez < $15k": 2,
       "precio ya subido >35%": 1
     },
     "paused_until": null,
@@ -1425,7 +1425,7 @@
       "name": "Copier",
       "status": "en vivo",
       "value": "0 copiados",
-      "detail": "1 vistos · 1 rechazados"
+      "detail": "2 vistos · 2 rechazados"
     },
     {
       "id": "executor",
@@ -1476,7 +1476,7 @@
       "last_signature": "5wP9XfujNjw86bAP2ycPKkrqPQGTFWygufNzR8uYxFSUNe9dHPqiKBBRLJj1bcfVbnTNFcttEqcSaeCsLrnar1Qy",
       "last_activity": "2026-11-22T22:39:22+01:00",
       "last_activity_human": "22 nov 2026, 22:39 (hora de Madrid)",
-      "last_activity_ago": "hace 32s",
+      "last_activity_ago": "hace 1 min",
       "activity_error": null,
       "copied": 0,
       "rejected": 12,
@@ -1486,10 +1486,10 @@
       "name": "Johnson",
       "wallet": "J9TYAsWWidbrcZybmLSfrLzryANf4CgJBLdvwdGuC8MB",
       "short": "J9TY…C8MB",
-      "last_signature": "5gZfTBYbFqKUStf2DBd63AUckva1egJyX8nkFW7u8tadU4S7waCyA3iJXgHzTLTVbNDhgDpGaPgvEVvezKqKNnnU",
-      "last_activity": "2026-11-22T22:39:55+01:00",
-      "last_activity_human": "22 nov 2026, 22:39 (hora de Madrid)",
-      "last_activity_ago": "hace 0s",
+      "last_signature": "3mL79TEk9uY3Sdk7yFnPPyDg4Lu3nugfeFEfjDGUaKxhjLv5Hx4czMmviP8u9rNmWq4iV3mhmRvAyg7Pgv5Dvu7T",
+      "last_activity": "2026-11-22T22:40:00+01:00",
+      "last_activity_human": "22 nov 2026, 22:40 (hora de Madrid)",
+      "last_activity_ago": "hace 1 min",
       "activity_error": null,
       "copied": 4,
       "rejected": 37,
@@ -1525,17 +1525,38 @@
       "name": "yHCx",
       "wallet": "yHCxHBEaJW5tbndqC8JciSThr7U1cqLpdcsvHcx6PRe",
       "short": "yHCx…6PRe",
-      "last_signature": "2WLmy6EEVKH4meswseJ8BkESm4Q3Ejm6rEeaSeGSdgDP9n8iq3iSMoui1aoyYvdU13LFyXmzXuGP1Msk4yrWhcc3",
-      "last_activity": "2026-11-16T19:50:50+01:00",
-      "last_activity_human": "16 nov 2026, 19:50 (hora de Madrid)",
-      "last_activity_ago": "hace 6 d",
+      "last_signature": "3mYP9LpBcW8Bqe77jszGpbDe8ErDdYeNzG6cdEtZyzgE4cbHNmoWi3GhAZHyZ7AVigAE4qBqjVxfa9CmxaBpJHUM",
+      "last_activity": "2026-11-18T14:03:39+01:00",
+      "last_activity_human": "18 nov 2026, 14:03 (hora de Madrid)",
+      "last_activity_ago": "hace 4 d",
       "activity_error": null,
       "copied": 0,
-      "rejected": 1,
+      "rejected": 2,
       "status": "vigilando"
     }
   ],
   "activity": [
+    {
+      "kind": "decision",
+      "ts": "2026-11-22T22:40:51",
+      "type": "rejected",
+      "trader": "yHCx",
+      "token": "BOGE",
+      "mint": "6TQmsU3XkLBPaFTRRML183Kd3J7NtxcGGtGLE7WKpump",
+      "usd": null,
+      "price": 1.393e-06,
+      "pct_up": -81.63933101817152,
+      "liquidity_usd": 1429.95,
+      "market_cap": null,
+      "reasons": [
+        "liquidez $1,430 < $15.000"
+      ],
+      "passed": false,
+      "route": "graduated",
+      "trader_entry": 7.76136752647934e-06,
+      "ts_human": "22 nov 2026, 22:40 (hora de Madrid)",
+      "ago": "hace 21s"
+    },
     {
       "kind": "decision",
       "ts": "2026-11-22T22:37:22",
@@ -1556,7 +1577,7 @@
       "route": "graduated",
       "trader_entry": 7.7569497685136e-06,
       "ts_human": "22 nov 2026, 22:37 (hora de Madrid)",
-      "ago": "hace 2 min"
+      "ago": "hace 3 min"
     },
     {
       "kind": "trade",
@@ -2291,25 +2312,6 @@
       "trader_entry": 0.0007001227883269649,
       "ts_human": "16 nov 2026, 06:17 (hora de Madrid)",
       "ago": "hace 6 d"
-    },
-    {
-      "kind": "trade",
-      "id": "2026-11-16T06:17:38|buy|73ogLNPfHiwLXoq33gTkVBnhmzyqqELztzBijMcUpump|Decu|19.777396040000003",
-      "ts": "2026-11-16T06:17:38",
-      "type": "buy",
-      "trader": "Decu",
-      "token": "pillheads",
-      "mint": "73ogLNPfHiwLXoq33gTkVBnhmzyqqELztzBijMcUpump",
-      "usd": 19.777396040000003,
-      "qty": 2826009.601981032,
-      "price": 6.998347077850002e-06,
-      "pnl_usd": 0.0,
-      "pnl_pct": 0.0,
-      "signature": "cbfefQQqXNxwHtMisdQNL2ikqo43Xa1wJ6PZ4xd97t3QAfXaUEDGDgBW6yZ7iMotg4oATaJoof7e9j4SqEXHLnk",
-      "market_cap": null,
-      "route": "curva",
-      "ts_human": "16 nov 2026, 06:17 (hora de Madrid)",
-      "ago": "hace 6 d"
     }
   ],
   "files": {
@@ -2317,7 +2319,7 @@
     "trades": true,
     "trades_count": 61,
     "decisions": true,
-    "decisions_count": 169,
+    "decisions_count": 170,
     "log": true,
     "heartbeat": true
   },
